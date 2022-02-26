@@ -1,0 +1,14 @@
+{
+  "TheFooter": {
+    "description": "Auto imported from components/TheFooter.vue"
+  },
+  "TheHeader": {
+    "description": "Auto imported from components/TheHeader.vue"
+  },
+  "TheNavbar": {
+    "description": "Auto imported from components/TheNavbar.vue"
+  },
+  "VSlide": {
+    "description": "Auto imported from components/VSlide.vue"
+  }
+}
