@@ -1,4 +1,7 @@
 {
+  "SlideApp": {
+    "description": "Auto imported from components/SlideApp.vue"
+  },
   "TheFooter": {
     "description": "Auto imported from components/TheFooter.vue"
   },
@@ -7,8 +10,5 @@
   },
   "TheNavbar": {
     "description": "Auto imported from components/TheNavbar.vue"
-  },
-  "VSlide": {
-    "description": "Auto imported from components/VSlide.vue"
   }
 }

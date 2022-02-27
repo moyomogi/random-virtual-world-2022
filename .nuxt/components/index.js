@@ -1,7 +1,7 @@
-export const TheFooter = () => import('../../components/TheFooter.vue' /* webpackChunkName: "components/the-footer" */).then(c => wrapFunctional(c.default || c))
-export const TheHeader = () => import('../../components/TheHeader.vue' /* webpackChunkName: "components/the-header" */).then(c => wrapFunctional(c.default || c))
-export const TheNavbar = () => import('../../components/TheNavbar.vue' /* webpackChunkName: "components/the-navbar" */).then(c => wrapFunctional(c.default || c))
-export const VSlide = () => import('../../components/VSlide.vue' /* webpackChunkName: "components/v-slide" */).then(c => wrapFunctional(c.default || c))
+export { default as SlideApp } from '../../components/SlideApp.vue'
+export { default as TheFooter } from '../../components/TheFooter.vue'
+export { default as TheHeader } from '../../components/TheHeader.vue'
+export { default as TheNavbar } from '../../components/TheNavbar.vue'
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {

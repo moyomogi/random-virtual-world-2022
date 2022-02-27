@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="bg-pattern bg-orange-500">
-      <div class="pt-48 container mx-auto flex items-end justify-center">
-        <img class="h-48 w-auto" src="/sidebar/serina.png" />
+      <div class="pt-36 container mx-auto flex items-end justify-center">
+        <img class="h-auto w-48" src="/sidebar/serina.png" />
       </div>
     </div>
     <div class="bg-blue-600">

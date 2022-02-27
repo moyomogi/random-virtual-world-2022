@@ -1,5 +1,5 @@
 <template>
-  <!-- header -->
+  <!-- https://dev.to/fayaz/making-a-navigation-drawer-sliding-sidebar-with-tailwindcss-blueprint-581l -->
   <nav
     class="
       flex
@@ -314,7 +314,7 @@
           href="https://ch-random.net"
           target="_blank"
         >
-          <img class="h-8 w-auto" src="/sidebar/chr.png" />
+          <img class="h-8 w-auto mr-2" src="/sidebar/chr.png" />
           <div>
             <span class="font-bold">Home Page</span>
             <br />
