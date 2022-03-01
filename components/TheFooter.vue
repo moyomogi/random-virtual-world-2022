@@ -1,17 +1,5 @@
 <template>
-  <footer>
+  <footer class="py-6 block border-t border-gray bg-slate-900 text-white text-center">
     Copyright &copy; 2022 Computer House Random
   </footer>
 </template>
-
-<style>
-footer {
-  border: 1px #eee;
-  border-style: solid none none none;
-  display: block;
-  padding: 24px 0;
-  text-align:center;
-  background-color: #111;
-  color:#eee;
-}
-</style>
