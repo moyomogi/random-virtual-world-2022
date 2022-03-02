@@ -2,6 +2,7 @@
   <!-- https://dev.to/fayaz/making-a-navigation-drawer-sliding-sidebar-with-tailwindcss-blueprint-581l -->
   <nav
     class="
+      my-logo
       flex
       fixed
       w-full
@@ -11,59 +12,60 @@
       h-16
       bg-slate-900
       text-white-700
-      border-b border-gray
+      border-b border-slate-400
       z-10
-      bg-contain bg-no-repeat
-      bg-center
+      bg-contain bg-no-repeat bg-center
     "
-    style="background-image: url('/navbar/logo.png')"
   >
+    <!-- header (left) -->
     <div class="flex items-center">
       <button
         class="mx-2 focus:outline-none"
         aria-label="Open menu"
-        @click="toggleDrawer"
+        @click="drawerOpen = true"
       >
-        <img class="w-12 h-12" src="/navbar/icon_burger.png" />
+        <img class="w-12 h-12" src="~assets/navbar/icon_burger.png" />
       </button>
       <button class="mx-2 focus:outline-none" @click="toggleMuted">
-        <img v-if="muted" class="w-12 h-12" src="/navbar/icon_vol_muted.png" />
-        <img v-else class="w-12 h-12" src="/navbar/icon_vol.png" />
+        <img
+          v-if="muted"
+          class="w-12 h-12"
+          src="~assets/navbar/icon_vol_muted.png"
+        />
+        <img v-else class="w-12 h-12" src="~assets/navbar/icon_vol.png" />
       </button>
     </div>
-    <!-- <img src="/navbar/logo.png" class="mx-auto h-12 w-auto z-20" /> -->
-    <div class="flex items-center">
-      <div class="hidden md:block md:flex md:justify-between md:bg-transparent">
-        <button class="mx-2 focus:outline-none" @click="infoOpen = true">
-          <img class="w-12 h-12" src="/navbar/icon_info.png" />
-        </button>
-        <ModalApp :open="infoOpen" text1="RVW について" text2="RVW は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。"/>
-        <a
-          rel="noopener"
-          href="https://ch-random.net"
-          target="_blank"
-          title="Computer House Random"
-          class="
-            flex
-            items-center
-            px-3
-            font-medium
-            mx-2
-            text-center
-            bg-orange-600
-            rounded
-            text-white
-            hover:bg-orange-700
-            focus:outline-none focus:bg-orange-400
-          "
-        >
-          <img
-            class="mr-3 h-6 w-auto"
-            src="/navbar/icon_hp.png"
-          />
-          <p class="font-bold">Home Page</p></a
-        >
-      </div>
+
+    <!-- header (right) -->
+    <div
+      class="flex my-auto items-center hidden block md:flex md:justify-between"
+    >
+      <!-- <div class="text-slate-100">d: {{ drawerOpen }} i: {{ infoOpen }}</div> -->
+      <button class="mx-2 focus:outline-none" @click="infoOpen = true">
+        <img class="w-12 h-12" src="~assets/navbar/icon_info.png" />
+      </button>
+      <ModalApp :open="infoOpen" @close="close" />
+      <a
+        rel="noopener"
+        href="https://ch-random.net"
+        target="_blank"
+        title="Computer House Random"
+        :class="magentaClass"
+        class="
+          flex
+          items-center
+          p-3
+          font-medium
+          mx-2
+          text-center
+          rounded
+          text-slate-100
+          focus:outline-none
+        "
+      >
+        <img class="mr-3 h-6 w-6" src="~assets/navbar/icon_hp.png" />
+        <p class="font-bold">Home Page</p></a
+      >
     </div>
 
     <!-- Darken the window -->
@@ -76,58 +78,54 @@
       leave-to-class="opacity-0"
     >
       <div
-        @keydown.esc="drawerOpen = false"
-        v-show="drawerOpen"
+        @keydown.esc="close"
+        v-show="drawerOpen || infoOpen"
         class="z-10 fixed inset-0 transition-opacity"
       >
         <div
-          @click="drawerOpen = false"
+          @click="close"
           class="absolute inset-0 bg-black opacity-50"
           tabindex="0"
         ></div>
       </div>
     </transition>
 
-    <!-- navbar -->
+    <!-- sidebar -->
     <aside
       class="
         transform
         top-0
         left-0
-        w-64
-        bg-slate-900
         fixed
+        w-64
         h-full
+        z-30
+        text-slate-100
+        bg-slate-900
+        border-r border-slate-400
         overflow-auto
         ease-in-out
         transition-all
         duration-300
-        border-r border-gray
-        z-30
       "
       :class="drawerOpen ? 'translate-x-0' : '-translate-x-full'"
     >
+      <!-- sidebar (top) -->
       <a
         v-for="(genreConfig, genre) in genresDict"
-        :href="genreConfig.id"
+        :href="'#' + genre.toLowerCase()"
         :key="genre"
-        @click="drawerOpen = false"
+        @click="close"
         class="py-4 h-12 w-full flex items-center no-underline"
       >
         <img :src="genreConfig.genreUrl" class="mx-auto h-8" />
       </a>
+      <!-- sidebar (bottom) -->
       <div class="fixed bottom-0 w-full">
         <a
           rel="noopener"
-          class="
-            flex
-            items-center
-            p-4
-            text-white
-            bg-blue-500
-            hover:bg-blue-600
-            w-full
-          "
+          :class="cyanClass"
+          class="flex items-center p-4 w-full"
           href="https://twitter.com/intent/tweet?text=RVW%20%7C%20Computer%20House%20Random&url=https://vuetest-103b3.firebaseapp.com&via=c_h_random"
           target="_blank"
         >
@@ -148,23 +146,16 @@
         </a>
         <a
           rel="noopener"
-          class="
-            flex
-            items-center
-            p-4
-            bg-orange-600
-            hover:bg-orange-700
-            focus:outline-none focus:bg-orange-400
-            text-white
-          "
+          :class="magentaClass"
+          class="flex items-center p-4 focus:outline-none"
           href="https://ch-random.net"
           target="_blank"
         >
-          <img class="h-8 w-auto mr-2" src="/navbar/icon_hp.png" />
+          <img class="h-8 w-auto mr-2" src="~assets/navbar/icon_hp.png" />
           <div>
             <span class="font-bold">Home Page</span>
             <br />
-            <span class="text-sm text-white mr-3">Computer House Random</span>
+            <span class="text-sm mr-3">Computer House Random</span>
           </div>
         </a>
       </div>
@@ -173,16 +164,23 @@
 </template>
 
 <script>
-import ModalApp from "~/components/ModalApp.vue";
-
 export default {
-  components: {
-    ModalApp,
-  },
   // audio https://aqua-engineer.com/post-884/
   data({ $genresDict }) {
+    const cyanClass = [
+      "focus:bg-sky-500",
+      "bg-sky-600",
+      "hover:bg-sky-700"
+    ];
+    const magentaClass = [
+      "focus:bg-pink-500",
+      "bg-pink-600",
+      "hover:bg-pink-700",
+    ];
     return {
       genresDict: $genresDict,
+      cyanClass,
+      magentaClass,
       drawerOpen: false,
       infoOpen: false,
       audio: process.client ? new Audio("/bgm.mp3") : null,
@@ -190,8 +188,9 @@ export default {
     };
   },
   methods: {
-    toggleDrawer() {
-      this.drawerOpen = !this.drawerOpen;
+    close() {
+      this.drawerOpen = false;
+      this.infoOpen = false;
     },
     toggleMuted() {
       if (this.muted) {
@@ -209,30 +208,23 @@ export default {
         if (process.client) {
           if (drawerOpen) document.body.style.setProperty("overflow", "hidden");
           else document.body.style.removeProperty("overflow");
-          // document.body.style.removeProperty("overflow", drawerOpen ? "hidden" : null);
         }
       },
     },
-    // infoOpen: {
-    //   immediate: true,
-    //   handler(infoOpen) {
-    //     if (process.client) {
-    //       document.body.style.removeProperty("overflow", infoOpen ? "hidden" : null);
-    //       console.log("infoOpen");
-    //       console.log(infoOpen);
-    //       if (infoOpen) {
-    //         this.$modal.show("modal-info")
-    //       } else {
-    //         this.$modal.hide("modal-info")
-    //       }
-    //     }
-    //   },
-    // },
   },
   mounted() {
+    this.audio.loop = true;
     document.addEventListener("keydown", (ev) => {
-      if (ev.key == "Esc") this.drawerOpen = false;
+      if (ev.key == "Esc") this.close();
     });
   },
 };
 </script>
+
+<style scoped>
+/* https://reactgo.com/nuxt-set-background-image/
+assets 内の画像は style に置く必要がある */
+.my-logo {
+  background-image: url("~assets/navbar/logo.png");
+}
+</style>

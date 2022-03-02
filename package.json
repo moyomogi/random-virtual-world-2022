@@ -9,7 +9,6 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "@nuxtjs/firebase": "^8.2.2",
     "@nuxtjs/tailwindcss": "^5.0.0-4",
     "core-js": "^3.19.3",
     "firebase": "^9.6.7",

@@ -1,5 +1,7 @@
 export default {
+  // mode: 'development',
   // mode: 'production',
+  // spa: true, // 静的ページか
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -39,7 +41,7 @@ export default {
         content:
           "RVW は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。",
       },
-      { hid: "og:image", property: "og:image", content: "/base/ogp.jpg" },
+      { hid: "og:image", property: "og:image", content: "/ogp.jpg" },
       { name: "twitter:card", content: "summary" },
     ],
     link: [
@@ -58,42 +60,31 @@ export default {
   plugins: [
     // mode: 'client': avoid SSR (CSR only)
     { src: "~/plugins/firebase", mode: "client" },
-    { src: "~/plugins/define", mode: "client" },
+    { src: "~/plugins/define" },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // target
-  target: "static",
+  target: "static", // `nuxt generate` (firebase 等の node.js hosting 用)
+  // target: "server",  // `nuxt build` (heroku 等の static hosting 用)
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   // https://go.nuxtjs.dev/tailwindcss
   buildModules: ["@nuxt/postcss8", "@nuxtjs/tailwindcss"],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
-  // modules: [
-  //   [
-  //     '@nuxtjs/firebase',
-  //     {
-  //       config: {
-  //         apiKey: 'AIzaSyBtJ2EN7_JznLs03fYngKzl0nN6F9-5G9I',
-  //         authDomain: 'vuetest-103b3.firebaseapp.com',
-  //         projectId: 'vuetest-103b3',
-  //         storageBucket: 'vuetest-103b3.appspot.com',
-  //         messagingSenderId: '640887077281',
-  //         appId: '1:640887077281:web:a87322542e2246c1f2f3e0',
-  //         measurementId: '<measurementId>'
-  //       },
-  //       // services: {
-  //       //   auth: true // Just as example. Can be any other service.
-  //       // }
-  //     }
-  //   ]
-  // ],
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    // ビルド高速化 https://tech.contracts.co.jp/entry/2020/12/14/161147
+    // parallel: true,
+    // cache: true,
+    // hardSource: true,
+    // webpack config https://nuxtjs.org/docs/features/configuration/
+    // nuxt assets https://develop365.gitlab.io/nuxtjs-2.8.X-doc/ja/guide/assets/
+    // extend(config, { isDev, isClient }) {
+    //   if (isDev) config.mode = "development";
+    // },
     postcss: {
       plugins: {
         tailwindcss: {},

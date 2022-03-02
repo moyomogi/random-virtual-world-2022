@@ -1,43 +1,83 @@
 <template>
-  <!-- https://tech.fusic.co.jp/posts/2020-10-26-vue-modal-sample/ -->
-  <client-only>
-    <modal
-      @before-close="beforeClose"
-      name="modal-target
-          w-1/2
-          bg-gray
-          rounded-lg
-          flex
-          items-center
-          justify-center
-        "
-      class="h-full w-full"
+  <!-- https://www.creative-tim.com/learning-lab/tailwind-starter-kit/documentation/vue/modals/large -->
+  <!-- items-center -->
+  <div
+    v-if="open"
+    class="
+      fixed
+      m-auto
+      md:w-1/2
+      h-auto
+      inset-0
+      z-50
+      flex
+      items-center
+      justify-center
+      outline-none
+      focus:outline-none
+      overflow-x-hidden overflow-y-auto
+    "
+  >
+    <!-- flex-col -->
+    <div
+      class="
+        relative
+        h-auto
+        w-full
+        rounded-md
+        shadow-md
+        flex flex-col
+        bg-slate-900
+      "
     >
-      <h1>{{ text1 }}</h1>
-      <div>{{ text2 }}</div>
-    </modal>
-  </client-only>
+      <!--header-->
+      <h3 class="flex text-white items-start p-5 text-3xl font-semibold">
+        RVW について
+      </h3>
+      <!--body-->
+      <div class="mx-8 my-2 flex text-slate-100">
+        RVW
+        は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった
+        2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽)
+        を展示します。無料でダウンロード・ウェブ上でプレイできます。
+      </div>
+      <!--footer-->
+      <div class="flex items-center justify-end pb-6 pr-6">
+        <button
+          class="
+            text-slate-400
+            bg-transparent
+            border border-solid border-slate-400
+            hover:bg-slate-400 hover:text-white
+            active:bg-slate-600
+            font-bold
+            uppercase
+            text-sm
+            px-3
+            py-2
+            rounded
+            outline-none
+            focus:outline-none
+            mr-1
+            mb-1
+            ease-linear
+            transition-all
+            duration-150
+          "
+          @click="$emit('close')"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- <div v-if="open" class="opacity-25 fixed inset-0 z-40 bg-black"></div> -->
 </template>
 
 <script>
 export default {
-  props: { open: false, text1: "", text2: "" },
-  watch: {
-    open: {
-      immediate: true,
-      handler(open) {
-        console.log("open");
-        console.log(open);
-        if (process.server) return;
-        if (open) this.$modal.show("modal-target");
-        else this.$modal.hide("modal-target");
-      },
-    },
-  },
-  methods: {
-    beforeClose() {
-      this.open = false;
-    },
+  props: {
+    open: false,
   },
 };
 </script>

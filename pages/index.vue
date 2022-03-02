@@ -2,8 +2,7 @@
   <div>
     <TheHeader />
     <div
-      class="antialiased md:flex md:flex-col bg-cover bg-repeat bg-center"
-      style="background-image: url('/base/bg.jpg')"
+      class="my-bg antialiased flex flex-col"
     >
       <TheSlides />
       <iframe
@@ -14,14 +13,20 @@
           mb-8
           md:w-1/2
           aspect-video
-          bg-gray-100
-          border-2 border-gray
-          rounded-lg
+          rounded-xl
           overflow-hidden
         "
-        src="https://www.youtube-nocookie.com/embed/_8rk_af6ApM" frameborder="0"
+        src="https://www.youtube-nocookie.com/embed/_8rk_af6ApM"
         allow="accelerometer;clipboard-write;encrypted-media;gyroscope"
       ></iframe>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* https://reactgo.com/nuxt-set-background-image/
+assets 内の画像は style に置く必要がある */
+.my-bg {
+  background-image: url("~assets/bg.jpg");
+}
+</style>

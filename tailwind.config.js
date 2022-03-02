@@ -9,7 +9,7 @@ module.exports = {
   mode: "jit", // 保存時に自動リロード
   theme: {
     extend: {
-      // Percentage values for spacing are not available per default
+      // Some classes are not available per default
       spacing: {
         "1/2": "50%",
         "1/3": "33.333333%",

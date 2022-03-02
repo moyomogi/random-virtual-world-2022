@@ -12,13 +12,19 @@ WSL の上で作業してください。
 npm install  # ./package.json を元に依存コマンドをインストール
 npm run dev
 ```
+あるいは、以下のようにします。
+```sh
+npm run generate
+firebase serve --only hosting
+```
 
 ## Firebase にデプロイ
 ```sh
+npm run generate  # ./dist にファイル群を生成
 firebase deploy
 ```
 
-## 使用したもの
+## 技術スタック
 - [NuxtJS](https://nuxtjs.org/ja/docs/get-started/installation/)
 - [Firebase](https://firebase.google.com/)
 - [Tailwind CSS](https://tailwindcss.com/docs/installation)
