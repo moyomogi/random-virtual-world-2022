@@ -5,7 +5,7 @@
     <section
       v-for="(slides, genre) in slidesList"
       :key="genre"
-      class="mx-auto p-6 h-full md:w-1/2 lg:w-1/3"
+      class="mx-auto md:px-6 py-6 h-full w-11/12 md:w-1/2 lg:w-1/3"
     >
       <!-- a の href で id に飛ばす用の虚無 -->
       <div :id="genre.toLowerCase()" class="-translate-y-24"></div>

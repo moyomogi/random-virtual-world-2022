@@ -21,8 +21,9 @@ npm run dev
 ```
 
 ## 製品モードで localhost にサーブする方法
-以下のコマンドは等価です。
-1. [localhost:3000](http://localhost:3000) にてサーブされる。
+いずれかのコマンド群を実行してください。
+
+#### 1. [localhost:3000](http://localhost:3000) にてサーブされる。
 ```sh
 # dist フォルダにファイル群を生成
 npm run generate
@@ -30,7 +31,7 @@ npm run generate
 npm run start
 ```
 
-2. [localhost:5000](http://localhost:5000) にてサーブされる。
+#### 2. [localhost:5000](http://localhost:5000) にてサーブされる。
 ```sh
 npm run generate
 # `npm run start` とほぼ等価
