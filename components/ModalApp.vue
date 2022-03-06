@@ -27,16 +27,16 @@
         rounded-md
         shadow-md
         flex flex-col
-        bg-slate-900
+        bg-stone-900
       "
     >
       <!--header-->
       <h3 class="flex text-white items-start p-5 text-3xl font-semibold">
-        RVW について
+        Random Virtual World について
       </h3>
       <!--body-->
-      <div class="mx-8 my-2 flex text-slate-100">
-        RVW
+      <div class="mx-8 my-2 flex text-stone-100">
+        Random Virtual World
         は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった
         2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽)
         を展示します。無料でダウンロード・ウェブ上でプレイできます。
@@ -45,11 +45,11 @@
       <div class="flex items-center justify-end pb-6 pr-6">
         <button
           class="
-            text-slate-400
+            text-stone-400
             bg-transparent
-            border border-solid border-slate-400
-            hover:bg-slate-400 hover:text-white
-            active:bg-slate-600
+            border border-solid border-stone-400
+            hover:bg-stone-400 hover:text-white
+            active:bg-stone-600
             font-bold
             uppercase
             text-sm
@@ -71,7 +71,6 @@
       </div>
     </div>
   </div>
-  <!-- <div v-if="open" class="opacity-25 fixed inset-0 z-40 bg-black"></div> -->
 </template>
 
 <script>
