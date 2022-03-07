@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* https://reactgo.com/nuxt-set-background-image/
 assets 内の画像は css か <style> に置く必要がある */
 .self-bg {

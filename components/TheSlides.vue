@@ -43,6 +43,15 @@ import { getDocs, collection } from "firebase/firestore";
 import { genresDict, colorsDict, envsDict } from "~/plugins/define.js";
 
 export default {
+  // https://github.com/nuxt-community/firebase-module/issues/90
+  // NuxtJS + Firestore 特有のバグ
+  hooks: {
+    generate: {
+      done(builder) {
+        db.goOffline();
+      },
+    },
+  },
   // https://nuxtjs.org/ja/docs/components-glossary/fetch/
   // fetch はサーバーサイドではルートをレンダリングするときに、クライアントサイドでは遷移するときに呼び出されます。
   async fetch() {

@@ -12,6 +12,7 @@
         border-4
         rounded-xl
         drop-shadow-lg
+        overflow-hidden
       "
     >
       <article class="md:flex">
@@ -127,16 +128,16 @@
 </template>
 
 <script>
-import { db } from "~/plugins/firebase.js";
 import { doc, getDoc } from "firebase/firestore";
+import { db } from "~/plugins/firebase.js";
 
+import { directive } from "vue-awesome-swiper";
 import {
   genresDict,
   authorsDict,
   colorsDict,
   envsDict,
 } from "~/plugins/define.js";
-import { directive } from "vue-awesome-swiper";
 
 const defaultPost = {
   // accessToken: "",
@@ -152,6 +153,16 @@ const defaultPost = {
   updatedTime: "2022/03/07 0:0",
 };
 export default {
+  // https://github.com/nuxt-community/firebase-module/issues/90
+  // NuxtJS + Firestore 特有のバグ
+  hooks: {
+    generate: {
+      done(builder) {
+        db.goOffline();
+      },
+    },
+  },
+  transition: "expandFade",
   directives: {
     swiper: directive,
   },
