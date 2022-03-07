@@ -1,13 +1,3 @@
-import Vue from "vue";
-
-if (process.browser) {
-  // https://github.com/davecat/vue-awesome-swiper
-  import("vue-awesome-swiper").then((VueAwesomeSwiper) =>
-    Vue.use(VueAwesomeSwiper)
-  );
-  // import("swiper/css/swiper.css");
-}
-
 // https://firebase.google.com/docs/storage/web/upload-files?hl=ja#web-version-9_1
 // 公式解説を読むと最短で理解できる
 import { initializeApp, getApps } from "firebase/app";
@@ -29,5 +19,5 @@ const firebaseApp = apps.length ? apps[0] : initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const storage = getStorage(firebaseApp);
 
-// listAll(ref(storage))
+// Firebase storage 全件列挙: listAll(ref(storage))
 export { db, storage };

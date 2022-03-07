@@ -21,7 +21,7 @@
       "
     >
       <!-- a の href で id に飛ばす用の虚無 -->
-      <div :id="genre.toLowerCase()" class="-translate-y-24"></div>
+      <div :id="genre" class="-translate-y-24"></div>
       <!-- assets に置いた画像は require する必要がある
         https://omiend.hatenablog.jp/entry/2019/05/12/131734
       -->
@@ -30,76 +30,7 @@
         :src="genresDict[genre].genreUrl"
         :alt="genresDict[genre].aka"
       />
-      <client-only>
-        <swiper
-          :class="colorsDict[genresDict[genre].color].borderClass"
-          class="
-            aspect-[8/9]
-            bg-stone-100
-            border-2
-            rounded-xl
-            drop-shadow-lg
-            overflow-hidden
-          "
-          :options="swiperOption"
-        >
-          <swiper-slide
-            v-for="post in posts"
-            :key="post.title"
-            class="relative"
-          >
-            <img
-              class="w-full aspect-video bg-white object-cover drop-shadow"
-              :src="post.pics[0]"
-              :title="post.title"
-              :alt="post.title"
-            />
-            <div class="px-6 pt-6 mb-auto">
-              <div class="items-baseline">
-                <NuxtLink :to="`/posts/${post.title}`">
-                  <h1
-                    class="
-                      mb-2
-                      font-semibold
-                      text-lg text-stone-800
-                      hover:underline hover:decoration-stone-800
-                    "
-                  >
-                    {{ post.title }}
-                  </h1></NuxtLink
-                >
-                <div class="space-x-2 mb-2 inline-block">
-                  <span
-                    v-for="env in post.supportedEnvs"
-                    :key="env"
-                    :class="[
-                      colorsDict[envsDict[env].color].textClass,
-                      colorsDict[envsDict[env].color].bgClass,
-                    ]"
-                    class="
-                      inline-block
-                      px-2
-                      py-1
-                      text-xs
-                      rounded-full
-                      font-semibold
-                      tracking-wide
-                    "
-                    >{{ envsDict[env].aka }}</span
-                  >
-                </div>
-              </div>
-              <!-- truncate は不要？ -->
-              <p class="mb-16 break-all">
-                {{ post.body }}
-              </p>
-            </div>
-          </swiper-slide>
-          <div class="swiper-pagination" slot="pagination"></div>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
-        </swiper>
-      </client-only>
+      <SlideApp :genre="genre" :posts="posts" />
     </section>
   </article>
 </template>
@@ -110,14 +41,10 @@ import { db } from "~/plugins/firebase.js";
 import { getDocs, collection } from "firebase/firestore";
 
 import { genresDict, colorsDict, envsDict } from "~/plugins/define.js";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 
-// fetch を使おうね https://nuxtjs.org/docs/features/data-fetching#async-data-in-components
 export default {
-  components: {
-    Swiper,
-    SwiperSlide,
-  },
+  // https://nuxtjs.org/ja/docs/components-glossary/fetch/
+  // fetch はサーバーサイドではルートをレンダリングするときに、クライアントサイドでは遷移するときに呼び出されます。
   async fetch() {
     // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
     // firebase公式 https://firebase.google.com/docs/firestore/query-data/queries
@@ -127,8 +54,18 @@ export default {
     try {
       // firestore/posts/<accessToken> を全件列挙
       const documents = await getDocs(postsRef);
+      if (!documents) {
+        console.warn("(TheSlides, fetch) Invalid documents");
+        return;
+      }
+      const genres = Object.keys(genresDict);
+      genres.forEach((genre) => (this.postsList[genre] = []));
+      // .forEash() は直に付けれるが、
+      // .map() は .docs.map() にしないといけない。
       documents.forEach((document) => {
         // cf: document.id == accessToken
+        // console.log("(TheSlides) document.id");
+        // console.log(document.id);
         let post = document.data();
         if (!post || !document.exists()) {
           console.warn("(TheSlides, fetch) Invalid post");
@@ -144,8 +81,24 @@ export default {
   },
   data() {
     let postsList = {};
+    let swiperOptionsDict = {};
     const genres = Object.keys(genresDict);
     genres.forEach((genre) => (postsList[genre] = []));
+    genres.forEach(
+      (genre) =>
+        (swiperOptionsDict[genre] = {
+          loop: true,
+          pagination: {
+            el: `.swiper-pagination-${genre}`,
+            clickable: true,
+          },
+          navigation: {
+            nextEl: `.swiper-button-next-${genre}`,
+            prevEl: `.swiper-button-prev-${genre}`,
+            dynamicBullets: true,
+          },
+        })
+    );
     return {
       // fetch
       postsList,
@@ -153,17 +106,19 @@ export default {
       genresDict,
       colorsDict,
       envsDict,
-      swiperOption: {
-        loop: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      },
+      // swiperOption: {
+      //   loop: true,
+      //   pagination: {
+      //     el: ".swiper-pagination",
+      //     clickable: true,
+      //   },
+      //   navigation: {
+      //     nextEl: ".swiper-button-next",
+      //     prevEl: ".swiper-button-prev",
+      //       dynamicBullets: true,
+      //   },
+      // },
+      swiperOptionsDict,
     };
   },
   // methods: {

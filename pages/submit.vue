@@ -61,7 +61,7 @@
               {{ warnTitle() }}, アップデートにはアクセストークンが必要です。
             </p>
             <p v-else class="py-2 text-sm text-gray-600">
-              OK: len(title) &gt; 0
+              OK: len(self.title) &gt; 0
             </p>
           </div>
         </section>
@@ -103,7 +103,7 @@
               {{ errBody() }}
             </p>
             <p v-else class="py-2 text-sm text-gray-600">
-              OK: len(body) &gt; 0
+              OK: len(self.body) &gt; 0
             </p>
           </div>
         </section>
@@ -145,7 +145,7 @@
               {{ errUrl() }}
             </p>
             <p v-else class="py-2 text-sm text-gray-600">
-              OK: re.match("https?://.*", url) != None
+              OK: re.match("https?://.*", self.url) != None
             </p>
           </div>
         </section>
@@ -336,7 +336,7 @@
               {{ errPics() }}
             </p>
             <p v-else class="py-2 text-sm text-gray-600">
-              OK: len(pics) == {{ picDetails.length }}
+              OK: len(self.pics) == {{ picDetails.length }}
             </p>
           </div>
         </section>
@@ -438,7 +438,7 @@
               {{ errYourAccessToken() }}
             </p>
             <p v-else class="py-2 text-sm text-gray-600">
-              OK: accessToken in submittedAccessTokens,
+              OK: self.accessToken in submittedAccessTokens,
               {{ accessTokensDict[yourAccessToken] }}
             </p>
           </div>

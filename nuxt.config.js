@@ -1,9 +1,10 @@
 const TITLE = "Random Virtual World";
 const DESC =
   "Random Virtual World は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
+
 export default {
-  ssr: true,
-  spa: true, // 静的ページか
+  // SSR, SPA(=CSR) https://shimablogs.com/spa-ssr-ssg-difference
+  ssr: false, // true: SSR, false: SPA(=CSR)
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -55,7 +56,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // mode: 'client': avoid SSR (CSR only)
-    { src: "~/plugins/firebase", mode: "client" },
+    { src: "~/plugins/bindSwiper", mode: "client" },
+    { src: "~/plugins/firebase" },
     { src: "~/plugins/define" },
   ],
 
@@ -75,8 +77,8 @@ export default {
     // ビルド高速化 https://tech.contracts.co.jp/entry/2020/12/14/161147
     // `parallel: true` にするとバグる https://lifesaver.codes/answer/how-do-i-fix-nuxt-warning-nuxt-build-finished-but-did-not-exit-after-5s-5669
     // parallel: true,
-    cache: true,
-    hardSource: true,
+    // cache: true,
+    // hardSource: true,
     postcss: {
       plugins: {
         tailwindcss: {},

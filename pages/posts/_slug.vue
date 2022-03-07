@@ -91,31 +91,35 @@
         </section>
 
         <!-- article (right) -->
-        <client-only>
-          <swiper
-            class="
-              my-auto
-              md:pl-8 md:w-1/3
-              aspect-video
-              object-cover object-center
-              rounded
-              drop-shadow
-            "
-            :options="swiperOption"
-          >
-            <swiper-slide v-for="pic in post.pics" :key="pic">
+        <!-- <client-only> -->
+        <section
+          class="
+            swiper
+            my-auto
+            md:pl-8 md:w-1/3
+            aspect-video
+            object-cover object-center
+            rounded
+            drop-shadow
+            overflow-hidden
+          "
+          v-swiper="swiperOption"
+        >
+          <div class="swiper-wrapper">
+            <div v-for="pic in post.pics" :key="pic" class="swiper-slide">
               <img
                 class="w-full aspect-video bg-white object-cover"
                 :src="pic"
                 :title="slug"
                 :alt="slug"
               />
-            </swiper-slide>
-            <div class="swiper-pagination" slot="pagination"></div>
-            <div class="swiper-button-prev" slot="button-prev"></div>
-            <div class="swiper-button-next" slot="button-next"></div>
-          </swiper>
-        </client-only>
+            </div>
+          </div>
+          <div class="swiper-pagination" slot="pagination"></div>
+          <div class="swiper-button-prev" slot="button-prev"></div>
+          <div class="swiper-button-next" slot="button-next"></div>
+        </section>
+        <!-- </client-only> -->
       </article>
     </main>
     <TheSlides />
@@ -132,29 +136,29 @@ import {
   colorsDict,
   envsDict,
 } from "~/plugins/define.js";
-import { Swiper, SwiperSlide } from "vue-awesome-swiper";
+import { directive } from "vue-awesome-swiper";
 
 const defaultPost = {
-  accessToken: "3d2tF4r5F4r5",
-  title: "羽衣ララ",
-  body: "惑星サマーン出身の宇宙人。地球の年齢では13歳だが、惑星サマーンでは大人扱い。フワとプルンスと一緒にロケットに乗って伝説の戦士プリキュアを探す旅をしている最中、フワの力で地球にワープしてしまう。責任感が強くて真面目だけど、ちょっと抜けているところも。チャームポイントは頭についたセンサー。天の川のプリキュア「キュアミルキー」に変身！",
+  // accessToken: "",
+  body: "",
   url: "https://vuetest-103b3.web.app",
   genre: "puzzle",
-  supportedEnvs: ["windows"],
-  authors: ["yomog"],
-  pics: ["/ogp.jpg"],
+  supportedEnvs: [],
+  authors: [],
+  // 1x1 の最小 GIF https://qiita.com/CloudRemix/items/92e68a048a0da93ed240
+  pics: [
+    "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
+  ],
   updatedTime: "2022/03/07 0:0",
 };
 export default {
-  components: {
-    Swiper,
-    SwiperSlide,
+  directives: {
+    swiper: directive,
   },
   data() {
     return {
       // asyncData
-      defaultPost,
-      post: defaultPost,
+      // post: defaultPost,  // asyncData の post を上書きしてしまう
       // define
       genresDict,
       authorsDict,
@@ -169,6 +173,7 @@ export default {
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev",
+          dynamicBullets: true,
         },
       },
     };
@@ -178,80 +183,82 @@ export default {
       title: this.slug,
     };
   },
-  // async fetch() {
-  //   const ref = doc(db, "posts", this.slug);
-  //   try {
-  //     const document = await getDoc(ref);
-  //     alert(document.data().text);
-  //   } catch (e) {
-  //     alert("(_slug, fetch) Error");
-  //     console.error(e);
-  //   }
-  // },
+  // async https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Statements/async_function
+  // async 関数では、返値が暗黙的に `Promise.resolve(/* value */)` でラップされる
+  // https://qiita.com/sotszk/items/f23199e864cba47455ce
+  // `Promise.resolve(/* value */)` は以下と等価
+  // `new Promise(resolve => resolve(/* value */))`
+  // https://negalog.com/nuxt-js-fetch-data/
+  // asyncData() がサーバー側で実行されるのは、アプリケーションへの初回アクセス時のみ。
+  // (URL への直接アクセス・リロードなどの形でページに遷移した場合など)
+  // 最初の一回はサーバー側で実行されるが、以降は SPA として動作。
+  // (ブラウザ側で実行される)
   async asyncData({ params, error }) {
     // https://nuxtjs.org/ja/docs/directory-structure/pages/
     // "/abc" パスにアクセスすると、slug は "abc" になります。
     // cf: このプロジェクトにおいては slug == title です
     const { slug } = params;
     // firestore/redirects/<title>/ にある json を取得
-    let accessToken = await (async () => {
-      let curAccessToken = "";
-      const docRef = doc(db, "redirects", slug);
-      try {
-        const document = await getDoc(docRef);
-        if (!document.exists() || !document.data()) {
-          console.log("(_slug, asyncData, redirects) Invalid doc ref");
-          error({
-            statusCode: 404,
-            message: `記事「${slug}」は存在しません。`,
-          });
-          return;
-        }
-        curAccessToken = document.data().redirect;
-        if (!curAccessToken) {
-          console.warn("(_slug, asyncData, redirects) Invalid accessToken");
-          error({
-            statusCode: 500,
-            message: `記事「${slug}」のデータが壊れています。`,
-          });
-          return;
-        }
-      } catch (e) {
-        console.warn("(_slug, asyncData, redirects) Error");
-        console.warn(e);
-        error({
-          statusCode: 500,
-          message: `記事「${slug}」の取得に失敗しました。`,
-        });
-      }
-      return curAccessToken;
-    })();
-    // firestore/posts/<accessToken>/ に json を送信
-    let post = defaultPost;
-    {
-      // console.log("(dbg) accessToken");
-      // console.log(accessToken);
-      const docRef = doc(db, "posts", accessToken);
-      try {
-        const document = await getDoc(docRef);
-        post = document.data();
-        if (!post) {
-          console.warn("(_slug, asyncData, posts) Invalid");
-          error({
-            statusCode: 500,
-            message: `記事「${slug}」のデータが壊れています。`,
-          });
-          return;
-        }
-        console.log(`(_slug, asyncData, posts) Sync'd ${slug}`);
-      } catch (e) {
-        console.log("(_slug, asyncData, posts) Error");
-        console.log(e);
+    let accessToken = "";
+    const redirectsDocRef = doc(db, "redirects", slug);
+    try {
+      const redirectDocument = await getDoc(redirectsDocRef);
+      if (!redirectDocument) {
+        console.log("(_slug, asyncData, redirects) Invalid doc ref");
         error({
           statusCode: 404,
-          message: `記事「${slug}」は削除されました。`,
+          message: `記事「${slug}」は存在しません。`,
         });
+        return { post: defaultPost, slug };
       }
+      const data = redirectDocument.data();
+      if (!data) {
+        console.log("(_slug, asyncData, redirects) Invalid doc ref");
+        error({
+          statusCode: 404,
+          message: `記事「${slug}」は存在しません。`,
+        });
+        return { post: defaultPost, slug };
+      }
+      accessToken = data.redirect;
+    } catch (e) {
+      console.warn("(_slug, asyncData, redirects) Error");
+      console.warn(e);
+      error({
+        statusCode: 500,
+        message: `記事「${slug}」の取得に失敗しました。`,
+      });
+    }
+    // firestore/posts/<accessToken>/ に json を送信
+    let post = defaultPost;
+    const postsDocRef = doc(db, "posts", accessToken);
+    try {
+      const postsDocument = await getDoc(postsDocRef);
+      if (!postsDocument) {
+        console.log("(_slug, asyncData, posts) Invalid doc ref");
+        error({
+          statusCode: 404,
+          message: `記事「${slug}」のデータが壊れています。`,
+        });
+        return { post: defaultPost, slug };
+      }
+      post = postsDocument.data();
+      if (!post) {
+        console.warn("(_slug, asyncData, posts) Invalid");
+        error({
+          statusCode: 500,
+          message: `記事「${slug}」のデータが壊れています。`,
+        });
+        return { post: defaultPost, slug };
+      }
+      console.log(`(_slug, asyncData, posts) Sync'd ${slug}`);
+    } catch (e) {
+      console.log("(_slug, asyncData, posts) Error");
+      console.log(e);
+      error({
+        statusCode: 404,
+        message: `記事「${slug}」は削除されました。`,
+      });
     }
     return { post, slug };
   },
