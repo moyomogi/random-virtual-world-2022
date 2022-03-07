@@ -62,32 +62,31 @@
                       mb-2
                       font-semibold
                       text-lg text-stone-800
-                      hover:underline
-                      hover:decoration-stone-800
+                      hover:underline hover:decoration-stone-800
                     "
                   >
                     {{ post.title }}
                   </h1></NuxtLink
                 >
                 <div class="space-x-2 mb-2 inline-block">
-                  <span v-for="env in post.supportedEnvs" :key="env">
-                    <span
-                      :class="[
-                        colorsDict[envsDict[env].color].textClass,
-                        colorsDict[envsDict[env].color].bgClass,
-                      ]"
-                      class="
-                        inline-block
-                        px-2
-                        py-1
-                        text-xs
-                        rounded-full
-                        font-semibold
-                        tracking-wide
-                      "
-                      >{{ envsDict[env].aka }}</span
-                    >
-                  </span>
+                  <span
+                    v-for="env in post.supportedEnvs"
+                    :key="env"
+                    :class="[
+                      colorsDict[envsDict[env].color].textClass,
+                      colorsDict[envsDict[env].color].bgClass,
+                    ]"
+                    class="
+                      inline-block
+                      px-2
+                      py-1
+                      text-xs
+                      rounded-full
+                      font-semibold
+                      tracking-wide
+                    "
+                    >{{ envsDict[env].aka }}</span
+                  >
                 </div>
               </div>
               <!-- truncate は不要？ -->
@@ -132,14 +131,14 @@ export default {
         // cf: document.id == accessToken
         let post = document.data();
         if (!post || !document.exists()) {
-          console.warn("(TheSlides, fetch) Not a single post was found.");
+          console.warn("(TheSlides, fetch) Invalid post");
           return;
         }
         console.log(`(TheSlides) Sync'd ${post.title}`);
         this.postsList[post.genre].push(post);
       });
     } catch (e) {
-      console.warn("(TheSlides, fetch) Error occurred.");
+      console.warn("(TheSlides, fetch) Error");
       console.warn(e);
     }
   },

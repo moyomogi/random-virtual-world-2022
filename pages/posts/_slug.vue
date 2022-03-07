@@ -134,6 +134,16 @@ import {
 } from "~/plugins/define.js";
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 
+const defaultPost = {
+  accessToken: "3d2tF4r5",
+  body: "羽衣ララは、惑星サマーン出身の宇宙人。地球の年齢では13歳だが、惑星サマーンでは大人扱い。フワとプルンスと一緒にロケットに乗って伝説の戦士プリキュアを探す旅をしている最中、フワの力で地球にワープしてしまう。責任感が強くて真面目だけど、ちょっと抜けているところも。チャームポイントは頭についたセンサー。天の川のプリキュア「キュアミルキー」に変身！",
+  url: "",
+  genre: "puzzle",
+  supportedEnvs: ["windows"],
+  authors: [],
+  pics: ["https://vuetest-103b3.web.app/ogp.jpg"],
+  updatedTime: "2022/03/07 12:12",
+};
 export default {
   components: {
     Swiper,
@@ -142,7 +152,8 @@ export default {
   data() {
     return {
       // asyncData
-      post: null,
+      defaultPost,
+      post: defaultPost,
       // define
       genresDict,
       authorsDict,
@@ -214,7 +225,7 @@ export default {
       }
     }
     // firestore/posts/<accessToken>/ に json を送信
-    let post = null;
+    let post = defaultPost;
     {
       // console.log("(dbg) accessToken");
       // console.log(accessToken);

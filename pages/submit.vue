@@ -583,17 +583,17 @@ export default {
     },
     errTitle() {
       if (this.title.length) return null;
-      return "NG: len(title) == 0";
+      return "NG: len(self.title) == 0";
     },
     warnTitle() {
       for (const [_, curTitle] of Object.entries(this.accessTokensDict)) {
-        if (curTitle === this.title) return "NG: title in submittedTitles";
+        if (curTitle === this.title) return "Submission is not allowed: self.title in submittedTitles";
       }
       return null;
     },
     errBody() {
       if (this.body.length) return null;
-      return "NG: len(body) == 0";
+      return "NG: len(self.body) == 0";
     },
     errUrl() {
       // regexp の pattern のオプションフラグについて。
@@ -603,19 +603,19 @@ export default {
       // /../u: unicode (漢字など) 対応
       const pattern = /^https?:\/\/.*$/u;
       if (pattern.test(this.url)) return null;
-      return 'NG: re.match("https?://.*", url) == None';
+      return 'NG: re.match("https?://.*", self.url) == None';
     },
     errSupportedEnvs() {
       if (this.supportedEnvs.length) return null;
-      return "NG: len(supportedEnvs) == 0";
+      return "NG: len(self.supportedEnvs) == 0";
     },
     errAuthors() {
       if (this.authors.length) return null;
-      return "NG: len(authors) == 0";
+      return "NG: len(self.authors) == 0";
     },
     errPics() {
       if (this.picDetails.length === 0) {
-        return "NG: len(pics) == 0";
+        return "NG: len(self.pics) == 0";
       }
       for (let i = 0; i < this.picDetails.length; i++) {
         const detail = this.picDetails[i];
@@ -648,7 +648,7 @@ export default {
         return accessToken === this.yourAccessToken;
       });
       if (valid) return null;
-      return "NG: accessToken not in submittedAccessTokens";
+      return "NG: self.accessToken not in submittedAccessTokens";
     },
     updateErrIfAny() {
       const funcs = [
@@ -672,7 +672,7 @@ export default {
       const len = this.picDetails.length;
       for (let i = 0; i < files.length; i++) {
         if (!files[i]) {
-          console.warn("file == null");
+          console.warn(`files[${i}] == null`);
           continue;
         }
         this.picDetails.push({
@@ -739,7 +739,7 @@ export default {
           const redirect = { redirect: accessToken };
           await setDoc(docRef, redirect);
         } catch (e) {
-          alert("(submitPost, redirects) Error occred.");
+          alert("(submitPost, redirects) Error");
           console.error(e);
           return;
         }
@@ -751,9 +751,9 @@ export default {
       this.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
         if (updates) {
-          this.updateMessage = `POST: storage/posts/${accessToken}${i + 1}"`;
+          this.updateMessage = `POST: storage/posts/${accessToken}/pic${i + 1}`;
         } else {
-          this.submitMessage = `POST: storage/posts/${accessToken}${i + 1}"`;
+          this.submitMessage = `POST: storage/posts/${accessToken}/pic${i + 1}`;
         }
         const bytes = this.picDetails[i].bytes;
         const storageRef = ref(storage, `${accessToken}/pic${i + 1}`);
@@ -775,14 +775,14 @@ export default {
       const docRef = doc(db, "posts", accessToken);
       try {
         await setDoc(docRef, post);
-        console.log("(submit, submitPost, posts) Success.");
+        console.log("(submit, submitPost, posts) Success");
         if (updates) {
-          this.updateMessage = `Updated!`;
+          this.updateMessage = "Updated!";
         } else {
-          this.submitMessage = `Submitted!`;
+          this.submitMessage = "Submitted!";
         }
       } catch (e) {
-        alert("(submit, submitPost, posts) Error occred.");
+        alert("(submit, submitPost, posts) Error");
         console.error(e);
         return;
       }
@@ -816,7 +816,7 @@ export default {
       console.warn(e);
       error({
         statusCode: 500,
-        message: "Fatal error occurred.",
+        message: "Fatal error",
       });
     }
     return { accessTokensDict };

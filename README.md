@@ -16,7 +16,7 @@ npm install
 
 ## Firebase にログイン
 詳しくは [Firebaseでデプロイしよう！](https://qiita.com/hiroki-harada/items/ca22ac177db68e3c3796) を参照。
-# 初期化
+### 初期化
 ```sh
 npm install -g firebase-tools
 firebase login
@@ -43,22 +43,19 @@ npm run start
 
 ## 技術スタック
 - [NuxtJS](https://nuxtjs.org/ja/docs/get-started/installation/)
-
 - [Tailwind CSS](https://tailwindcss.com/docs/installation)
   `/` キーを押すと、クラスを検索できます。
-
 - [@nuxtjs/tailwindcss](https://tailwindcss.nuxtjs.org)
-
 - [Firebase](https://firebase.google.com/)
-
 - [vue-awesome-swiper](https://github.surmon.me/vue-awesome-swiper/)
   スライドショー機能
 
 ## 参考文献
 - [Making a Navigation Drawer/Sliding Sidebar with TailwindCSS](https://dev.to/fayaz/making-a-navigation-drawer-sliding-sidebar-with-tailwindcss-blueprint-581l)
   THeNavbar.vue で使いました。
-
 - [Multi Section Form | Tailwind Toolbox](https://www.tailwindtoolbox.com/templates/multi-section-form)
   submit.vue で使いました。
-
 - [Tailblocks](https://tailblocks.cc)
+
+## License
+これらのコードは [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.ja) で許諾されています。すなわち、商用利用・非商用利用を問わず、引用元に記載せずに、これらのコードの一部または全部を使用できます。
