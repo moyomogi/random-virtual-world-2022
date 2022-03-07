@@ -26,6 +26,7 @@ footers = soup.select("div.projects-container")
 # 生成したいもの
 # const authorsDict = {
 #   yomog: {
+#     year: 1,
 #     name: "よもぎ",
 #     icon: "https://ch-random.net/authors/yomog/avatar_hue523f5c0a45e10cf0e33f8e085b52548_162276_250x250_fill_lanczos_center_2.png",
 #   },

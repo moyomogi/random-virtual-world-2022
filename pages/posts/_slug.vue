@@ -135,14 +135,15 @@ import {
 import { Swiper, SwiperSlide } from "vue-awesome-swiper";
 
 const defaultPost = {
-  accessToken: "3d2tF4r5",
-  body: "羽衣ララは、惑星サマーン出身の宇宙人。地球の年齢では13歳だが、惑星サマーンでは大人扱い。フワとプルンスと一緒にロケットに乗って伝説の戦士プリキュアを探す旅をしている最中、フワの力で地球にワープしてしまう。責任感が強くて真面目だけど、ちょっと抜けているところも。チャームポイントは頭についたセンサー。天の川のプリキュア「キュアミルキー」に変身！",
-  url: "",
+  accessToken: "3d2tF4r5F4r5",
+  title: "羽衣ララ",
+  body: "惑星サマーン出身の宇宙人。地球の年齢では13歳だが、惑星サマーンでは大人扱い。フワとプルンスと一緒にロケットに乗って伝説の戦士プリキュアを探す旅をしている最中、フワの力で地球にワープしてしまう。責任感が強くて真面目だけど、ちょっと抜けているところも。チャームポイントは頭についたセンサー。天の川のプリキュア「キュアミルキー」に変身！",
+  url: "https://vuetest-103b3.web.app",
   genre: "puzzle",
   supportedEnvs: ["windows"],
-  authors: [],
-  pics: ["https://vuetest-103b3.web.app/ogp.jpg"],
-  updatedTime: "2022/03/07 12:12",
+  authors: ["yomog"],
+  pics: ["/ogp.jpg"],
+  updatedTime: "2022/03/07 0:0",
 };
 export default {
   components: {
@@ -193,8 +194,8 @@ export default {
     // cf: このプロジェクトにおいては slug == title です
     const { slug } = params;
     // firestore/redirects/<title>/ にある json を取得
-    let accessToken = "";
-    {
+    let accessToken = await (async () => {
+      let curAccessToken = "";
       const docRef = doc(db, "redirects", slug);
       try {
         const document = await getDoc(docRef);
@@ -206,9 +207,9 @@ export default {
           });
           return;
         }
-        accessToken = document.data().redirect;
-        if (!accessToken) {
-          console.warn("(_slug, asyncData, redirects) Invalid");
+        curAccessToken = document.data().redirect;
+        if (!curAccessToken) {
+          console.warn("(_slug, asyncData, redirects) Invalid accessToken");
           error({
             statusCode: 500,
             message: `記事「${slug}」のデータが壊れています。`,
@@ -223,7 +224,8 @@ export default {
           message: `記事「${slug}」の取得に失敗しました。`,
         });
       }
-    }
+      return curAccessToken;
+    })();
     // firestore/posts/<accessToken>/ に json を送信
     let post = defaultPost;
     {

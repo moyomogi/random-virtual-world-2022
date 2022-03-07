@@ -8,7 +8,7 @@
 
 ## インストール
 WSL の上で作業してください。  
-まず `Code > Download ZIP` から DL してカレントフォルダに置いてください。その後、下記コマンドを実行してください。  
+まず緑色の `Code > Download ZIP` から DL して、好きな場所に置いてください。その後、カレントフォルダで下記コマンドを実行してください。  
 ```sh
 # ./package.json の "dependencies", "devDependencies" にあるコマンドをインストール
 npm install
@@ -43,19 +43,24 @@ npm run start
 
 ## 技術スタック
 - [NuxtJS](https://nuxtjs.org/ja/docs/get-started/installation/)
+  Vue.js のフレームワーク
 - [Tailwind CSS](https://tailwindcss.com/docs/installation)
-  `/` キーを押すと、クラスを検索できます。
+  `/` キーを押すと、クラスで検索できます。
 - [@nuxtjs/tailwindcss](https://tailwindcss.nuxtjs.org)
+  NuxtJS アプリケーションに Tailwind CSS を手軽に導入できる。
 - [Firebase](https://firebase.google.com/)
+  Firestore, Firebase Storage を DB として使い、
+  Firebase Hosting でホスティングしています。
 - [vue-awesome-swiper](https://github.surmon.me/vue-awesome-swiper/)
   スライドショー機能
 
 ## 参考文献
 - [Making a Navigation Drawer/Sliding Sidebar with TailwindCSS](https://dev.to/fayaz/making-a-navigation-drawer-sliding-sidebar-with-tailwindcss-blueprint-581l)
-  THeNavbar.vue で使いました。
+  `components/TheNavbar.vue` で使いました。
 - [Multi Section Form | Tailwind Toolbox](https://www.tailwindtoolbox.com/templates/multi-section-form)
-  submit.vue で使いました。
+  `pages/submit.vue` で使いました。
 - [Tailblocks](https://tailblocks.cc)
+  `components/TheSlides.vue` で使いました。
 
 ## License
 これらのコードは [CC0](https://creativecommons.org/publicdomain/zero/1.0/deed.ja) で許諾されています。すなわち、商用利用・非商用利用を問わず、引用元に記載せずに、これらのコードの一部または全部を使用できます。
