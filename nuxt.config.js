@@ -26,7 +26,7 @@ export default {
   target: "server",  // nuxt build (heroku 等の node.js hosting 用)
   // メモ false, static で動作確認済み
   // メモ true, static でも正常に動いてるぽい
-  // メモ true, server: 差分更新
+  // メモ true, server: heroku に置けば差分更新できる
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
