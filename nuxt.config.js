@@ -1,38 +1,21 @@
-import { db } from "./plugins/firebase";
-import { terminate } from "firebase/firestore";
-
 const TITLE = "Random Virtual World";
 const DESC =
   "Random Virtual World は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
 
 export default {
-  // Firebase 9 のバグ https://stackoverflow.com/questions/60124687/nuxt-generate-routes-by-firebase-data-is-finished-but-did-not-exit-after-5s
-  hooks: {
-    generate: {
-      async done(builder) {
-        try {
-          await terminate(db);
-        } catch (e) {
-          console.error(e);
-        }
-      },
-    },
-  },
+  // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
+  // ssr: false, // true: SSR, SSG, false: SPA(=CSR)
+  ssr: true, // true: SSR, SSG, false: SPA(=CSR)
+  target: "static", // nuxt generate (Firebase Hosting 等の static hosting 用)
+  // target: "server", // nuxt build (Heroku 等の node.js hosting 用)
+  // Firebase Hosting にデプロイするときは true, static にしてください。
+  // Heroku にデプロイするときは true, server にしてください。
 
-  // heroku
+  // Config for Heroku
   server: {
     port: process.env.PORT || 3000,
     host: "0.0.0.0",
   },
-
-  // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
-  // ssr: false, // true: SSR, SSG, false: SPA(=CSR)
-  ssr: true, // true: SSR, SSG, false: SPA(=CSR)
-  // target: "static", // nuxt generate (gh pages 等の static hosting 用)
-  target: "server", // nuxt build (heroku 等の node.js hosting 用)
-  // メモ false, static で動作確認済み
-  // メモ true, static でも正常に動いてるぽい
-  // メモ true, server: heroku に置けば差分更新できる
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
