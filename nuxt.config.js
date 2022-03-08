@@ -19,11 +19,17 @@ export default {
     },
   },
 
+  // heroku
+  server: {
+    port: process.env.PORT || 3000,
+    host: "0.0.0.0",
+  },
+
   // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
   // ssr: false, // true: SSR, SSG, false: SPA(=CSR)
   ssr: true, // true: SSR, SSG, false: SPA(=CSR)
   // target: "static", // nuxt generate (gh pages 等の static hosting 用)
-  target: "server",  // nuxt build (heroku 等の node.js hosting 用)
+  target: "server", // nuxt build (heroku 等の node.js hosting 用)
   // メモ false, static で動作確認済み
   // メモ true, static でも正常に動いてるぽい
   // メモ true, server: heroku に置けば差分更新できる
