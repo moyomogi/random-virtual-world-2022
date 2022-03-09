@@ -1,9 +1,9 @@
-[![hp](https://raw.githubusercontent.com/moyomogi/vuetest/master/docs/hp.svg)](https://vuetest-103b3.herokuapp.com)
-[![deploy](https://github.com/moyomogi/vuetest/actions/workflows/deploy-on-merge.yml/badge.svg)](https://github.com/moyomogi/vuetest/actions/workflows/deploy-on-merge.yml)
-[![last-commit](https://img.shields.io/github/last-commit/moyomogi/vuetest)](https://github.com/moyomogi/vuetest/commits/master)
+[![hp](https://raw.githubusercontent.com/moyomogi/random-virtual-world-2022/master/docs/hp.svg)](https://random-virtual-world-2022.herokuapp.com)
+[![deploy](https://github.com/moyomogi/random-virtual-world-2022/actions/workflows/deploy-on-merge.yml/badge.svg)](https://github.com/moyomogi/random-virtual-world-2022/actions/workflows/deploy-on-merge.yml)
+[![last-commit](https://img.shields.io/github/last-commit/moyomogi/random-virtual-world-2022)](https://github.com/moyomogi/random-virtual-world-2022/commits/master)
 [![license](https://img.shields.io/badge/license-CC0-blue)](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)
 
-# 🌸 Vue test
+# 🌸 Random Virtual World 2022
 <img src="https://i.imgur.com/R9YV2YX.png" width="180">  
 
 ## インストール
@@ -22,12 +22,19 @@ npm install
 npm run dev
 ```
 
-### 製品モードでサーブ
+### 製品モード・Static hosting (GH Pages など) モードでサーブ
 [localhost:3000](http://localhost:3000) にてサーブされる。
 ```sh
 # dist フォルダにファイル群を生成
 npm run generate
 # localhost にてサーブする
+npm run start
+```
+
+### 製品モード・Node.js hosting (Heroku など) モードでサーブ
+[localhost:3000](http://localhost:3000) にてサーブされる。
+```sh
+npm run build
 npm run start
 ```
 
@@ -45,8 +52,8 @@ firebase login
 アカウントを作った後、公式解説 [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) に従い、以下を実行。
 ```sh
 heroku login
-# `vuetest-103b3` は自分のプロジェクト名に変更してください
-heroku git:remote -a vuetest-103b3
+# `random-virtual-world-2022` は自分の Heroku のプロジェクト名に変更してください
+heroku git:remote -a random-virtual-world-2022
 ```
 
 ### 以降はこれを実行
@@ -65,8 +72,9 @@ git push origin master  # Github にデプロイ
 - [@nuxtjs/tailwindcss](https://tailwindcss.nuxtjs.org)
   NuxtJS アプリケーションに Tailwind CSS を手軽に導入できる。
 - [Firebase](https://firebase.google.com/)
-  Firestore, Firebase Storage を DB として使い、
-  Firebase Hosting でホスティングしています。
+  Firestore, Firebase Storage を DB として使っています。
+- [Heroku](https://jp.heroku.com/)
+  Node.js hosting である Heroku でホスティングしています。
 - [vue-awesome-swiper](https://github.surmon.me/vue-awesome-swiper/)
   スライドショー機能
 
@@ -74,7 +82,7 @@ git push origin master  # Github にデプロイ
 - [Making a Navigation Drawer/Sliding Sidebar with TailwindCSS](https://dev.to/fayaz/making-a-navigation-drawer-sliding-sidebar-with-tailwindcss-blueprint-581l)
   `components/TheNavbar.vue` で使いました。
 - [Multi Section Form | Tailwind Toolbox](https://www.tailwindtoolbox.com/templates/multi-section-form)
-  `pages/submit.vue` で使いました。
+  `pages/submit.vue`, `pages/update.vue` で使いました。
 - [Tailblocks](https://tailblocks.cc)
   `components/TheSlides.vue` で使いました。
 
