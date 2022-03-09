@@ -1,4 +1,4 @@
-[![hp](https://raw.githubusercontent.com/moyomogi/vuetest/master/docs/hp.svg)](https://vuetest-103b3.web.app)
+[![hp](https://raw.githubusercontent.com/moyomogi/vuetest/master/docs/hp.svg)](https://vuetest-103b3.herokuapp.com)
 [![deploy](https://github.com/moyomogi/vuetest/actions/workflows/deploy-on-merge.yml/badge.svg)](https://github.com/moyomogi/vuetest/actions/workflows/deploy-on-merge.yml)
 [![last-commit](https://img.shields.io/github/last-commit/moyomogi/vuetest)](https://github.com/moyomogi/vuetest/commits/master)
 [![license](https://img.shields.io/badge/license-CC0-blue)](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)
@@ -14,17 +14,7 @@ WSL の上で作業してください。
 npm install
 ```
 
-## Firebase にログイン
-詳しくは [Firebaseでデプロイしよう！](https://qiita.com/hiroki-harada/items/ca22ac177db68e3c3796) を参照。
-### 初期化
-```sh
-npm install -g firebase-tools
-firebase login
-firebase init
-```
-
 ## localhost にサーブする方法
-
 ### 開発モードでサーブ
 [localhost:3000](http://localhost:3000) にてサーブされる。
 ```sh
@@ -39,6 +29,32 @@ npm run dev
 npm run generate
 # localhost にてサーブする
 npm run start
+```
+
+## Firestore, Firebase Storage の設定
+詳しくは [Firebaseでデプロイしよう！](https://qiita.com/hiroki-harada/items/ca22ac177db68e3c3796) を参照。
+```sh
+# `firebase` コマンドのインストール
+npm install -g firebase-tools
+# Firebase にログイン
+firebase login
+```
+
+## Heroku にデプロイ
+### 初回設定
+アカウントを作った後、公式解説 [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) に従い、以下を実行。
+```sh
+heroku login
+# `vuetest-103b3` は自分のプロジェクト名に変更してください
+heroku git:remote -a vuetest-103b3
+```
+
+### 以降はこれを実行
+```sh
+git add --all
+git commit -m "Test heroku"
+git push heroku master  # Heroku にデプロイ
+git push origin master  # Github にデプロイ
 ```
 
 ## 技術スタック

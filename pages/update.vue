@@ -18,12 +18,43 @@
       <!-- h1 -->
       <h1 class="pb-4 flex text-gray-600 font-bold">
         <p class="mx-auto space-x-4">
-          <span class="text-2xl text-gray-600">初回投稿</span>
-          <NuxtLink to="/update" class="text-base text-sky-600 underline"
-            >更新</NuxtLink
+          <NuxtLink to="/submit" class="text-base text-sky-600 underline"
+            >初回投稿</NuxtLink
           >
+          <span class="text-2xl text-gray-600">更新</span>
         </p>
       </h1>
+
+      <section class="md:flex">
+        <div class="pr-4 md:w-1/6 block text-gray-600 font-bold md:text-left">
+          更新したい記事 (一択)
+        </div>
+        <div class="md:w-5/6">
+          <label
+            v-for="(curPost, curPostId) in postIdsDict"
+            :key="curPostId"
+            :for="curPostId"
+            class="inline-flex items-center"
+          >
+            <input
+              type="radio"
+              class="form-radio text-indigo-600"
+              :id="curPostId"
+              :value="curPostId"
+              v-model="postId"
+            />
+            <div class="flex-col">
+              <p class="w-32 text-sm text-gray-600 break-all truncate">
+                {{ curPost.title }}
+              </p>
+              <img
+                :src="curPost.pics[0]"
+                class="h-16 aspect-video bg-white object-cover"
+              />
+            </div>
+          </label>
+        </div>
+      </section>
 
       <!-- title -->
       <section class="md:flex">
@@ -327,9 +358,9 @@
             multiple
           />
           <!-- container:
-                w-1/2, h-3/4 系のクラスと呼応的に使用し、
-                100% の基準となるクラスです。
-          -->
+                  w-1/2, h-3/4 系のクラスと呼応的に使用し、
+                  100% の基準となるクラスです。
+            -->
           <div class="container flex flex-wrap">
             <div
               v-for="(detail, idx) in picDetails"
@@ -350,8 +381,11 @@
                   class="mx-2 h-32 aspect-video bg-white object-cover"
                   :src="detail.base64"
                 />
+                <span v-if="detail.pic" class="py-2 text-sm text-gray-600"
+                  >OK: Already posted</span
+                >
                 <span
-                  v-if="parseInt(detail.bytes.size) > maxBytes"
+                  v-else-if="parseInt(detail.bytes.size) > maxBytes"
                   class="py-2 text-sm text-red-600"
                   >NG: {{ parseBytes(parseInt(detail.bytes.size)) }} &gt;
                   {{ parseBytes(maxBytes) }}</span
@@ -384,37 +418,36 @@
         </div>
       </section>
 
-      <!-- Submit -->
+      <!-- Update -->
       <section class="py-1 md:flex md:items-center">
         <div class="md:w-1/6"></div>
         <div class="md:w-auto">
           <button
             :class="
               colorsDict[
-                submitErrIfAny().state === 'ok'
+                updateErrIfAny().state === 'ok'
                   ? genresDict[post.genre].color
                   : 'gray'
               ].buttonClass
             "
             class="px-4 py-2 focus:outline-none text-white font-bold rounded"
             type="button"
-            @click="submitPost(false)"
+            @click="updatePost()"
           >
-            Submit
+            Update
           </button>
           <span
-            :class="msgColorsDict[submitErrIfAny().state]"
+            :class="msgColorsDict[updateErrIfAny().state]"
             class="ml-3 text-sm"
-            >{{ submitErrIfAny().msg }}</span
+            >{{ updateErrIfAny().msg }}</span
           >
         </div>
       </section>
 
       <!-- info -->
-      <p class="py-2">
+      <p v-if="post.title" class="py-2">
         ・この投稿は
         <NuxtLink
-          v-if="post.title"
           rel="noopener"
           :to="`/posts/${post.title}`"
           target="_blank"
@@ -430,10 +463,7 @@
         >
           https://vuetest-103b3.firebaseapp.com/posts/{{ post.title }}</NuxtLink
         >
-        にて公開されます。
-        <br />
-        ・なお、動作軽量化と実装難易度の観点から DTM のプラウザ上再生および
-        WebGL は実装しない予定です。DTM は zip で配布してください。
+        にて公開中です。
       </p>
 
       <!-- 水平線 (所謂 hr) -->
@@ -458,10 +488,10 @@
         <!-- ・Submit 済み投稿一覧:
         <br />
         <span
-          v-for="(curPost, curId) in postIdsDict"
-          :key="curId"
+          v-for="(curPost, curPostId) in postIdsDict"
+          :key="curPostId"
           class="inline-block w-full text-sky-600 bg-sky-100 rounded"
-          >{{ curPost.title }} ({{ curId }})
+          >{{ curPost.title }} ({{ curPostId }})
         </span> -->
       </p>
     </form>
@@ -504,26 +534,26 @@ const urlPattern = /^https?:\/\/.*$/u;
 export default {
   data() {
     return {
+      // watch 用
+      // postId: null,
       // Submit 用
       post: {
         title: "",
-        postId: getRandom(12),
-        body: "",
+        postId: "",
+        body: "羽衣ララは、惑星サマーン出身の宇宙人。地球の年齢では13歳だが、惑星サマーンでは大人扱い。フワとプルンスと一緒にロケットに乗って伝説の戦士プリキュアを探す旅をしている最中、フワの力で地球にワープしてしまう。責任感が強くて真面目だけど、ちょっと抜けているところも。チャームポイントは頭についたセンサー。天の川のプリキュア「キュアミルキー」に変身！",
         downloadUrl: "https://vuetest-103b3.herokuapp.com",
         playUrl: "",
         genre: "puzzle",
         supportedEnvs: [],
         authors: [],
-        pics: null,
+        pics: [],
       },
       picDetails: [],
       // for internal system
       maxBytes: 5 * 1024 * 1024, // 5 MB 以下
-      submitMsg: null,
-      // Update 用
-      yourPostId: "",
+      updateMsg: null,
       // asyncData
-      // postIdsDict: {},  // asyncData の postIdsDict を上書きしてしまう (？)
+      // postIdsDict: {}, // asyncData の postIdsDict を上書きしてしまう (？)
       // define
       genresDict,
       authorsDict,
@@ -552,11 +582,15 @@ export default {
     },
     errTitle() {
       if (this.post.title.length) {
-        for (const [_, curPost] of Object.entries(this.postIdsDict)) {
-          if (curPost.title === this.post.title) {
+        for (const [curPostId, curPost] of Object.entries(this.postIdsDict)) {
+          if (
+            !curPostId &&
+            curPost.title === this.post.title &&
+            curPostId !== this.post.postId
+          ) {
             return {
               state: "ng",
-              msg: "NG: 入力された self.title は既に存在します。Submit ではなく Update をしてください。",
+              msg: "NG: 入力された self.title は既に存在します。",
             };
           }
         }
@@ -651,7 +685,7 @@ export default {
       }
       return {
         state: "ng",
-        msg: "NG: len(self.supportedEnvs) == 0",
+        msg: "NG: len(self.post.supportedEnvs) == 0",
       };
     },
     errAuthors() {
@@ -674,12 +708,12 @@ export default {
         };
       }
       for (let i = 0; i < this.picDetails.length; i++) {
-        const detail = this.picDetails[i];
-        if (parseInt(detail.bytes.size) > this.maxBytes) {
+        const bytes = this.picDetails[i].bytes;
+        if (parseInt(bytes.size) > this.maxBytes) {
           return {
             state: "ng",
             msg: `pics[${i}]: ${this.parseBytes(
-              parseInt(detail.bytes.size)
+              parseInt(bytes.size)
             )} > ${this.parseBytes(this.maxBytes)}`,
           };
         }
@@ -689,11 +723,11 @@ export default {
         msg: `OK: len(self.pics) == ${this.picDetails.length}`,
       };
     },
-    submitErrIfAny() {
-      if (this.submitMsg) {
+    updateErrIfAny() {
+      if (this.updateMsg) {
         return {
           state: "wip",
-          msg: this.submitMsg,
+          msg: this.updateMsg,
         };
       }
       const funcs = [
@@ -706,7 +740,7 @@ export default {
       ];
       for (let i = 0; i < funcs.length; i++) {
         const msg = funcs[i]();
-        if (msg.state !== "ok") {
+        if (msg.state === "ng") {
           return {
             state: msg.state,
             msg: msg.msg,
@@ -719,9 +753,8 @@ export default {
       };
     },
     addPics(ev) {
-      // this.pics = null;
       const files = ev.target.files;
-      const len = this.picDetails.length;
+      const curLen = this.picDetails.length;
       for (let i = 0; i < files.length; i++) {
         if (!files[i]) {
           console.warn(`files[${i}] == null`);
@@ -736,15 +769,15 @@ export default {
         });
 
         // https://okinawanpizza.hatenablog.com/entry/2020/12/29/120807
-        // 入力画像を base64 化する
+        // 入力画像を base64 化する。この画像はユーザーに見せるようであり、
+        // Upload するのは生データ (bytes) の方
         const rd = new FileReader();
         rd.onload = (evRd) =>
-          (this.picDetails[i + len].base64 = evRd.target.result);
+          (this.picDetails[i + curLen].base64 = evRd.target.result);
         rd.readAsDataURL(files[i]); // base64 埋め込み
       }
     },
     dumpPic(idx) {
-      // this.pics = null;
       // splice https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array
       this.picDetails.splice(idx, 1);
     },
@@ -754,31 +787,34 @@ export default {
       const updatedTime = `${dt.getFullYear()}/${
         dt.getMonth() + 1
       }/${dt.getDate()} ${func(dt.getHours())}:${func(dt.getMinutes())}`;
-      let post = deepCopy(this.post);
-      post.pics = this.picDetails.map((detail) => {
-        if (detail.url) return detail.url;
+      let curPost = deepCopy(this.post);
+      curPost.pics = this.picDetails.map((detail) => {
+        if (detail.pic) return detail.pic;
         return "<Ungenerated URL>";
       });
-      post["updatedTime"] = updatedTime;
-      return post;
+      curPost["updatedTime"] = updatedTime;
+      return curPost;
     },
-    async submitPost() {
-      const msg = this.submitErrIfAny();
+    async updatePost() {
+      if (!this.post.postId) {
+        alert("ページ上部「更新したい記事」にて、記事を選択してください。");
+        return;
+      }
+      const msg = this.updateErrIfAny();
       if (msg.state !== "ok") {
         alert(msg.msg);
         return;
       }
-      const postId = this.postId;
       {
         // firestore は 1 GB で、クエリ処理が速い
         // firestore/redirects/<title>/ に json を送信
-        this.submitMsg = `POST: firestore/redirects/${this.title}`;
-        const docRef = doc(db, "redirects", this.title);
+        this.updateMsg = `POST: firestore/redirects/${this.post.title}`;
+        const docRef = doc(db, "redirects", this.post.title);
         try {
-          const redirect = { redirect: postId };
+          const redirect = { redirect: this.post.postId };
           await setDoc(docRef, redirect);
         } catch (e) {
-          console.error("(submitPost, redirects) Error");
+          console.error("(updatePost, redirects) Error");
           console.error(e);
           return;
         }
@@ -787,28 +823,31 @@ export default {
       // storage/posts/<postId>/ に画像群を送信
       let post = this.getPost();
       // 長さ this.picDetails.length の空配列
-      this.pics = Array(this.picDetails.length);
+      this.post.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
+        if (this.picDetails[i].pic) {
+          this.post.pics[i] = this.picDetails[i].pic;
+          continue;
+        }
         const picName = getRandom();
-        this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
-        const bytes = this.picDetails[i].bytes;
-        const storageRef = ref(storage, `${postId}/${picName}`);
-        await uploadBytes(storageRef, bytes).then(
+        this.updateMsg = `POST: storage/posts/${this.post.postId}/${picName}`;
+        const storageRef = ref(storage, `${this.post.postId}/${picName}`);
+        await uploadBytes(storageRef, this.picDetails[i].bytes).then(
           async (snapshot) =>
-            (this.pics[i] = await getDownloadURL(snapshot.ref))
+            (this.post.pics[i] = await getDownloadURL(snapshot.ref))
         );
       }
-      post.pics = this.pics;
+      post.pics = this.post.pics;
       // firestore/posts/<postId>/ に json を送信
-      this.submitMsg = `POST: firestore/posts/${post.postId}`;
-      const docRef = doc(db, "posts", post.postId);
+      this.updateMsg = `POST: firestore/posts/${this.post.postId}`;
+      const docRef = doc(db, "posts", this.post.postId);
       try {
         await setDoc(docRef, post);
-        console.log("(submit, submitPost, posts) Success");
-        this.submitMsg = "Submitted!";
-        setTimeout(() => (this.submitMsg = null), 1000);
+        console.log("(submit, updatePost, posts) Success");
+        this.updateMsg = "Updated!";
+        setTimeout(() => (this.updateMsg = null), 1000);
       } catch (e) {
-        console.error("(submit, submitPost, posts) Error");
+        console.error("(submit, updatePost, posts) Error");
         console.error(e);
         return;
       }
@@ -824,28 +863,48 @@ export default {
       // firebase.performance(); // call to activate
     },
   },
+  watch: {
+    postId: {
+      immediate: true,
+      handler(postId) {
+        if (!postId) return;
+        this.post = deepCopy(this.postIdsDict[postId]);
+        this.post.postId = postId;
+        this.picDetails = this.post.pics.map((pic) => {
+          return {
+            bytes:
+              "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
+            base64: pic,
+            pic: pic,
+          };
+        });
+      },
+    },
+  },
   async asyncData({ error }) {
     // firestore/posts/<postId>/ を見て this.postIdsDict を生成
     let postIdsDict = {};
     const docRef = collection(db, "posts");
+    let postId = null;
     try {
       const documents = await getDocs(docRef);
       if (!documents) {
-        console.warn("");
+        console.warn("(update, asyncData) Invalid");
         return;
       }
       documents.forEach((document) => {
         postIdsDict[document.id] = document.data();
+        if (!postId) postId = document.id;
       });
     } catch (e) {
-      console.warn("(submit, asyncData) Error");
+      console.warn("(update, asyncData) Error");
       console.warn(e);
       error({
         statusCode: 500,
         message: "Fatal error",
       });
     }
-    return { postIdsDict };
+    return { postId, postIdsDict };
   },
 };
 </script>

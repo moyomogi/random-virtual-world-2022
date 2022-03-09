@@ -108,3 +108,15 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* https://github.com/surmon-china/vue-awesome-swiper/issues/98 */
+.swiper-pagination > .swiper-pagination-bullet {
+    opacity: 1;
+    border: black solid 1px;
+    background-color: transparent;
+}
+.swiper-pagination > .swiper-pagination-bullet-active {
+    background-color: black;
+}
+</style>

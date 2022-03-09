@@ -1,5 +1,11 @@
 <template>
   <div class="self-bg flex flex-col">
+    <!--
+      main, article, section は div と同じ役割です。
+      全部 div でもいいですが、コードを見やすくするために振り分けていま
+      す。
+      また、ウェブスクレイピングがしやすくなるという利点もあります。
+    -->
     <main
       :class="colorsDict[genresDict[post.genre].color].borderClass"
       class="
@@ -17,9 +23,11 @@
     >
       <article class="md:flex">
         <!-- article (left) -->
-        <section class="md:w-2/3 mb-6 md:mb-0 md:pr-8">
-          <h1 class="text-gray-900 text-3xl font-medium mb-4">
-            {{ slug }}
+        <section class="md:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2">
+          <div class="flex items-center space-x-3">
+            <h1 class="text-gray-800 text-3xl font-medium">
+              {{ slug }}
+            </h1>
             <span
               :class="[
                 colorsDict[genresDict[post.genre].color].textClass,
@@ -38,25 +46,50 @@
               "
               >{{ genresDict[post.genre].aka }}</span
             >
-          </h1>
+          </div>
           <div class="mb-4">
             <p v-for="(line, idx) in post.body.split('\n')" :key="idx">
               {{ line }}
             </p>
           </div>
-          <div class="flex border-t border-gray-200 py-2">
+
+          <!-- 水平線 (所謂 hr) -->
+          <div class="border-t border-stone-200"></div>
+
+          <!-- author -->
+          <div class="flex min-h-10 items-center">
             <span class="text-gray-500">作者</span>
-            <span class="ml-auto text-gray-900">
-              {{
-                post.authors.map((athr) => authorsDict[athr].name).join(", ")
-              }}
+            <span class="ml-auto text-gray-800 flex flex-wrap">
+              <span
+                v-for="athr in post.authors"
+                :key="athr"
+                class="mr-2 flex flex-row items-center"
+              >
+                <img
+                  :src="authorsDict[athr].icon"
+                  class="h-8 w-8 rounded-full"
+                />
+                <p class="mx-1">
+                  {{ authorsDict[athr].name }}({{ authorsDict[athr].year }}回生)
+                </p>
+              </span>
             </span>
           </div>
-          <div class="flex border-t border-gray-200 py-2">
+
+          <!-- 水平線 (所謂 hr) -->
+          <div class="border-t border-stone-200"></div>
+
+          <!-- updatedTime -->
+          <div class="flex min-h-8 items-center">
             <span class="text-gray-500">更新日時</span>
-            <span class="ml-auto text-gray-900">{{ post.updatedTime }}</span>
+            <span class="ml-auto text-gray-800">{{ post.updatedTime }}</span>
           </div>
-          <div class="flex border-t border-gray-200 py-2">
+
+          <!-- 水平線 (所謂 hr) -->
+          <div class="border-t border-stone-200"></div>
+
+          <!-- supportedEnvs -->
+          <div class="flex min-h-8 items-center">
             <span class="mr-auto text-gray-500">対応環境</span>
             <span v-for="env in post.supportedEnvs" :key="env">
               <span
@@ -78,15 +111,26 @@
               >
             </span>
           </div>
-          <div class="mt-4 w-full flex items-center">
+          <div class="ml-auto pt-3 w-full flex justify-end space-x-4">
             <a
+              v-if="post.downloadUrl"
               rel="noopener"
-              :href="post.url"
+              :href="post.downloadUrl"
               target="_blank"
               :class="colorsDict[genresDict[post.genre].color].buttonClass"
-              class="ml-auto py-2 px-6 text-white focus:outline-none rounded"
+              class="py-2 px-6 text-white focus:outline-none rounded"
             >
               Download
+            </a>
+            <a
+              v-if="post.playUrl"
+              rel="noopener"
+              :href="post.playUrl"
+              target="_blank"
+              :class="colorsDict[genresDict[post.genre].color].buttonClass"
+              class="py-2 px-6 text-white focus:outline-none rounded"
+            >
+              Play
             </a>
           </div>
         </section>
@@ -139,19 +183,6 @@ import {
   envsDict,
 } from "~/plugins/define.js";
 
-const defaultPost = {
-  // accessToken: "",
-  body: "",
-  url: "https://vuetest-103b3.web.app",
-  genre: "puzzle",
-  supportedEnvs: [],
-  authors: [],
-  // 1x1 の最小 GIF https://qiita.com/CloudRemix/items/92e68a048a0da93ed240
-  pics: [
-    "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
-  ],
-  updatedTime: "2022/03/07 0:0",
-};
 export default {
   // https://github.com/nuxt-community/firebase-module/issues/90
   // NuxtJS + Firestore 特有のバグ
@@ -169,7 +200,7 @@ export default {
   data() {
     return {
       // asyncData
-      // post: defaultPost,  // asyncData の post を上書きしてしまう
+      // post: {},  // asyncData の post を上書きしてしまう
       // define
       genresDict,
       authorsDict,
@@ -210,7 +241,7 @@ export default {
     // cf: このプロジェクトにおいては slug == title です
     const { slug } = params;
     // firestore/redirects/<title>/ にある json を取得
-    let accessToken = "";
+    let postId = "";
     const redirectsDocRef = doc(db, "redirects", slug);
     try {
       const redirectDocument = await getDoc(redirectsDocRef);
@@ -220,7 +251,6 @@ export default {
           statusCode: 404,
           message: `記事「${slug}」は存在しません。`,
         });
-        return { post: defaultPost, slug };
       }
       const data = redirectDocument.data();
       if (!data) {
@@ -229,9 +259,8 @@ export default {
           statusCode: 404,
           message: `記事「${slug}」は存在しません。`,
         });
-        return { post: defaultPost, slug };
       }
-      accessToken = data.redirect;
+      postId = data.redirect;
     } catch (e) {
       console.warn("(_slug, asyncData, redirects) Error");
       console.warn(e);
@@ -240,9 +269,9 @@ export default {
         message: `記事「${slug}」の取得に失敗しました。`,
       });
     }
-    // firestore/posts/<accessToken>/ に json を送信
-    let post = defaultPost;
-    const postsDocRef = doc(db, "posts", accessToken);
+    // firestore/posts/<postId>/ に json を送信
+    let post = {};
+    const postsDocRef = doc(db, "posts", postId);
     try {
       const postsDocument = await getDoc(postsDocRef);
       if (!postsDocument) {
@@ -251,7 +280,6 @@ export default {
           statusCode: 404,
           message: `記事「${slug}」のデータが壊れています。`,
         });
-        return { post: defaultPost, slug };
       }
       post = postsDocument.data();
       if (!post) {
@@ -260,7 +288,6 @@ export default {
           statusCode: 500,
           message: `記事「${slug}」のデータが壊れています。`,
         });
-        return { post: defaultPost, slug };
       }
       console.log(`(_slug, asyncData, posts) Sync'd ${slug}`);
     } catch (e) {

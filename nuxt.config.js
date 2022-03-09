@@ -4,14 +4,19 @@ const DESC =
 
 export default {
   // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
-  // ssr: false, // true: SSR, SSG, false: SPA(=CSR)
   ssr: true, // true: SSR, SSG, false: SPA(=CSR)
-  target: "static", // nuxt generate (Firebase Hosting 等の static hosting 用)
-  // target: "server", // nuxt build (Heroku 等の node.js hosting 用)
-  // Firebase Hosting にデプロイするときは true, static にしてください。
-  // Heroku にデプロイするときは true, server にしてください。
+
+  // 1. GH Pages 等の static hosting のとき
+  // target: "static", $ nuxt generate
+  // 2. Heroku 等の node.js hosting
+  // target: "server", $ nuxt build
+  target: process.env.TARGET || "server",
+  // Firebase Hosting にデプロイするときは static にする。
+  // Heroku にデプロイするときは server にする。
 
   // Config for Heroku
+  // process.env.PORT は環境変数です。
+  // cf 環境変数 https://qiita.com/theFirstPenguin/items/89444431a6a590aa4784
   server: {
     port: process.env.PORT || 3000,
     host: "0.0.0.0",
@@ -41,7 +46,7 @@ export default {
       {
         hid: "og:url",
         property: "og:url",
-        content: "https://vuetest-103b3.web.app",
+        content: "https://vuetest-103b3.herokuapp.com",
       },
       { hid: "og:type", property: "og:type", content: "website" },
       { hid: "og:image", property: "og:image", content: "/ogp.jpg" },
