@@ -1,6 +1,6 @@
-[![hp](https://raw.githubusercontent.com/moyomogi/random-virtual-world-2022/master/docs/hp.svg)](https://random-virtual-world-2022.herokuapp.com)
-[![deploy](https://github.com/moyomogi/random-virtual-world-2022/actions/workflows/deploy-on-merge.yml/badge.svg)](https://github.com/moyomogi/random-virtual-world-2022/actions/workflows/deploy-on-merge.yml)
-[![last-commit](https://img.shields.io/github/last-commit/moyomogi/random-virtual-world-2022)](https://github.com/moyomogi/random-virtual-world-2022/commits/master)
+[![hp](https://raw.githubusercontent.com/moyomogi/rvw2022/master/docs/hp.svg)](https://rvw2022.herokuapp.com)
+[![deploy](https://github.com/moyomogi/rvw2022/actions/workflows/deploy-on-merge.yml/badge.svg)](https://github.com/moyomogi/rvw2022/actions/workflows/deploy-on-merge.yml)
+[![last-commit](https://img.shields.io/github/last-commit/moyomogi/rvw2022)](https://github.com/moyomogi/rvw2022/commits/master)
 [![license](https://img.shields.io/badge/license-CC0-blue)](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)
 
 # 🌸 Random Virtual World 2022
@@ -52,8 +52,8 @@ firebase login
 アカウントを作った後、公式解説 [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) に従い、以下を実行。
 ```sh
 heroku login
-# `random-virtual-world-2022` は自分の Heroku のプロジェクト名に変更してください
-heroku git:remote -a random-virtual-world-2022
+# `rvw2022` は自分の Heroku のプロジェクト名に変更してください
+heroku git:remote -a rvw2022
 ```
 
 ### 以降はこれを実行
