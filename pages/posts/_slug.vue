@@ -47,7 +47,7 @@
               >{{ genresDict[post.genre].aka }}</span
             >
           </div>
-          <div class="mb-4">
+          <div class="pt-2 pb-4">
             <p v-for="(line, idx) in post.body.split('\n')" :key="idx">
               {{ line }}
             </p>
@@ -59,7 +59,7 @@
           <!-- author -->
           <div class="flex min-h-10 items-center">
             <span class="text-gray-500">作者</span>
-            <span class="ml-auto text-gray-800 flex flex-wrap">
+            <span class="ml-auto -my-4 text-gray-800 flex flex-wrap">
               <span
                 v-for="athr in post.authors"
                 :key="athr"
@@ -70,7 +70,7 @@
                   class="h-8 w-8 rounded-full"
                 />
                 <p class="mx-1">
-                  {{ authorsDict[athr].name }}({{ authorsDict[athr].year }}回生)
+                  {{ authorsDict[athr].name }}
                 </p>
               </span>
             </span>
@@ -111,6 +111,11 @@
               >
             </span>
           </div>
+
+          <!-- 水平線 (所謂 hr) -->
+          <div class="border-t border-stone-200"></div>
+
+          <!-- downloadUrl, playUrl -->
           <div class="ml-auto pt-3 w-full flex justify-end space-x-4">
             <a
               v-if="post.downloadUrl"
@@ -221,8 +226,22 @@ export default {
     };
   },
   head() {
+    const DESC = this.post.body;
     return {
       title: this.slug,
+      meta: [
+        { hid: "og:image", property: "og:image", content: this.post.pics[0] },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content: DESC,
+        },
+        {
+          hid: "description",
+          name: "description",
+          content: DESC,
+        },
+      ],
     };
   },
   // async https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Statements/async_function

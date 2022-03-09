@@ -43,13 +43,19 @@
               :value="curPostId"
               v-model="postId"
             />
-            <div class="flex-col">
-              <p class="w-32 text-sm text-gray-600 break-all truncate">
+            <div class="flex-col rounded-lg overflow-hidden">
+              <p
+                :class="[
+                  colorsDict[genresDict[curPost.genre].color].textClass,
+                  colorsDict[genresDict[curPost.genre].color].bgClass,
+                ]"
+                class="w-24 text-sm text-gray-600 break-all truncate"
+              >
                 {{ curPost.title }}
               </p>
               <img
                 :src="curPost.pics[0]"
-                class="h-16 aspect-video bg-white object-cover"
+                class="w-24 aspect-video bg-white object-cover"
               />
             </div>
           </label>
@@ -287,8 +293,8 @@
             <label
               :for="env"
               :class="[
-                colorsDict[val.color].textClass,
-                colorsDict[val.color].bgClass,
+                colorsDict[envsDict[env].color].textClass,
+                colorsDict[envsDict[env].color].bgClass,
               ]"
               class="
                 inline-block
@@ -567,7 +573,11 @@ export default {
       },
     };
   },
-  // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
+  head() {
+    return {
+      title: "更新",
+    };
+  },
   methods: {
     parseBytes(b) {
       if (!b) b = 0;
@@ -795,6 +805,7 @@ export default {
       curPost["updatedTime"] = updatedTime;
       return curPost;
     },
+    // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
     async updatePost() {
       if (!this.post.postId) {
         alert("ページ上部「更新したい記事」にて、記事を選択してください。");

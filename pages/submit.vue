@@ -256,8 +256,8 @@
             <label
               :for="env"
               :class="[
-                colorsDict[val.color].textClass,
-                colorsDict[val.color].bgClass,
+                colorsDict[envsDict[env].color].textClass,
+                colorsDict[envsDict[env].color].bgClass,
               ]"
               class="
                 inline-block
@@ -537,7 +537,11 @@ export default {
       },
     };
   },
-  // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
+  head() {
+    return {
+      title: "初回投稿",
+    };
+  },
   methods: {
     parseBytes(b) {
       if (!b) b = 0;
@@ -824,6 +828,7 @@ export default {
       // firebase.performance(); // call to activate
     },
   },
+  // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
   async asyncData({ error }) {
     // firestore/posts/<postId>/ を見て this.postIdsDict を生成
     let postIdsDict = {};

@@ -6,3 +6,15 @@
     </div>
   </div>
 </template>
+
+<script>
+
+export default {
+  head() {
+    return {
+      title: "Random Virtual World",
+      titleTemplate: "",
+    };
+  },
+};
+</script>

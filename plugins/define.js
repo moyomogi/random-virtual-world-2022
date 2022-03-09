@@ -264,8 +264,8 @@ const colorsDict = {
     frameUrl: "/slides/frame_y.png",
   },
   gray: {
-    textClass: "text-stone-800",
-    bgClass: "bg-stone-200",
+    textClass: "text-stone-100",
+    bgClass: "bg-stone-600",
     borderClass: "border-stone-400",
     buttonClass: ["focus:bg-stone-500", "bg-stone-600", "hover:bg-stone-700"],
     buttonUrls: ["/slides/button_c.png", "/slides/button_c_hover.png"],
