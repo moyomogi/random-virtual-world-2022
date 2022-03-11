@@ -2,30 +2,31 @@
   <div class="self-bg flex flex-col items-center">
     <!--
       main, article, section は div と同じ役割です。
-      全部 div でもいいですが、コードを見やすくするために振り分けていま
-      す。
+      全部 div でもいいですが、コードを見やすくするために振り分けています。
       また、ウェブスクレイピングがしやすくなるという利点もあります。
     -->
-    <main
-      :class="[
-        colorsDict[genresDict[post.genre].color].borderClass,
-        colorsDict[genresDict[post.genre].color].shadowClass,
-      ]"
-      class="
-        container
-        max-w-11/12
-        mx-auto
-        my-8
-        p-12
-        bg-stone-100
-        border-4
-        rounded-xl
-        shadow-md
-      "
-    >
-      <article class="md:flex">
+    <main class="container px-4 mx-auto flex">
+      <article
+        :class="[
+          colorsDict[genresDict[post.genre].color].borderClass,
+          colorsDict[genresDict[post.genre].color].shadowClass,
+        ]"
+        class="
+          container
+          mx-auto
+          my-8
+          p-12
+          bg-stone-100
+          border-4
+          rounded-xl
+          shadow-md
+          md:flex
+        "
+      >
         <!-- article (left) -->
-        <section class="md:w-1/2 lg:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2">
+        <section
+          class="w-11/12 md:w-1/2 lg:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2"
+        >
           <div class="flex items-center space-x-3">
             <h1 class="text-gray-800 text-3xl font-medium">
               {{ slug }}
@@ -147,6 +148,7 @@
           class="
             relative
             my-auto
+            w-11/12
             md:w-1/2
             lg:w-1/3
             rounded-md
@@ -228,12 +230,12 @@
                   ></div>
                   <img
                     class="
-                      max-h-32
+                      w-full
                       aspect-video
                       bg-white
-                      object-cover
                       rounded
                       overflow-hidden
+                      object-cover
                     "
                     :src="pic"
                     :title="slug"
@@ -301,14 +303,19 @@ export default {
   // https://nuxtjs.org/docs/directory-structure/store/
   computed: {
     post() {
-      let post = deepCopy(
-        this.$store.getters["posts/getPostByTitle"](this.slug)
-      );
+      let post = this.$store.getters["posts/getPostByTitle"](this.slug);
+      post = deepCopy(post);
       if (!post) {
+        // this.$nuxt.context.res.statusCode = 404;
         this.$nuxt.context.error({
           statusCode: 404,
           message: `記事「${this.slug}」は存在しません。`,
         });
+        return {
+          body: `記事「${this.slug}」は存在しません。`,
+          genre: "puzzle",
+          pics: [],
+        };
       }
       if (post.pics.length === 0) {
         post.pics = [
@@ -333,6 +340,7 @@ export default {
   },
   head() {
     const DESC = this.post.body;
+    if (!DESC) return {};
     return {
       title: this.slug,
       meta: [

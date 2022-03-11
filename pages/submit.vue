@@ -508,7 +508,7 @@ export default {
         title: "",
         postId: getRandom(12),
         body: "",
-        downloadUrl: "https://vuetest-103b3.herokuapp.com",
+        downloadUrl: "",
         playUrl: "",
         genre: "puzzle",
         supportedEnvs: [],
@@ -519,8 +519,6 @@ export default {
       // for internal system
       maxBytes: 5 * 1024 * 1024, // 5 MB 以下
       submitMsg: null,
-      // Update 用
-      yourPostId: "",
       // asyncData
       // postIdsDict: {},  // asyncData の postIdsDict を上書きしてしまう (？)
       // define
@@ -771,14 +769,14 @@ export default {
         alert(msg.msg);
         return;
       }
-      const postId = this.postId;
+      let post = this.getPost();
       {
         // firestore は 1 GB で、クエリ処理が速い
         // firestore/redirects/<title>/ に json を送信
-        this.submitMsg = `POST: firestore/redirects/${this.title}`;
-        const docRef = doc(db, "redirects", this.title);
+        this.submitMsg = `POST: firestore/redirects/${post.title}`;
+        const docRef = doc(db, "redirects", post.title);
         try {
-          const redirect = { redirect: postId };
+          const redirect = { redirect: post.postId };
           await setDoc(docRef, redirect);
         } catch (e) {
           console.error("(submitPost, redirects) Error");
@@ -788,14 +786,13 @@ export default {
       }
       // storage は 10 GB で、クエリ処理が遅い
       // storage/posts/<postId>/ に画像群を送信
-      let post = this.getPost();
       // 長さ this.picDetails.length の空配列
       post.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
         const picName = getRandom();
         this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
         const bytes = this.picDetails[i].bytes;
-        const storageRef = ref(storage, `${postId}/${picName}`);
+        const storageRef = ref(storage, `${post.postId}/${picName}`);
         await uploadBytes(storageRef, bytes).then(
           async (snapshot) =>
             (post.pics[i] = await getDownloadURL(snapshot.ref))

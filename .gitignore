@@ -16,4 +16,4 @@ cptest.sh
 input.txt
 memo.md
 package-lock.json
-storage.rules
+# storage.rules

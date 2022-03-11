@@ -1,22 +1,23 @@
 <template>
   <div class="self-bg flex flex-col">
     <main
-      :class="colorsDict['magenta'].borderClass"
+      :class="[
+        colorsDict['magenta'].borderClass,
+        colorsDict['magenta'].shadowClass,
+      ]"
       class="
         container
-        mx-4
-        md:mx-auto
+        mx-auto
         my-8
         p-12
         bg-stone-100
-        border-2
+        border-4
         rounded-xl
+        shadow-md
       "
     >
-      <p>
-        {{ error.statusCode }} {{ getMessage(error.statusCode) }}
-        {{ error.message ? " Message: \n" + error.message : "" }}
-      </p>
+      <p class="text-lg">{{ error.statusCode }} {{ getMessage(error.statusCode) }}</p>
+      <p v-if="error.message">{{ error.message }}</p>
     </main>
     <TheSlides />
   </div>

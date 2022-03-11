@@ -240,9 +240,7 @@ const colorsDict = {
     bgClass: "bg-pink-200",
     borderClass: "border-pink-400",
     shadowClass: "shadow-pink-500/60",
-    buttonClass: ["focus:bg-pink-600", "bg-pink-700", "hover:bg-pink-800"],
-    buttonUrls: ["/slides/button_m.png", "/slides/button_m_hover.png"],
-    frameUrl: "/slides/frame_m.png",
+    buttonClass: ["focus:bg-pink-500", "bg-pink-600", "hover:bg-pink-700"],
   },
   cyan: {
     textClass: "text-sky-800",
@@ -250,8 +248,6 @@ const colorsDict = {
     borderClass: "border-sky-400",
     shadowClass: "shadow-sky-500/60",
     buttonClass: ["focus:bg-sky-500", "bg-sky-600", "hover:bg-sky-700"],
-    buttonUrls: ["/slides/button_c.png", "/slides/button_c_hover.png"],
-    frameUrl: "/slides/frame_c.png",
   },
   yellow: {
     textClass: "text-yellow-800",
@@ -263,16 +259,19 @@ const colorsDict = {
       "bg-yellow-600",
       "hover:bg-yellow-700",
     ],
-    buttonUrls: ["/slides/button_y.png", "/slides/button_y_hover.png"],
-    frameUrl: "/slides/frame_y.png",
   },
   gray: {
     textClass: "text-stone-100",
     bgClass: "bg-stone-600",
     borderClass: "border-stone-400",
     buttonClass: ["focus:bg-stone-500", "bg-stone-600", "hover:bg-stone-700"],
-    buttonUrls: ["/slides/button_c.png", "/slides/button_c_hover.png"],
-    frameUrl: "/slides/frame_c.png",
+  },
+  random: {
+    textClass: "text-rose-800",
+    bgClass: "bg-rose-200",
+    borderClass: "border-rose-400",
+    shadowClass: "shadow-rose-500/60",
+    buttonClass: ["focus:bg-rose-600", "bg-rose-700", "hover:bg-rose-800"],
   },
 };
 export { colorsDict };

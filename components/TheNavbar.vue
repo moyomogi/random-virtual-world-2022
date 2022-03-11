@@ -61,7 +61,7 @@
           href="https://ch-random.net"
           target="_blank"
           title="Computer House Random"
-          :class="colorsDict['magenta'].buttonClass"
+          :class="colorsDict['random'].buttonClass"
           class="
             mx-2
             p-3
@@ -190,7 +190,7 @@
           <!-- sidebar (Home Page) -->
           <a
             rel="noopener"
-            :class="colorsDict['magenta'].buttonClass"
+            :class="colorsDict['random'].buttonClass"
             class="flex items-center px-4 h-20 focus:outline-none"
             href="https://ch-random.net"
             target="_blank"
