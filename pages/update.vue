@@ -1,11 +1,10 @@
 <template>
-  <div class="self-bg flex flex-col">
+  <div class="self-bg flex flex-col items-center">
     <form
       :class="colorsDict[genresDict[post.genre].color].borderClass"
       class="
         container
-        mx-4
-        md:mx-auto
+        mx-auto
         my-8
         p-12
         space-y-4
@@ -30,35 +29,41 @@
           更新したい記事 (一択)
         </div>
         <div class="md:w-5/6">
-          <label
-            v-for="(curPost, curPostId) in postIdsDict"
-            :key="curPostId"
-            :for="curPostId"
-            class="inline-flex items-center"
-          >
-            <input
-              type="radio"
-              class="form-radio text-indigo-600"
-              :id="curPostId"
-              :value="curPostId"
-              v-model="postId"
-            />
-            <div class="flex-col rounded-lg overflow-hidden">
-              <p
-                :class="[
-                  colorsDict[genresDict[curPost.genre].color].textClass,
-                  colorsDict[genresDict[curPost.genre].color].bgClass,
-                ]"
-                class="w-24 text-sm text-gray-600 break-all truncate"
-              >
-                {{ curPost.title }}
-              </p>
-              <img
-                :src="curPost.pics[0]"
-                class="w-24 aspect-video bg-white object-cover"
+          <span v-for="(_, gnr) in genresDict" :key="gnr">
+            <label
+              v-for="curPostId in postGenresDict[gnr]"
+              :key="curPostId"
+              :for="curPostId"
+              class="p-1 inline-flex items-center"
+            >
+              <input
+                type="radio"
+                class="form-radio text-indigo-600"
+                :id="curPostId"
+                :value="curPostId"
+                v-model="postId"
               />
-            </div>
-          </label>
+              <div class="flex-col rounded-lg overflow-hidden">
+                <img
+                  :src="getPost(curPostId).pics[0]"
+                  class="w-24 aspect-video bg-white object-cover"
+                />
+                <p
+                  :class="[
+                    colorsDict[genresDict[getPost(curPostId).genre].color]
+                      .textClass,
+                    colorsDict[genresDict[getPost(curPostId).genre].color]
+                      .bgClass,
+                  ]"
+                  class="w-24 text-sm break-all truncate"
+                >
+                  ({{ genresDict[gnr].aka }})
+                  <br />
+                  {{ getPost(curPostId).title }}
+                </p>
+              </div>
+            </label>
+          </span>
         </div>
       </section>
 
@@ -413,7 +418,7 @@
                   type="button"
                   @click="dumpPic(idx)"
                 >
-                  削除
+                  Remove
                 </button>
               </div>
             </div>
@@ -472,7 +477,41 @@
         にて公開中です。
       </p>
 
-      <!-- 水平線 (所謂 hr) -->
+      <!-- 水平線 -->
+      <div class="border-t border-stone-800"></div>
+
+      <!-- info -->
+      <p :class="msgColorsDict['ng']" class="py-2 truncate">
+        {{ "--- Danger Zone ".repeat(12) }}
+      </p>
+
+      <!-- DELETE -->
+      <section class="py-1 md:flex md:items-center">
+        <div class="md:w-1/6"></div>
+        <div class="md:w-auto">
+          <button
+            :class="
+              colorsDict[
+                deleteErrIfAny().state === 'ok'
+                  ? genresDict[post.genre].color
+                  : 'gray'
+              ].buttonClass
+            "
+            class="px-4 py-2 focus:outline-none text-white font-bold rounded"
+            type="button"
+            @click="deletePost()"
+          >
+            DELETE
+          </button>
+          <span
+            :class="msgColorsDict[deleteErrIfAny().state]"
+            class="ml-3 text-sm"
+            >{{ deleteErrIfAny().msg }}</span
+          >
+        </div>
+      </section>
+
+      <!-- 水平線 -->
       <div class="border-t border-stone-800"></div>
 
       <!-- info -->
@@ -489,7 +528,7 @@
             bg-sky-100
             rounded
           "
-          >{{ JSON.stringify(getPost()) }}</span
+          >{{ JSON.stringify(getCurPost()) }}</span
         >
         <!-- ・Submit 済み投稿一覧:
         <br />
@@ -507,8 +546,14 @@
 <script>
 // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
 import { db, storage } from "~/plugins/firebase.js";
-import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { doc, setDoc, getDocs, collection } from "firebase/firestore";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  listAll,
+  deleteObject,
+} from "firebase/storage";
+import { doc, setDoc, deleteDoc } from "firebase/firestore";
 
 import {
   genresDict,
@@ -541,13 +586,13 @@ export default {
   data() {
     return {
       // watch 用
-      // postId: null,
+      postId: null,
       // Submit 用
       post: {
         title: "",
         postId: "",
-        body: "羽衣ララは、惑星サマーン出身の宇宙人。地球の年齢では13歳だが、惑星サマーンでは大人扱い。フワとプルンスと一緒にロケットに乗って伝説の戦士プリキュアを探す旅をしている最中、フワの力で地球にワープしてしまう。責任感が強くて真面目だけど、ちょっと抜けているところも。チャームポイントは頭についたセンサー。天の川のプリキュア「キュアミルキー」に変身！",
-        downloadUrl: "https://vuetest-103b3.herokuapp.com",
+        body: "",
+        downloadUrl: "",
         playUrl: "",
         genre: "puzzle",
         supportedEnvs: [],
@@ -558,8 +603,7 @@ export default {
       // for internal system
       maxBytes: 5 * 1024 * 1024, // 5 MB 以下
       updateMsg: null,
-      // asyncData
-      // postIdsDict: {}, // asyncData の postIdsDict を上書きしてしまう (？)
+      deleteMsg: null,
       // define
       genresDict,
       authorsDict,
@@ -577,6 +621,31 @@ export default {
     return {
       title: "更新",
     };
+  },
+  computed: {
+    postGenresDict() {
+      return this.$store.getters["posts/getPostGenresDict"];
+    },
+    postIdsDict() {
+      // const postIdsDict = this.$store.getters["posts/getPostIdsDict"];
+      // for (const [k, _v] of Object.entries(postIdsDict)) {
+      //   this.postId = k;
+      //   this.post.postId = k;
+      //   break;
+      // }
+      // console.log("postIdsDict");
+      // console.log(postIdsDict);
+      // return postIdsDict;
+      return this.$store.getters["posts/getPostIdsDict"];
+    },
+  },
+  mounted() {
+    for (const [k, _v] of Object.entries(this.postIdsDict)) {
+      this.postId = k;
+      console.log("k");
+      console.log(k);
+      break;
+    }
   },
   methods: {
     parseBytes(b) {
@@ -734,6 +803,12 @@ export default {
       };
     },
     updateErrIfAny() {
+      if (!this.post) {
+        return {
+          state: "ng",
+          msg: "ページ上部「更新したい記事」にて、記事を選択してください。",
+        };
+      }
       if (this.updateMsg) {
         return {
           state: "wip",
@@ -756,6 +831,24 @@ export default {
             msg: msg.msg,
           };
         }
+      }
+      return {
+        state: "ok",
+        msg: "OK",
+      };
+    },
+    deleteErrIfAny() {
+      if (!this.post) {
+        return {
+          state: "ng",
+          msg: "ページ上部「更新したい記事」にて、記事を選択してください。",
+        };
+      }
+      if (this.deleteMsg) {
+        return {
+          state: "wip",
+          msg: this.deleteMsg,
+        };
       }
       return {
         state: "ok",
@@ -791,7 +884,7 @@ export default {
       // splice https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array
       this.picDetails.splice(idx, 1);
     },
-    getPost() {
+    getCurPost() {
       const dt = new Date();
       const func = (x) => ("00" + x).slice(-2);
       const updatedTime = `${dt.getFullYear()}/${
@@ -805,12 +898,18 @@ export default {
       curPost["updatedTime"] = updatedTime;
       return curPost;
     },
+    // The Firebase SDK is initialized and available here!
+    // firebase.auth().onAuthStateChanged(user => { });
+    // firebase.database().ref("/path/to/ref").on("value", snapshot => { });
+    // firebase.firestore().doc("/foo/bar").get().then(() => { });
+    // firebase.functions().httpsCallable("yourFunction")().then(() => { });
+    // firebase.messaging().requestPermission().then(() => { });
+    // firebase.storage().ref("/path/to/ref").getDownloadURL().then(() => { });
+    // firebase.analytics(); // call to activate
+    // firebase.analytics().logEvent("tutorial_completed");
+    // firebase.performance(); // call to activate
     // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
     async updatePost() {
-      if (!this.post.postId) {
-        alert("ページ上部「更新したい記事」にて、記事を選択してください。");
-        return;
-      }
       const msg = this.updateErrIfAny();
       if (msg.state !== "ok") {
         alert(msg.msg);
@@ -822,7 +921,7 @@ export default {
         this.updateMsg = `POST: firestore/redirects/${this.post.title}`;
         const docRef = doc(db, "redirects", this.post.title);
         try {
-          const redirect = { redirect: this.post.postId };
+          const redirect = { redirect: this.postId };
           await setDoc(docRef, redirect);
         } catch (e) {
           console.error("(updatePost, redirects) Error");
@@ -832,7 +931,7 @@ export default {
       }
       // storage は 10 GB で、クエリ処理が遅い
       // storage/posts/<postId>/ に画像群を送信
-      let post = this.getPost();
+      let post = this.getCurPost();
       // 長さ this.picDetails.length の空配列
       this.post.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
@@ -841,8 +940,8 @@ export default {
           continue;
         }
         const picName = getRandom();
-        this.updateMsg = `POST: storage/posts/${this.post.postId}/${picName}`;
-        const storageRef = ref(storage, `${this.post.postId}/${picName}`);
+        this.updateMsg = `POST: storage/posts/${this.postId}/${picName}`;
+        const storageRef = ref(storage, `${this.postId}/${picName}`);
         await uploadBytes(storageRef, this.picDetails[i].bytes).then(
           async (snapshot) =>
             (this.post.pics[i] = await getDownloadURL(snapshot.ref))
@@ -850,8 +949,8 @@ export default {
       }
       post.pics = this.post.pics;
       // firestore/posts/<postId>/ に json を送信
-      this.updateMsg = `POST: firestore/posts/${this.post.postId}`;
-      const docRef = doc(db, "posts", this.post.postId);
+      this.updateMsg = `POST: firestore/posts/${this.postId}`;
+      const docRef = doc(db, "posts", this.postId);
       try {
         await setDoc(docRef, post);
         console.log("(submit, updatePost, posts) Success");
@@ -862,16 +961,46 @@ export default {
         console.error(e);
         return;
       }
-      // // The Firebase SDK is initialized and available here!
-      // firebase.auth().onAuthStateChanged(user => { });
-      // firebase.database().ref("/path/to/ref").on("value", snapshot => { });
-      // firebase.firestore().doc("/foo/bar").get().then(() => { });
-      // firebase.functions().httpsCallable("yourFunction")().then(() => { });
-      // firebase.messaging().requestPermission().then(() => { });
-      // firebase.storage().ref("/path/to/ref").getDownloadURL().then(() => { });
-      // firebase.analytics(); // call to activate
-      // firebase.analytics().logEvent("tutorial_completed");
-      // firebase.performance(); // call to activate
+    },
+    // firestore https://firebase.google.com/docs/firestore/manage-data/delete-data
+    // firebase storage https://firebase.google.com/docs/storage/web/delete-files
+    async deletePost() {
+      if (!this.postId) {
+        alert("ページ上部「更新したい記事」にて、記事を選択してください。");
+        return;
+      }
+      const err = this.deleteErrIfAny();
+      if (err.state !== "ok") {
+        alert(err.msg);
+        return;
+      }
+      this.updateMsg = "This post will be deleted.";
+      {
+        const docRef1 = doc(db, "redirects", this.post.title);
+        const docRef2 = doc(db, "posts", this.postId);
+        try {
+          this.deleteMsg = `Delete: firestore/redirects/${this.post.title}`;
+          await deleteDoc(docRef1);
+          this.deleteMsg = `Delete: firestore/posts/${this.postId}`;
+          await deleteDoc(docRef2);
+          const storageRef = ref(storage, this.postId);
+          await listAll(storageRef).then((res) => {
+            res.items.forEach((itemRef) => {
+              this.deleteMsg = `Delete: storage/${this.postId}/${itemRef.name}`;
+              deleteObject(itemRef);
+            });
+          });
+        } catch (e) {
+          console.error("(deletePost, redirects) Error");
+          console.error(e);
+          return;
+        }
+      }
+      this.updateMsg = "Deleted! Press F5 to refresh.";
+      this.deleteMsg = "Deleted! Press F5 to refresh.";
+    },
+    getPost(id) {
+      return this.$store.getters["posts/getPost"](id);
     },
   },
   watch: {
@@ -892,30 +1021,30 @@ export default {
       },
     },
   },
-  async asyncData({ error }) {
-    // firestore/posts/<postId>/ を見て this.postIdsDict を生成
-    let postIdsDict = {};
-    const docRef = collection(db, "posts");
-    let postId = null;
-    try {
-      const documents = await getDocs(docRef);
-      if (!documents) {
-        console.warn("(update, asyncData) Invalid");
-        return;
-      }
-      documents.forEach((document) => {
-        postIdsDict[document.id] = document.data();
-        if (!postId) postId = document.id;
-      });
-    } catch (e) {
-      console.warn("(update, asyncData) Error");
-      console.warn(e);
-      error({
-        statusCode: 500,
-        message: "Fatal error",
-      });
-    }
-    return { postId, postIdsDict };
-  },
+  // async asyncData({ error }) {
+  //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成
+  //   let postIdsDict = {};
+  //   const docRef = collection(db, "posts");
+  //   let postId = null;
+  //   try {
+  //     const documents = await getDocs(docRef);
+  //     if (!documents) {
+  //       console.warn("(update, asyncData) Invalid");
+  //       return;
+  //     }
+  //     documents.forEach((document) => {
+  //       postIdsDict[document.id] = document.data();
+  //       if (!postId) postId = document.id;
+  //     });
+  //   } catch (e) {
+  //     console.warn("(update, asyncData) Error");
+  //     console.warn(e);
+  //     error({
+  //       statusCode: 500,
+  //       message: "Fatal error",
+  //     });
+  //   }
+  //   return { postId, postIdsDict };
+  // },
 };
 </script>

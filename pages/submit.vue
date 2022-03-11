@@ -1,11 +1,10 @@
 <template>
-  <div class="self-bg flex flex-col">
+  <div class="self-bg flex flex-col items-center">
     <form
       :class="colorsDict[genresDict[post.genre].color].borderClass"
       class="
         container
-        mx-4
-        md:mx-auto
+        mx-auto
         my-8
         p-12
         space-y-4
@@ -436,7 +435,7 @@
         WebGL は実装しない予定です。DTM は zip で配布してください。
       </p>
 
-      <!-- 水平線 (所謂 hr) -->
+      <!-- 水平線 -->
       <div class="border-t border-stone-800"></div>
 
       <!-- info -->
@@ -472,7 +471,7 @@
 // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
 import { db, storage } from "~/plugins/firebase.js";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
-import { doc, setDoc, getDocs, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 import {
   genresDict,
@@ -791,7 +790,7 @@ export default {
       // storage/posts/<postId>/ に画像群を送信
       let post = this.getPost();
       // 長さ this.picDetails.length の空配列
-      this.pics = Array(this.picDetails.length);
+      post.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
         const picName = getRandom();
         this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
@@ -799,58 +798,51 @@ export default {
         const storageRef = ref(storage, `${postId}/${picName}`);
         await uploadBytes(storageRef, bytes).then(
           async (snapshot) =>
-            (this.pics[i] = await getDownloadURL(snapshot.ref))
+            (post.pics[i] = await getDownloadURL(snapshot.ref))
         );
       }
-      post.pics = this.pics;
       // firestore/posts/<postId>/ に json を送信
       this.submitMsg = `POST: firestore/posts/${post.postId}`;
       const docRef = doc(db, "posts", post.postId);
       try {
         await setDoc(docRef, post);
         console.log("(submit, submitPost, posts) Success");
-        this.submitMsg = "Submitted!";
-        setTimeout(() => (this.submitMsg = null), 1000);
+        this.submitMsg = "Submitted! Press F5 to refresh.";
       } catch (e) {
         console.error("(submit, submitPost, posts) Error");
         console.error(e);
         return;
       }
-      // // The Firebase SDK is initialized and available here!
-      // firebase.auth().onAuthStateChanged(user => { });
-      // firebase.database().ref("/path/to/ref").on("value", snapshot => { });
-      // firebase.firestore().doc("/foo/bar").get().then(() => { });
-      // firebase.functions().httpsCallable("yourFunction")().then(() => { });
-      // firebase.messaging().requestPermission().then(() => { });
-      // firebase.storage().ref("/path/to/ref").getDownloadURL().then(() => { });
-      // firebase.analytics(); // call to activate
-      // firebase.analytics().logEvent("tutorial_completed");
-      // firebase.performance(); // call to activate
+    },
+  },
+  computed: {
+    postIdsDict() {
+      return this.$store.getters["posts/getPostIdsDict"];
     },
   },
   // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
-  async asyncData({ error }) {
-    // firestore/posts/<postId>/ を見て this.postIdsDict を生成
-    let postIdsDict = {};
-    const docRef = collection(db, "posts");
-    try {
-      const documents = await getDocs(docRef);
-      if (!documents) {
-        console.warn("");
-        return;
-      }
-      documents.forEach((document) => {
-        postIdsDict[document.id] = document.data();
-      });
-    } catch (e) {
-      console.warn("(submit, asyncData) Error");
-      console.warn(e);
-      error({
-        statusCode: 500,
-        message: "Fatal error",
-      });
-    }
-    return { postIdsDict };
-  },
+  // async asyncData({ error }) {
+  //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成
+  //   let postIdsDict = {};
+  //   const docRef = collection(db, "posts");
+  //   try {
+  //     const documents = await getDocs(docRef);
+  //     if (!documents) {
+  //       console.warn("");
+  //       return;
+  //     }
+  //     documents.forEach((document) => {
+  //       postIdsDict[document.id] = document.data();
+  //     });
+  //   } catch (e) {
+  //     console.warn("(submit, asyncData) Error");
+  //     console.warn(e);
+  //     error({
+  //       statusCode: 500,
+  //       message: "Fatal error",
+  //     });
+  //   }
+  //   return { postIdsDict };
+  // },
 };
 </script>

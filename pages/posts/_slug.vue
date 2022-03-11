@@ -1,5 +1,5 @@
 <template>
-  <div class="self-bg flex flex-col">
+  <div class="self-bg flex flex-col items-center">
     <!--
       main, article, section は div と同じ役割です。
       全部 div でもいいですが、コードを見やすくするために振り分けていま
@@ -7,23 +7,25 @@
       また、ウェブスクレイピングがしやすくなるという利点もあります。
     -->
     <main
-      :class="colorsDict[genresDict[post.genre].color].borderClass"
+      :class="[
+        colorsDict[genresDict[post.genre].color].borderClass,
+        colorsDict[genresDict[post.genre].color].shadowClass,
+      ]"
       class="
         container
-        mx-4
-        md:mx-auto
+        max-w-11/12
+        mx-auto
         my-8
         p-12
         bg-stone-100
         border-4
         rounded-xl
-        drop-shadow-lg
-        overflow-hidden
+        shadow-md
       "
     >
       <article class="md:flex">
         <!-- article (left) -->
-        <section class="md:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2">
+        <section class="md:w-1/2 lg:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2">
           <div class="flex items-center space-x-3">
             <h1 class="text-gray-800 text-3xl font-medium">
               {{ slug }}
@@ -141,35 +143,107 @@
         </section>
 
         <!-- article (right) -->
-        <!-- <client-only> -->
         <section
           class="
-            swiper
+            relative
             my-auto
-            md:pl-8 md:w-1/3
-            aspect-video
-            object-cover object-center
-            rounded
-            drop-shadow
+            md:w-1/2
+            lg:w-1/3
+            rounded-md
+            drop-shadow-md
+            bg-stone-600
             overflow-hidden
           "
-          v-swiper="swiperOption"
         >
-          <div class="swiper-wrapper">
-            <div v-for="pic in post.pics" :key="pic" class="swiper-slide">
-              <img
-                class="w-full aspect-video bg-white object-cover"
-                :src="pic"
-                :title="slug"
-                :alt="slug"
-              />
+          <!-- 1. swiper (main pic) -->
+          <section
+            :class="genresDict[post.genre].color"
+            class="
+              swiper
+              md:pl-8
+              w-full
+              aspect-video
+              object-cover object-center
+              overflow-hidden
+            "
+            v-swiper:swiperTop="swiperOptionTop"
+          >
+            <div class="swiper-wrapper">
+              <div
+                v-for="(pic, idx) in post.pics"
+                :key="pic"
+                class="swiper-slide"
+              >
+                <img
+                  class="w-full aspect-video bg-white object-cover"
+                  :src="pic"
+                  :title="slug"
+                  :alt="slug"
+                />
+                <div
+                  class="
+                    absolute
+                    flex
+                    mx-auto
+                    inset-x-0
+                    bottom-2
+                    h-5
+                    w-10
+                    bg-black bg-opacity-40
+                    rounded
+                    text-stone-100 text-sm
+                  "
+                >
+                  <p class="m-auto">
+                    {{ `${(idx % picsDefaultLen) + 1} / ${picsDefaultLen}` }}
+                  </p>
+                </div>
+              </div>
             </div>
+          </section>
+
+          <!-- 2. swiper (sub pics) -->
+          <div class="p-1">
+            <section
+              class="swiper object-cover object-center"
+              v-swiper:swiperThumbs="swiperOptionThumbs"
+            >
+              <div class="swiper-wrapper">
+                <div
+                  v-for="pic in post.pics"
+                  :key="pic"
+                  class="swiper-slide bg-gray-900 relative"
+                >
+                  <div
+                    id="darken"
+                    class="
+                      absolute
+                      h-full
+                      w-full
+                      bg-black bg-opacity-50
+                      transition-colors
+                      ease-in-out
+                      duration-300
+                    "
+                  ></div>
+                  <img
+                    class="
+                      max-h-32
+                      aspect-video
+                      bg-white
+                      object-cover
+                      rounded
+                      overflow-hidden
+                    "
+                    :src="pic"
+                    :title="slug"
+                    :alt="slug"
+                  />
+                </div>
+              </div>
+            </section>
           </div>
-          <div class="swiper-pagination" slot="pagination"></div>
-          <div class="swiper-button-prev" slot="button-prev"></div>
-          <div class="swiper-button-next" slot="button-next"></div>
         </section>
-        <!-- </client-only> -->
       </article>
     </main>
     <TheSlides />
@@ -177,9 +251,6 @@
 </template>
 
 <script>
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "~/plugins/firebase.js";
-
 import { directive } from "vue-awesome-swiper";
 import {
   genresDict,
@@ -188,42 +259,77 @@ import {
   envsDict,
 } from "~/plugins/define.js";
 
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
 export default {
-  // https://github.com/nuxt-community/firebase-module/issues/90
-  // NuxtJS + Firestore 特有のバグ
-  hooks: {
-    generate: {
-      done(builder) {
-        db.goOffline();
-      },
-    },
-  },
-  transition: "expandFade",
   directives: {
     swiper: directive,
   },
   data() {
     return {
-      // asyncData
-      // post: {},  // asyncData の post を上書きしてしまう
+      picsDefaultLen: 1,
       // define
       genresDict,
       authorsDict,
       colorsDict,
       envsDict,
-      swiperOption: {
+      swiperOptionTop: {
         loop: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
+        // loopedSlides: post.pics.length,
+        autoplay: {
+          delay: 5000,
         },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-          dynamicBullets: true,
-        },
+        // pagination: {
+        //   el: ".swiper-pagination",
+        //   type: "fraction",
+        // },
+      },
+      swiperOptionThumbs: {
+        loop: true,
+        // loopedSlides: post.pics.length,
+        spaceBetween: 10,
+        centeredSlides: true,
+        slidesPerView: 3,
+        touchRatio: 0.2,
+        slideToClickedSlide: true,
       },
     };
+  },
+  // https://qiita.com/watataku8911/items/8dba8082b35dbbde4533
+  // https://nuxtjs.org/docs/directory-structure/store/
+  computed: {
+    post() {
+      let post = deepCopy(
+        this.$store.getters["posts/getPostByTitle"](this.slug)
+      );
+      if (!post) {
+        this.$nuxt.context.error({
+          statusCode: 404,
+          message: `記事「${this.slug}」は存在しません。`,
+        });
+      }
+      if (post.pics.length === 0) {
+        post.pics = [
+          "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
+        ];
+      }
+      // 画像が一枚だと #darken がバグるので 2 枚に複製。
+      this.picsDefaultLen = post.pics.length;
+      while (post.pics.length <= 2) {
+        const pics = post.pics;
+        pics.forEach((pic) => post.pics.push(pic));
+      }
+      this.swiperOptionTop.loopedSlides = post.pics.length;
+      this.swiperOptionThumbs.loopedSlides = post.pics.length;
+      return post;
+    },
+  },
+  mounted() {
+    // https://github.com/surmon-china/vue-awesome-swiper/issues/272#issuecomment-751482139
+    this.swiperTop.controller.control = this.swiperThumbs;
+    this.swiperThumbs.controller.control = this.swiperTop;
   },
   head() {
     const DESC = this.post.body;
@@ -244,80 +350,20 @@ export default {
       ],
     };
   },
-  // async https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Statements/async_function
-  // async 関数では、返値が暗黙的に `Promise.resolve(/* value */)` でラップされる
-  // https://qiita.com/sotszk/items/f23199e864cba47455ce
-  // `Promise.resolve(/* value */)` は以下と等価
-  // `new Promise(resolve => resolve(/* value */))`
-  // https://negalog.com/nuxt-js-fetch-data/
-  // asyncData() がサーバー側で実行されるのは、アプリケーションへの初回アクセス時のみ。
-  // (URL への直接アクセス・リロードなどの形でページに遷移した場合など)
-  // 最初の一回はサーバー側で実行されるが、以降は SPA として動作。
-  // (ブラウザ側で実行される)
-  async asyncData({ params, error }) {
+  asyncData({ params }) {
     // https://nuxtjs.org/ja/docs/directory-structure/pages/
     // "/abc" パスにアクセスすると、slug は "abc" になります。
     // cf: このプロジェクトにおいては slug == title です
     const { slug } = params;
-    // firestore/redirects/<title>/ にある json を取得
-    let postId = "";
-    const redirectsDocRef = doc(db, "redirects", slug);
-    try {
-      const redirectDocument = await getDoc(redirectsDocRef);
-      if (!redirectDocument) {
-        console.log("(_slug, asyncData, redirects) Invalid doc ref");
-        error({
-          statusCode: 404,
-          message: `記事「${slug}」は存在しません。`,
-        });
-      }
-      const data = redirectDocument.data();
-      if (!data) {
-        console.log("(_slug, asyncData, redirects) Invalid doc ref");
-        error({
-          statusCode: 404,
-          message: `記事「${slug}」は存在しません。`,
-        });
-      }
-      postId = data.redirect;
-    } catch (e) {
-      console.warn("(_slug, asyncData, redirects) Error");
-      console.warn(e);
-      error({
-        statusCode: 500,
-        message: `記事「${slug}」の取得に失敗しました。`,
-      });
-    }
-    // firestore/posts/<postId>/ に json を送信
-    let post = {};
-    const postsDocRef = doc(db, "posts", postId);
-    try {
-      const postsDocument = await getDoc(postsDocRef);
-      if (!postsDocument) {
-        console.log("(_slug, asyncData, posts) Invalid doc ref");
-        error({
-          statusCode: 404,
-          message: `記事「${slug}」のデータが壊れています。`,
-        });
-      }
-      post = postsDocument.data();
-      if (!post) {
-        console.warn("(_slug, asyncData, posts) Invalid");
-        error({
-          statusCode: 500,
-          message: `記事「${slug}」のデータが壊れています。`,
-        });
-      }
-      console.log(`(_slug, asyncData, posts) Sync'd ${slug}`);
-    } catch (e) {
-      console.log("(_slug, asyncData, posts) Error");
-      console.log(e);
-      error({
-        statusCode: 404,
-        message: `記事「${slug}」は削除されました。`,
-      });
-    }
-    return { post, slug };
+    return { slug };
   },
 };
 </script>
+
+<style scoped lang="postcss">
+/* https://github.com/surmon-china/vue-awesome-swiper/issues/98 */
+.swiper-slide-active >>> #darken,
+.swiper-slide-duplicate-active >>> #darken {
+  @apply bg-transparent;
+}
+</style>

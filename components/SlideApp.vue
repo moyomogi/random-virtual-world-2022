@@ -1,7 +1,11 @@
 <template>
   <client-only>
     <article
-      :class="colorsDict[genresDict[genre].color].borderClass"
+      :class="[
+        genresDict[genre].color,
+        colorsDict[genresDict[genre].color].borderClass,
+        colorsDict[genresDict[genre].color].shadowClass,
+      ]"
       class="
         swiper
         directive
@@ -9,11 +13,12 @@
         bg-stone-100
         border-2
         rounded-xl
-        drop-shadow-lg
+        shadow-lg
         overflow-hidden
       "
       v-swiper="swiperOption"
     >
+      <!-- この中に各スライドを入れる -->
       <div class="swiper-wrapper">
         <div v-for="post in posts" :key="post.title" class="swiper-slide">
           <img
@@ -22,12 +27,13 @@
             :title="post.title"
             :alt="post.title"
           />
-          <div class="px-6 pt-6 mb-auto">
+          <div class="px-6 pt-4 mb-auto">
             <div class="items-baseline">
               <NuxtLink :to="`/posts/${post.title}`">
                 <h1
                   class="
-                    mb-2
+                    pr-1
+                    inline-block
                     font-semibold
                     text-lg text-stone-800
                     hover:underline hover:decoration-stone-800
@@ -36,7 +42,7 @@
                   {{ post.title }}
                 </h1></NuxtLink
               >
-              <div class="space-x-2 mb-2 inline-block">
+              <div class="space-x-2 p-1 inline-block">
                 <span
                   v-for="env in post.supportedEnvs"
                   :key="env"
@@ -62,9 +68,19 @@
           </div>
         </div>
       </div>
+
+      <!-- swiper 諸要素 -->
       <div class="swiper-pagination" slot="pagination"></div>
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <div class="swiper-button-next" slot="button-next"></div>
+      <div
+        :class="{ invisible: posts.length <= 1 }"
+        class="swiper-button-prev"
+        slot="button-prev"
+      ></div>
+      <div
+        :class="{ invisible: posts.length <= 1 }"
+        class="swiper-button-next"
+        slot="button-next"
+      ></div>
     </article>
   </client-only>
 </template>
@@ -88,6 +104,12 @@ export default {
   directives: {
     swiper: directive,
   },
+  mounted() {
+    if (this.posts.length <= 1) {
+      this.swiperOption.slideToClickedSlide = true;
+      this.swiperOption.loop = false;
+    }
+  },
   data() {
     return {
       // define
@@ -98,6 +120,7 @@ export default {
         loop: true,
         pagination: {
           el: ".swiper-pagination",
+          clickable: true,
         },
         navigation: {
           nextEl: ".swiper-button-next",
@@ -109,14 +132,30 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 /* https://github.com/surmon-china/vue-awesome-swiper/issues/98 */
-.swiper-pagination > .swiper-pagination-bullet {
-    opacity: 1;
-    border: black solid 1px;
-    background-color: transparent;
+.magenta >>> .swiper-pagination-bullet {
+  @apply bg-pink-400 opacity-40;
 }
-.swiper-pagination > .swiper-pagination-bullet-active {
-    background-color: black;
+.cyan >>> .swiper-pagination-bullet {
+  @apply bg-sky-400 opacity-40;
+}
+.yellow >>> .swiper-pagination-bullet {
+  @apply bg-yellow-400 opacity-40;
+}
+.swiper-pagination >>> .swiper-pagination-bullet-active {
+  @apply opacity-100;
+}
+.magenta >>> .swiper-button-prev,
+.magenta >>> .swiper-button-next {
+  @apply text-pink-400 drop-shadow;
+}
+.cyan >>> .swiper-button-prev,
+.cyan >>> .swiper-button-next {
+  @apply text-sky-400 drop-shadow;
+}
+.yellow >>> .swiper-button-prev,
+.yellow >>> .swiper-button-next {
+  @apply text-yellow-400 drop-shadow;
 }
 </style>

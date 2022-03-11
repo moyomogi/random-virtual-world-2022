@@ -235,26 +235,29 @@ const authorsDict = {
 export { authorsDict };
 
 const colorsDict = {
-  cyan: {
-    textClass: "text-sky-800",
-    bgClass: "bg-sky-200",
-    borderClass: "border-sky-400",
-    buttonClass: ["focus:bg-sky-500", "bg-sky-600", "hover:bg-sky-700"],
-    buttonUrls: ["/slides/button_c.png", "/slides/button_c_hover.png"],
-    frameUrl: "/slides/frame_c.png",
-  },
   magenta: {
     textClass: "text-pink-800",
     bgClass: "bg-pink-200",
     borderClass: "border-pink-400",
+    shadowClass: "shadow-pink-500/60",
     buttonClass: ["focus:bg-pink-600", "bg-pink-700", "hover:bg-pink-800"],
     buttonUrls: ["/slides/button_m.png", "/slides/button_m_hover.png"],
     frameUrl: "/slides/frame_m.png",
+  },
+  cyan: {
+    textClass: "text-sky-800",
+    bgClass: "bg-sky-200",
+    borderClass: "border-sky-400",
+    shadowClass: "shadow-sky-500/60",
+    buttonClass: ["focus:bg-sky-500", "bg-sky-600", "hover:bg-sky-700"],
+    buttonUrls: ["/slides/button_c.png", "/slides/button_c_hover.png"],
+    frameUrl: "/slides/frame_c.png",
   },
   yellow: {
     textClass: "text-yellow-800",
     bgClass: "bg-yellow-200",
     borderClass: "border-yellow-400",
+    shadowClass: "shadow-yellow-500/60",
     buttonClass: [
       "focus:bg-yellow-500",
       "bg-yellow-600",

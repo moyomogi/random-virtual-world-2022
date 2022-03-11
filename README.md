@@ -52,7 +52,7 @@ firebase login
 アカウントを作った後、公式解説 [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) に従い、以下を実行。
 ```sh
 heroku login
-# `rvw2022` は自分の Heroku のプロジェクト名に変更してください
+# `rvw2022` は自分の Heroku プロジェクト名に変更してください
 heroku git:remote -a rvw2022
 ```
 

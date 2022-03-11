@@ -1,6 +1,6 @@
-const TITLE = "Random Virtual World";
+const TITLE = "Random Virtual World 2022";
 const DESC =
-  "Random Virtual World は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
+  "Random Virtual World 2022 は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
 
 export default {
   // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
@@ -32,6 +32,10 @@ export default {
     },
     meta: [
       { charset: "utf-8" },
+      {
+        name: "google-site-verification",
+        content: "Gx18T3hkrzY9YZy_MAKgNWckKkWFZkFqK_-n6h5TBvQ",
+      },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
         hid: "og:site_name",
@@ -66,7 +70,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
+  // https://github.com/nomunomu0504/vue-awesome-swiper#local-registration
   css: ["~/assets/css/global.css", "swiper/css/swiper.css"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

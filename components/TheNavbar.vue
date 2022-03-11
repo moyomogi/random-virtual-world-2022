@@ -49,10 +49,7 @@
       <!-- header (right) -->
       <div class="flex my-auto items-center">
         <!-- info -->
-        <button
-          class="mx-2 hidden sm:flex focus:outline-none"
-          @click="infoOpen = true"
-        >
+        <button class="mx-2 focus:outline-none" @click="infoOpen = true">
           <img class="w-12 h-12" src="~assets/navbar/icon_info.png" />
         </button>
         <ModalApp :open="infoOpen" @close="close" />
@@ -123,11 +120,36 @@
           transition-all
           duration-300
           flex flex-col
-          justify-evenly
+          justify-between
         "
         :class="drawerOpen ? 'translate-x-0' : '-translate-x-full'"
       >
-        <!-- sidebar (top) -->
+        <!-- sidebar (top, burger) -->
+        <div class="absolute top-2 left-2 flex items-center">
+          <button
+            class="mx-2 focus:outline-none"
+            aria-label="Open menu"
+            @click="drawerOpen = false"
+          >
+            <img class="w-12 h-12" src="~assets/navbar/icon_burger.png" />
+          </button>
+          <button
+            class="mx-2 hidden sm:flex focus:outline-none"
+            @click="toggleMuted"
+          >
+            <img
+              v-if="muted"
+              class="w-12 h-12"
+              src="~assets/navbar/icon_vol_muted.png"
+            />
+            <img v-else class="w-12 h-12" src="~assets/navbar/icon_vol.png" />
+          </button>
+        </div>
+
+        <!-- sidebar (top, burger 用のスペース) -->
+        <div class="mt-14 w-full flex"></div>
+
+        <!-- sidebar (center) -->
         <a
           v-for="(genreConfig, genre) in genresDict"
           :href="'#' + genre.toLowerCase()"
@@ -139,7 +161,7 @@
         </a>
 
         <!-- sidebar (Share, Home Page 用のスペース) -->
-        <div class="mt-36 w-full flex items-center"></div>
+        <div class="mt-36 w-full flex"></div>
 
         <!-- sidebar (Share, Home Page) -->
         <div class="fixed bottom-0 w-full">
