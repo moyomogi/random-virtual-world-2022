@@ -346,7 +346,7 @@
                 "
               >
                 <img
-                  class="mx-2 h-32 aspect-video bg-white object-cover"
+                  class="mx-2 h-30 aspect-video bg-white object-cover"
                   :src="detail.base64"
                 />
                 <span
@@ -452,7 +452,7 @@
             bg-sky-100
             rounded
           "
-          >{{ JSON.stringify(getPost()) }}</span
+          >{{ JSON.stringify(getCurPost()) }}</span
         >
         <!-- ・Submit 済み投稿一覧:
         <br />
@@ -643,11 +643,17 @@ export default {
     },
     errSupportedEnvs() {
       if (this.post.supportedEnvs.length) {
+        const envs = Object.keys(this.envsDict);
+        let supEnvs = [];
+        envs.forEach((env) => {
+          const valid = this.post.supportedEnvs.some(
+            (supEnv) => supEnv === env
+          );
+          if (valid) supEnvs.push(env);
+        });
         return {
           state: "ok",
-          msg: this.post.supportedEnvs
-            .map((env) => this.envsDict[env].aka)
-            .join(", "),
+          msg: supEnvs.map((env) => this.envsDict[env].aka).join(", "),
         };
       }
       return {
@@ -733,7 +739,6 @@ export default {
           // https://qiita.com/CloudRemix/items/92e68a048a0da93ed240
           base64:
             "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
-          pic: null,
         });
 
         // https://okinawanpizza.hatenablog.com/entry/2020/12/29/120807
@@ -749,19 +754,31 @@ export default {
       // splice https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array
       this.picDetails.splice(idx, 1);
     },
-    getPost() {
+    getCurPost() {
+      let curPost = deepCopy(this.post);
+
+      // pics
+      if (!curPost.pics) {
+        curPost.pics = this.picDetails.map(() => "<Ungenerated URL>");
+      }
+
+      // supportedEnvs
+      curPost.supportedEnvs = [];
+      const envs = Object.keys(envsDict);
+      envs.forEach((env) => {
+        const valid = this.post.supportedEnvs.some((supEnv) => supEnv === env);
+        if (valid) curPost.supportedEnvs.push(env);
+      });
+
+      // updatedTime
       const dt = new Date();
       const func = (x) => ("00" + x).slice(-2);
       const updatedTime = `${dt.getFullYear()}/${
         dt.getMonth() + 1
       }/${dt.getDate()} ${func(dt.getHours())}:${func(dt.getMinutes())}`;
-      let post = deepCopy(this.post);
-      post.pics = this.picDetails.map((detail) => {
-        if (detail.url) return detail.url;
-        return "<Ungenerated URL>";
-      });
-      post["updatedTime"] = updatedTime;
-      return post;
+      curPost.updatedTime = updatedTime;
+
+      return curPost;
     },
     async submitPost() {
       const msg = this.submitErrIfAny();
@@ -769,7 +786,7 @@ export default {
         alert(msg.msg);
         return;
       }
-      let post = this.getPost();
+      let post = this.getCurPost();
       {
         // firestore は 1 GB で、クエリ処理が速い
         // firestore/redirects/<title>/ に json を送信
@@ -784,6 +801,7 @@ export default {
           return;
         }
       }
+
       // storage は 10 GB で、クエリ処理が遅い
       // storage/posts/<postId>/ に画像群を送信
       // 長さ this.picDetails.length の空配列
@@ -793,11 +811,12 @@ export default {
         this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
         const bytes = this.picDetails[i].bytes;
         const storageRef = ref(storage, `${post.postId}/${picName}`);
-        await uploadBytes(storageRef, bytes).then(
-          async (snapshot) =>
-            (post.pics[i] = await getDownloadURL(snapshot.ref))
-        );
+        await uploadBytes(storageRef, bytes).then(async (snapshot) => {
+          post.pics[i] = await getDownloadURL(snapshot.ref);
+        });
       }
+      this.post.pics = post.pics;
+
       // firestore/posts/<postId>/ に json を送信
       this.submitMsg = `POST: firestore/posts/${post.postId}`;
       const docRef = doc(db, "posts", post.postId);

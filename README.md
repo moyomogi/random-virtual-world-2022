@@ -1,10 +1,9 @@
 [![hp](https://raw.githubusercontent.com/moyomogi/rvw2022/master/docs/hp.svg)](https://rvw2022.herokuapp.com)
-[![deploy](https://github.com/moyomogi/rvw2022/actions/workflows/deploy-on-merge.yml/badge.svg)](https://github.com/moyomogi/rvw2022/actions/workflows/deploy-on-merge.yml)
 [![last-commit](https://img.shields.io/github/last-commit/moyomogi/rvw2022)](https://github.com/moyomogi/rvw2022/commits/master)
 [![license](https://img.shields.io/badge/license-CC0-blue)](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)
 
 # 🌸 Random Virtual World 2022
-<img src="https://i.imgur.com/R9YV2YX.png" width="180">  
+<img src="https://i.imgur.com/R9YV2YX.png" width="180" style="border-radius: 0.375rem;">  
 
 ## インストール
 WSL の上で作業してください。  
@@ -22,19 +21,20 @@ npm install
 npm run dev
 ```
 
-### 製品モード・Static hosting (GH Pages など) モードでサーブ
+### 製品モード・Node.js hosting (Heroku など) モードでサーブ
+[localhost:3000](http://localhost:3000) にてサーブされる。
+Heroku にデプロイしているので、今回はこっち。
+```sh
+npm run build
+npm run start
+```
+
+### (製品モード・Static hosting (GH Pages など) モードでサーブ)
 [localhost:3000](http://localhost:3000) にてサーブされる。
 ```sh
 # dist フォルダにファイル群を生成
 npm run generate
 # localhost にてサーブする
-npm run start
-```
-
-### 製品モード・Node.js hosting (Heroku など) モードでサーブ
-[localhost:3000](http://localhost:3000) にてサーブされる。
-```sh
-npm run build
 npm run start
 ```
 
@@ -61,7 +61,7 @@ heroku git:remote -a rvw2022
 git add --all
 git commit -m "Test heroku"
 git push heroku master  # Heroku にデプロイ
-git push origin master  # Github にデプロイ
+# git push origin master  # Github にデプロイ
 ```
 
 ## 技術スタック

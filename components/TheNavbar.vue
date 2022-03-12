@@ -133,21 +133,10 @@
           >
             <img class="w-12 h-12" src="~assets/navbar/icon_burger.png" />
           </button>
-          <button
-            class="mx-2 hidden sm:flex focus:outline-none"
-            @click="toggleMuted"
-          >
-            <img
-              v-if="muted"
-              class="w-12 h-12"
-              src="~assets/navbar/icon_vol_muted.png"
-            />
-            <img v-else class="w-12 h-12" src="~assets/navbar/icon_vol.png" />
-          </button>
         </div>
 
         <!-- sidebar (top, burger 用のスペース) -->
-        <div class="mt-14 w-full flex"></div>
+        <div class="mt-10 w-full flex"></div>
 
         <!-- sidebar (center) -->
         <a

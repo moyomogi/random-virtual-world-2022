@@ -45,21 +45,21 @@
               />
               <div class="flex-col rounded-lg overflow-hidden">
                 <img
-                  :src="getPost(curPostId).pics[0]"
+                  :src="getPostById(curPostId).pics[0]"
                   class="w-24 aspect-video bg-white object-cover"
                 />
                 <p
                   :class="[
-                    colorsDict[genresDict[getPost(curPostId).genre].color]
+                    colorsDict[genresDict[getPostById(curPostId).genre].color]
                       .textClass,
-                    colorsDict[genresDict[getPost(curPostId).genre].color]
+                    colorsDict[genresDict[getPostById(curPostId).genre].color]
                       .bgClass,
                   ]"
                   class="w-24 text-sm break-all truncate"
                 >
                   ({{ genresDict[gnr].aka }})
                   <br />
-                  {{ getPost(curPostId).title }}
+                  {{ getPostById(curPostId).title }}
                 </p>
               </div>
             </label>
@@ -389,10 +389,10 @@
                 "
               >
                 <img
-                  class="mx-2 h-32 aspect-video bg-white object-cover"
+                  class="mx-2 h-30 aspect-video bg-white object-cover"
                   :src="detail.base64"
                 />
-                <span v-if="detail.pic" class="py-2 text-sm text-gray-600"
+                <span v-if="detail.pic" class="py-2 text-sm text-stone-800"
                   >OK: Already posted</span
                 >
                 <span
@@ -627,24 +627,18 @@ export default {
       return this.$store.getters["posts/getPostGenresDict"];
     },
     postIdsDict() {
-      // const postIdsDict = this.$store.getters["posts/getPostIdsDict"];
-      // for (const [k, _v] of Object.entries(postIdsDict)) {
-      //   this.postId = k;
-      //   this.post.postId = k;
-      //   break;
-      // }
-      // console.log("postIdsDict");
-      // console.log(postIdsDict);
-      // return postIdsDict;
       return this.$store.getters["posts/getPostIdsDict"];
     },
   },
   mounted() {
-    for (const [k, _v] of Object.entries(this.postIdsDict)) {
-      this.postId = k;
-      console.log("k");
-      console.log(k);
-      break;
+    // for (let key in dict) {}
+    for (let genre in this.genresDict) {
+      // for (let x of array) {}
+      for (let postId of this.postGenresDict[genre]) {
+        this.postId = postId;
+        break;
+      }
+      if (this.postId) break;
     }
   },
   methods: {
@@ -665,7 +659,7 @@ export default {
           if (
             !curPostId &&
             curPost.title === this.post.title &&
-            curPostId !== this.post.postId
+            curPostId !== this.postId
           ) {
             return {
               state: "ng",
@@ -755,16 +749,22 @@ export default {
     },
     errSupportedEnvs() {
       if (this.post.supportedEnvs.length) {
+        const envs = Object.keys(this.envsDict);
+        let supEnvs = [];
+        envs.forEach((env) => {
+          const valid = this.post.supportedEnvs.some(
+            (supEnv) => supEnv === env
+          );
+          if (valid) supEnvs.push(env);
+        });
         return {
           state: "ok",
-          msg: this.post.supportedEnvs
-            .map((env) => this.envsDict[env].aka)
-            .join(", "),
+          msg: supEnvs.map((env) => this.envsDict[env].aka).join(", "),
         };
       }
       return {
         state: "ng",
-        msg: "NG: len(self.post.supportedEnvs) == 0",
+        msg: "NG: len(self.supportedEnvs) == 0",
       };
     },
     errAuthors() {
@@ -885,17 +885,33 @@ export default {
       this.picDetails.splice(idx, 1);
     },
     getCurPost() {
+      let curPost = deepCopy(this.post);
+
+      // postId
+      curPost.postId = this.postId;
+
+      // pics
+      curPost.pics = this.picDetails.map((detail) => {
+        if (detail.pic) return detail.pic;
+        return "<Ungenerated URL>";
+      });
+
+      // supportedEnvs
+      curPost.supportedEnvs = [];
+      const envs = Object.keys(envsDict);
+      envs.forEach((env) => {
+        const valid = this.post.supportedEnvs.some((supEnv) => supEnv === env);
+        if (valid) curPost.supportedEnvs.push(env);
+      });
+
+      // updatedTime
       const dt = new Date();
       const func = (x) => ("00" + x).slice(-2);
       const updatedTime = `${dt.getFullYear()}/${
         dt.getMonth() + 1
       }/${dt.getDate()} ${func(dt.getHours())}:${func(dt.getMinutes())}`;
-      let curPost = deepCopy(this.post);
-      curPost.pics = this.picDetails.map((detail) => {
-        if (detail.pic) return detail.pic;
-        return "<Ungenerated URL>";
-      });
-      curPost["updatedTime"] = updatedTime;
+      curPost.updatedTime = updatedTime;
+
       return curPost;
     },
     // The Firebase SDK is initialized and available here!
@@ -979,14 +995,14 @@ export default {
         const docRef1 = doc(db, "redirects", this.post.title);
         const docRef2 = doc(db, "posts", this.postId);
         try {
-          this.deleteMsg = `Delete: firestore/redirects/${this.post.title}`;
+          this.deleteMsg = `DELETE: firestore/redirects/${this.post.title}`;
           await deleteDoc(docRef1);
-          this.deleteMsg = `Delete: firestore/posts/${this.postId}`;
+          this.deleteMsg = `DELETE: firestore/posts/${this.postId}`;
           await deleteDoc(docRef2);
           const storageRef = ref(storage, this.postId);
           await listAll(storageRef).then((res) => {
             res.items.forEach((itemRef) => {
-              this.deleteMsg = `Delete: storage/${this.postId}/${itemRef.name}`;
+              this.deleteMsg = `DELETE: storage/${this.postId}/${itemRef.name}`;
               deleteObject(itemRef);
             });
           });
@@ -999,8 +1015,8 @@ export default {
       this.updateMsg = "Deleted! Press F5 to refresh.";
       this.deleteMsg = "Deleted! Press F5 to refresh.";
     },
-    getPost(id) {
-      return this.$store.getters["posts/getPost"](id);
+    getPostById(id) {
+      return this.$store.getters["posts/getPostById"](id);
     },
   },
   watch: {
@@ -1009,7 +1025,6 @@ export default {
       handler(postId) {
         if (!postId) return;
         this.post = deepCopy(this.postIdsDict[postId]);
-        this.post.postId = postId;
         this.picDetails = this.post.pics.map((pic) => {
           return {
             bytes:

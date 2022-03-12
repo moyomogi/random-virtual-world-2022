@@ -27,7 +27,7 @@
         :src="genresDict[genre].genreUrl"
         :alt="genresDict[genre].aka"
       />
-      <SlideApp :genre="genre" :posts="postIds.map((id) => getPost(id))" />
+      <SlideApp :genre="genre" :posts="postIds.map((id) => getPostById(id))" />
     </section>
   </article>
 </template>
@@ -46,8 +46,8 @@ export default {
     },
   },
   methods: {
-    getPost(id) {
-      return this.$store.getters["posts/getPost"](id);
+    getPostById(id) {
+      return this.$store.getters["posts/getPostById"](id);
     },
   },
   data() {

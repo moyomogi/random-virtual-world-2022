@@ -93,7 +93,7 @@ export default {
     // ビルド高速化 https://tech.contracts.co.jp/entry/2020/12/14/161147
     // `parallel: true` にするとバグる https://lifesaver.codes/answer/how-do-i-fix-nuxt-warning-nuxt-build-finished-but-did-not-exit-after-5s-5669
     // parallel: true,
-    cache: true,
+    // cache: true,
     // hardSource: true,
     postcss: {
       plugins: {

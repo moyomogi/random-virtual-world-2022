@@ -10,18 +10,16 @@ export const state = () => ({
   postGenresDict: {},
 });
 
-function deepCopy(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
+// function deepCopy(obj) {
+//   return JSON.parse(JSON.stringify(obj));
+// }
 
 // this.$store.getters["FILE_NAME/FUNC"];
 export const getters = {
-  getPost(state) {
-    // todo: 404
-    return (id) => deepCopy(state.postIdsDict[id]);
+  getPostById(state) {
+    return (id) => state.postIdsDict[id];
   },
   getPostByTitle(state) {
-    // todo: 404
     return (title) => {
       const id = state.postTitlesDict[title];
       if (!id) return null;
@@ -29,7 +27,7 @@ export const getters = {
     };
   },
   getPostIdsDict(state) {
-    return deepCopy(state.postIdsDict);
+    return state.postIdsDict;
   },
   getPostGenresDict(state) {
     return state.postGenresDict;
@@ -95,6 +93,9 @@ export const actions = {
         postTitlesDict[post.title] = document.id;
         postGenresDict[post.genre].push(document.id);
       });
+
+      // sort
+      genres.forEach((genre) => postGenresDict[genre].sort());
     } catch (e) {
       console.warn("(posts, fetch) Error");
       console.warn(e);
