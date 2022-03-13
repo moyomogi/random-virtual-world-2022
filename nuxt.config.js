@@ -1,4 +1,4 @@
-const TITLE = "Random Virtual World 2022";
+const SITE_NAME = "Random Virtual World 2022";
 const DESC =
   "Random Virtual World 2022 は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
 const HOST_NAME = "https://rvw2022.herokuapp.com";
@@ -25,8 +25,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: TITLE,
-    titleTemplate: `%s | ${TITLE}`,
+    title: SITE_NAME,
+    titleTemplate: `%s | ${SITE_NAME}`,
     htmlAttrs: {
       lang: "jp",
       prefix: "og: http://ogp.me/ns#",
@@ -38,15 +38,17 @@ export default {
         content: "Gx18T3hkrzY9YZy_MAKgNWckKkWFZkFqK_-n6h5TBvQ",
       },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // サイト名は SITE_NAME で固定
       {
         hid: "og:site_name",
         property: "og:site_name",
-        content: TITLE,
+        content: SITE_NAME,
       },
+      // デフォルト値は SITE_NAME とした
       {
         hid: "og:title",
         property: "og:title",
-        content: TITLE,
+        content: SITE_NAME,
       },
       {
         hid: "og:url",

@@ -545,11 +545,6 @@ export default {
         { hid: "robots", name: "robots", content: "noindex" },
         // og の方の title
         {
-          hid: "og:site_name",
-          property: "og:site_name",
-          content: TITLE,
-        },
-        {
           hid: "og:title",
           property: "og:title",
           content: TITLE,
