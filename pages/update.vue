@@ -618,8 +618,38 @@ export default {
     };
   },
   head() {
+    const TITLE = "更新";
+    const DESC = "部員用の更新ページです。";
     return {
-      title: "更新",
+      // <title> を設定
+      title: TITLE,
+      meta: [
+        // 検索結果に表示させない https://nishimura.club/nuxt-noindex
+        { hid: "robots", name: "robots", content: "noindex" },
+        // og の方の title
+        {
+          hid: "og:site_name",
+          property: "og:site_name",
+          content: TITLE,
+        },
+        {
+          hid: "og:title",
+          property: "og:title",
+          content: TITLE,
+        },
+        // og 画像はなし
+        { hid: "og:image" },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content: DESC,
+        },
+        {
+          hid: "description",
+          name: "description",
+          content: DESC,
+        },
+      ],
     };
   },
   computed: {

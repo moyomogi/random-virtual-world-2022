@@ -42,8 +42,8 @@
                 mr-2
                 px-2
                 py-1
-                text-xs
-                rounded-full
+                text-sm
+                rounded
                 font-semibold
                 tracking-wide
               "
@@ -339,11 +339,29 @@ export default {
     this.swiperThumbs.controller.control = this.swiperTop;
   },
   head() {
+    const TITLE = this.slug;
     const DESC = this.post.body;
-    if (!DESC) return {};
+    if (!TITLE || !DESC) return {};
     return {
-      title: this.slug,
+      // <title> を設定
+      title: TITLE,
       meta: [
+        // og の方の title
+        {
+          hid: "og:site_name",
+          property: "og:site_name",
+          content: TITLE,
+        },
+        {
+          hid: "og:title",
+          property: "og:title",
+          content: TITLE,
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: "https://vuetest-103b3.herokuapp.com",
+        },
         { hid: "og:image", property: "og:image", content: this.post.pics[0] },
         {
           hid: "og:description",

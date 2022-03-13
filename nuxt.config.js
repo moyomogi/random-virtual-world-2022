@@ -1,6 +1,7 @@
 const TITLE = "Random Virtual World 2022";
 const DESC =
   "Random Virtual World 2022 は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
+const HOST_NAME = "https://rvw2022.herokuapp.com";
 
 export default {
   // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
@@ -50,7 +51,7 @@ export default {
       {
         hid: "og:url",
         property: "og:url",
-        content: "https://vuetest-103b3.herokuapp.com",
+        content: HOST_NAME,
       },
       { hid: "og:type", property: "og:type", content: "website" },
       { hid: "og:image", property: "og:image", content: "/ogp.jpg" },
@@ -83,6 +84,14 @@ export default {
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
+
+  // https://nishimura.club/nuxt-sitemap
+  modules: ["@nuxtjs/sitemap"],
+  sitemap: {
+    path: "/sitemap.xml",
+    hostname: HOST_NAME,
+    exclude: ["/submit", "/update"],
+  },
 
   // Only imported during dev and build time: https://go.nuxtjs.dev/config-modules
   // https://go.nuxtjs.dev/tailwindcss
