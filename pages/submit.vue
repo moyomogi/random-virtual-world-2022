@@ -715,12 +715,12 @@ export default {
         };
       }
       for (let i = 0; i < this.picDetails.length; i++) {
-        const detail = this.picDetails[i];
-        if (parseInt(detail.bytes.size) > this.maxBytes) {
+        const { bytes } = this.picDetails[i];
+        if (parseInt(bytes.size) > this.maxBytes) {
           return {
             state: "ng",
             msg: `pics[${i}]: ${this.parseBytes(
-              parseInt(detail.bytes.size)
+              parseInt(bytes.size)
             )} > ${this.parseBytes(this.maxBytes)}`,
           };
         }
@@ -770,6 +770,8 @@ export default {
         }
         this.picDetails.push({
           bytes: files[i],
+          // http://www.openspc2.org/reibun/javascript2/FileAPI/files/0002/index.html
+          ext: files[i].name.replace(/.*\./u, "."),
           // https://qiita.com/CloudRemix/items/92e68a048a0da93ed240
           base64:
             "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
@@ -857,9 +859,9 @@ export default {
       // 長さ this.picDetails.length の空配列
       post.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
-        const picName = getRandom();
+        const { bytes, ext } = this.picDetails[i];
+        const picName = getRandom() + ext;
         this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
-        const bytes = this.picDetails[i].bytes;
         const storageRef = ref(storage, `${post.postId}/${picName}`);
         await uploadBytes(storageRef, bytes).then(async (snapshot) => {
           post.pics[i] = await getDownloadURL(snapshot.ref);

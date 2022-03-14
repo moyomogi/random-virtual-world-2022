@@ -823,7 +823,7 @@ export default {
         };
       }
       for (let i = 0; i < this.picDetails.length; i++) {
-        const bytes = this.picDetails[i].bytes;
+        const { bytes } = this.picDetails[i];
         if (parseInt(bytes.size) > this.maxBytes) {
           return {
             state: "ng",
@@ -901,6 +901,8 @@ export default {
         }
         this.picDetails.push({
           bytes: files[i],
+          // http://www.openspc2.org/reibun/javascript2/FileAPI/files/0002/index.html
+          ext: files[i].name.replace(/.*\./u, "."),
           // https://qiita.com/CloudRemix/items/92e68a048a0da93ed240
           base64:
             "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
@@ -1001,21 +1003,21 @@ export default {
       // storage/posts/<postId>/ に画像群を送信
       let post = this.getCurPost();
       // 長さ this.picDetails.length の空配列
-      this.post.pics = Array(this.picDetails.length);
+      post.pics = Array(this.picDetails.length);
       for (let i = 0; i < this.picDetails.length; i++) {
-        if (this.picDetails[i].pic) {
-          this.post.pics[i] = this.picDetails[i].pic;
+        const { bytes, ext, pic } = this.picDetails[i];
+        if (pic) {
+          post.pics[i] = pic;
           continue;
         }
-        const picName = getRandom();
-        this.updateMsg = `POST: storage/posts/${this.postId}/${picName}`;
-        const storageRef = ref(storage, `${this.postId}/${picName}`);
-        await uploadBytes(storageRef, this.picDetails[i].bytes).then(
-          async (snapshot) =>
-            (this.post.pics[i] = await getDownloadURL(snapshot.ref))
-        );
+        const picName = getRandom() + ext;
+        this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
+        const storageRef = ref(storage, `${post.postId}/${picName}`);
+        await uploadBytes(storageRef, bytes).then(async (snapshot) => {
+          post.pics[i] = await getDownloadURL(snapshot.ref);
+        });
       }
-      post.pics = this.post.pics;
+      this.post.pics = post.pics;
       // firestore/posts/<postId>/ に json を送信
       this.updateMsg = `POST: firestore/posts/${this.postId}`;
       const docRef = doc(db, "posts", this.postId);
@@ -1081,6 +1083,7 @@ export default {
           return {
             bytes:
               "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
+            ext: "",
             base64: pic,
             pic: pic,
           };
