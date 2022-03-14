@@ -303,10 +303,19 @@ export default {
   // https://nuxtjs.org/docs/directory-structure/store/
   computed: {
     post() {
-      let post = this.$store.getters["posts/getPostByTitle"](this.slug);
-      post = deepCopy(post);
+      if (!this.slug) {
+        this.$nuxt.context.error({
+          statusCode: 500,
+          message: "slug: undefined",
+        });
+        return {
+          body: "slug: undefined",
+          genre: "puzzle",
+          pics: [],
+        };
+      }
+      let post = deepCopy(this.$store.getters["posts/getPostByTitle"](this.slug));
       if (!post) {
-        // this.$nuxt.context.res.statusCode = 404;
         this.$nuxt.context.error({
           statusCode: 404,
           message: `記事「${this.slug}」は存在しません。`,

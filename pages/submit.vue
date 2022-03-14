@@ -504,6 +504,7 @@ export default {
   data() {
     return {
       // Submit 用
+      googleDriveFileId: "",
       post: {
         title: "",
         postId: getRandom(12),
@@ -515,12 +516,10 @@ export default {
         authors: [],
         pics: null,
       },
-      picDetails: [],
       // for internal system
+      picDetails: [],
       maxBytes: 5 * 1024 * 1024, // 5 MB 以下
       submitMsg: null,
-      // asyncData
-      // postIdsDict: {},  // asyncData の postIdsDict を上書きしてしまう (？)
       // define
       genresDict,
       authorsDict,
@@ -616,6 +615,12 @@ export default {
         };
       }
       if (urlPattern.test(url)) {
+        if (str === "downloadUrl") {
+          return {
+            state: "ok",
+            msg: `OK: re.match("https?://.*", self.${str}) != None, self.googleDriveFileId == "${this.googleDriveFileId}"`,
+          };
+        }
         return {
           state: "ok",
           msg: `OK: re.match("https?://.*", self.${str}) != None`,
@@ -781,6 +786,22 @@ export default {
     },
     getCurPost() {
       let curPost = deepCopy(this.post);
+
+      // 1. downloadUrl に関しては
+      // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing
+      // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
+      // 2. playUrl に関してはそのままです
+      const introns = ["/view?usp=sharing", /.*[\/=]/u];
+      if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
+        let googleDriveFileId = curPost.downloadUrl;
+        introns.forEach((s) => {
+          googleDriveFileId = googleDriveFileId.replace(s, "");
+        });
+        if (googleDriveFileId) {
+          curPost.downloadUrl = `https://drive.google.com/uc?export=download&id=${googleDriveFileId}`;
+          this.googleDriveFileId = googleDriveFileId;
+        }
+      }
 
       // pics
       if (!curPost.pics) {

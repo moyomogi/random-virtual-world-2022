@@ -5,6 +5,16 @@ const SITE_NAME = "Random Virtual World 2022";
 const DESC =
   "Random Virtual World 2022 は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
 const HOST_NAME = "https://rvw2022.herokuapp.com";
+async function getUrls() {
+  const postsRef = collection(db, "posts");
+  const documents = await getDocs(postsRef);
+  if (!documents) return [];
+  return documents.docs.map((document) => {
+    let post = document.data();
+    if (!post || !post.title) return "/";
+    return `/posts/${post.title}`;
+  });
+}
 
 export default {
   // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
@@ -98,20 +108,23 @@ export default {
     gzip: true,
     exclude: ["/submit", "/update"],
     // https://zenn.dev/ysmtegsr/articles/f1cd20fb877dd8c8c154
-    routes: async () => {
-      const postsRef = collection(db, "posts");
-      const documents = await getDocs(postsRef);
-      if (!documents) return;
-      return documents.docs.map((document) => {
-        let post = document.data();
-        if (!post || !post.title) return "/";
-        return {
-          url: `/posts/${post.title}`,
-          changefreq: "weekly",
-          lastmod: new Date(),
-          priority: 1,
-        };
-      });
+    async routes() {
+      return getUrls().then((urls) =>
+        urls.map((url) => {
+          return {
+            url: url,
+            changefreq: "weekly",
+            lastmod: new Date(),
+            priority: 1,
+          };
+        }));
+    },
+  },
+
+  // 使ってません
+  generate: {
+    routes() {
+      return getUrls();
     },
   },
 
@@ -123,9 +136,9 @@ export default {
   build: {
     // ビルド高速化 https://tech.contracts.co.jp/entry/2020/12/14/161147
     // `parallel: true` にするとバグる https://lifesaver.codes/answer/how-do-i-fix-nuxt-warning-nuxt-build-finished-but-did-not-exit-after-5s-5669
-    // parallel: true,
-    // cache: true,
-    // hardSource: true,
+    // parallel: process.env.DEBUG === null,
+    // cache: process.env.DEBUG === null,
+    // hardSource: process.env.DEBUG === null,
     postcss: {
       plugins: {
         tailwindcss: {},
@@ -134,13 +147,13 @@ export default {
     },
     // https://lifesaver.codes/answer/vendor-is-too-big-2201
     // webpack にて、分割し過ぎると、低速化するかも
-    optimization: {
-      splitChunks: {
-        // chunks: "all",
-        automaticNameDelimiter: ".",
-        name: "test",
-        maxSize: 128000,
-      },
-    },
+    // optimization: {
+    //   splitChunks: {
+    //     // chunks: "all",
+    //     automaticNameDelimiter: "-",
+    //     name: "test",
+    //     maxSize: 128000,
+    //   },
+    // },
   },
 };
