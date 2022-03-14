@@ -1,3 +1,6 @@
+import { db } from "./plugins/firebase.js";
+import { getDocs, collection } from "firebase/firestore";
+
 const SITE_NAME = "Random Virtual World 2022";
 const DESC =
   "Random Virtual World 2022 は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
@@ -92,7 +95,24 @@ export default {
   sitemap: {
     path: "/sitemap.xml",
     hostname: HOST_NAME,
+    gzip: true,
     exclude: ["/submit", "/update"],
+    // https://zenn.dev/ysmtegsr/articles/f1cd20fb877dd8c8c154
+    routes: async () => {
+      const postsRef = collection(db, "posts");
+      const documents = await getDocs(postsRef);
+      if (!documents) return;
+      return documents.docs.map((document) => {
+        let post = document.data();
+        if (!post || !post.title) return "/";
+        return {
+          url: `/posts/${post.title}`,
+          changefreq: "weekly",
+          lastmod: new Date(),
+          priority: 1,
+        };
+      });
+    },
   },
 
   // Only imported during dev and build time: https://go.nuxtjs.dev/config-modules
@@ -113,12 +133,13 @@ export default {
       },
     },
     // https://lifesaver.codes/answer/vendor-is-too-big-2201
+    // webpack にて、分割し過ぎると、低速化するかも
     optimization: {
       splitChunks: {
-        chunks: "all",
+        // chunks: "all",
         automaticNameDelimiter: ".",
         name: "test",
-        maxSize: 256000,
+        maxSize: 128000,
       },
     },
   },

@@ -340,8 +340,12 @@ export default {
   },
   head() {
     const TITLE = this.slug;
-    const DESC = this.post.body;
+    let DESC = this.post.body;
     if (!TITLE || !DESC) return {};
+    if (DESC.length >= 70) {
+      // DESC が 70 字以上なら、50 字までを表示
+      DESC = DESC.substring(0, 50) + "...";
+    }
     return {
       // <title> を設定
       title: TITLE,

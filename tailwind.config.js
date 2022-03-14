@@ -6,7 +6,7 @@ module.exports = {
     "./plugins/**/*.{js,ts}",
     "./nuxt.config.{js,ts}",
   ],
-  mode: "jit", // 保存時に自動リロード
+  // mode: "jit", // 保存時に自動リロード
   theme: {
     extend: {
       // Some classes are not available per default
