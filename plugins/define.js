@@ -5,37 +5,37 @@ const genresDict = {
   puzzle: {
     aka: "パズル",
     color: "cyan",
-    genreUrl: "/slides/genre_puzzle.png",
+    genreUrl: "/slides/genre_puzzle.webp",
   },
   role_playing: {
     aka: "RPG",
     color: "yellow",
-    genreUrl: "/slides/genre_role_playing.png",
+    genreUrl: "/slides/genre_role_playing.webp",
   },
   action: {
     aka: "アクション",
     color: "magenta",
-    genreUrl: "/slides/genre_action.png",
+    genreUrl: "/slides/genre_action.webp",
   },
   shooting: {
     aka: "シューティング",
     color: "cyan",
-    genreUrl: "/slides/genre_shooting.png",
+    genreUrl: "/slides/genre_shooting.webp",
   },
   desttop_music: {
     aka: "DTM",
     color: "yellow",
-    genreUrl: "/slides/genre_desktop_music.png",
+    genreUrl: "/slides/genre_desktop_music.webp",
   },
   etcetera: {
     aka: "その他",
     color: "magenta",
-    genreUrl: "/slides/genre_etcetera.png",
+    genreUrl: "/slides/genre_etcetera.webp",
   },
   illustration: {
     aka: "イラスト",
     color: "cyan",
-    genreUrl: "/slides/genre_illustration.png",
+    genreUrl: "/slides/genre_illustration.webp",
   },
 };
 export { genresDict };

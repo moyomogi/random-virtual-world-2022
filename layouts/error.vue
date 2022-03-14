@@ -13,7 +13,7 @@
         bg-stone-100
         border-4
         rounded-xl
-        shadow-md
+        shadow-lg
       "
     >
       <p class="text-lg">{{ error.statusCode }} {{ getMessage(error.statusCode) }}</p>

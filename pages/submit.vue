@@ -1,7 +1,10 @@
 <template>
   <div class="self-bg flex flex-col items-center">
     <form
-      :class="colorsDict[genresDict[post.genre].color].borderClass"
+      :class="[
+        colorsDict[genresDict[post.genre].color].borderClass,
+        colorsDict[genresDict[post.genre].color].shadowClass,
+      ]"
       class="
         container
         mx-auto
@@ -11,6 +14,7 @@
         bg-stone-100
         border-4
         rounded-xl
+        shadow-lg
       "
     >
       <!-- https://www.tailwindtoolbox.com/templates/multi-section-form -->
@@ -315,12 +319,12 @@
       <!-- picDetails -->
       <section class="md:flex">
         <div class="pr-4 md:w-1/6 block text-gray-600 font-bold md:text-left">
-          画像 (1 枚～, 16:9)
+          画像 (1 枚～, 16:9 にトリミングされる, 高圧縮な .webp がお薦め)
         </div>
         <div class="md:w-5/6">
           <input
             type="file"
-            accept=".png, .jpeg, .jpg"
+            accept=".webp, .png, .jpg, .jpeg"
             class="p-1 text-sky-600 bg-sky-100 rounded"
             @change="addPics($event)"
             multiple

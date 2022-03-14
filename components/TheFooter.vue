@@ -57,7 +57,7 @@
       >
         <img
           class="w-18 md:w-12 h-18 md:h-12 rounded-md"
-          src="~assets/footer/icon_youtube.jpg"
+          src="~assets/footer/icon_youtube.webp"
         />
         <img
           class="absolute w-8 md:w-5 h-8 md:h-5 -right-2 -bottom-2 rounded-full"
@@ -73,7 +73,7 @@
       >
         <img
           class="w-18 md:w-12 h-18 md:h-12 rounded-md"
-          src="~assets/footer/icon_twitter.jpg"
+          src="~assets/footer/icon_twitter.webp"
         />
         <img
           class="absolute w-8 md:w-5 h-8 md:h-5 -right-2 -bottom-2 rounded-full"

@@ -19,7 +19,7 @@
           bg-stone-100
           border-4
           rounded-xl
-          shadow-md
+          shadow-lg
           md:flex
         "
       >
