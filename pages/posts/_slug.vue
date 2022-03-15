@@ -15,237 +15,243 @@
           container
           mx-auto
           my-8
-          p-12
+          p-6
+          md:p-10
           bg-stone-100
           border-4
           rounded-xl
           shadow-lg
-          md:flex
+          flex flex-col
+          space-y-3
         "
       >
         <!-- article (left) -->
-        <section
-          class="w-11/12 md:w-1/2 lg:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2"
-        >
-          <div class="flex items-center space-x-3">
-            <h1 class="text-gray-800 text-3xl font-medium">
-              {{ slug }}
-            </h1>
-            <span
-              :class="[
-                colorsDict[genresDict[post.genre].color].textClass,
-                colorsDict[genresDict[post.genre].color].bgClass,
-              ]"
-              class="
-                inline-block
-                ml-1
-                mr-2
-                px-2
-                py-1
-                text-sm
-                rounded
-                font-semibold
-                tracking-wide
-              "
-              >{{ genresDict[post.genre].aka }}</span
-            >
-          </div>
-          <div class="pt-2 pb-4">
-            <p v-for="(line, idx) in post.body.split('\n')" :key="idx">
-              {{ line }}
-            </p>
-          </div>
-
-          <!-- 水平線 (所謂 hr) -->
-          <div class="border-t border-stone-200"></div>
-
-          <!-- author -->
-          <div class="flex min-h-10 items-center">
-            <span class="text-gray-500">作者</span>
-            <span class="ml-auto -my-4 text-gray-800 flex flex-wrap">
-              <span
-                v-for="athr in post.authors"
-                :key="athr"
-                class="mr-2 flex flex-row items-center"
-              >
-                <img
-                  :src="authorsDict[athr].icon"
-                  class="h-8 w-8 rounded-full"
-                />
-                <p class="mx-1">
-                  {{ authorsDict[athr].name }}
-                </p>
-              </span>
-            </span>
-          </div>
-
-          <!-- 水平線 (所謂 hr) -->
-          <div class="border-t border-stone-200"></div>
-
-          <!-- updatedTime -->
-          <div class="flex min-h-8 items-center">
-            <span class="text-gray-500">更新日時</span>
-            <span class="ml-auto text-gray-800">{{ post.updatedTime }}</span>
-          </div>
-
-          <!-- 水平線 (所謂 hr) -->
-          <div class="border-t border-stone-200"></div>
-
-          <!-- supportedEnvs -->
-          <div class="flex min-h-8 items-center">
-            <span class="mr-auto text-gray-500">対応環境</span>
-            <span v-for="env in post.supportedEnvs" :key="env">
+        <div class="flex flex-col md:flex-row items-center">
+          <section
+            class="w-full md:w-1/2 lg:w-2/3 mb-6 md:mb-0 md:pr-8 space-y-2"
+          >
+            <!-- slug -->
+            <p class="text-gray-800 text-3xl font-medium space-x-2">
+              <span>{{ slug }}</span>
               <span
                 :class="[
-                  colorsDict[envsDict[env].color].textClass,
-                  colorsDict[envsDict[env].color].bgClass,
+                  colorsDict[genresDict[post.genre].color].textClass,
+                  colorsDict[genresDict[post.genre].color].bgClass,
                 ]"
                 class="
-                  inline-block
-                  ml-2
+                  ml-1
+                  md:mr-2
                   px-2
                   py-1
-                  text-xs
-                  rounded-full
+                  text-sm
+                  rounded
                   font-semibold
                   tracking-wide
                 "
-                >{{ envsDict[env].aka }}</span
+                >{{ genresDict[post.genre].aka }}</span
               >
-            </span>
-          </div>
+            </p>
 
-          <!-- 水平線 (所謂 hr) -->
-          <div class="border-t border-stone-200"></div>
+            <!-- body -->
+            <div class="pt-2 pb-4">
+              <p v-for="(line, idx) in post.body.split('\n')" :key="idx">
+                {{ line }}
+              </p>
+            </div>
 
-          <!-- downloadUrl, playUrl -->
-          <div class="ml-auto pt-3 w-full flex justify-end space-x-4">
-            <a
-              v-if="post.downloadUrl"
-              rel="noopener"
-              :href="post.downloadUrl"
-              target="_blank"
-              :class="colorsDict[genresDict[post.genre].color].buttonClass"
-              class="py-2 px-6 text-white focus:outline-none rounded"
-            >
-              Download
-            </a>
-            <a
-              v-if="post.playUrl"
-              rel="noopener"
-              :href="post.playUrl"
-              target="_blank"
-              :class="colorsDict[genresDict[post.genre].color].buttonClass"
-              class="py-2 px-6 text-white focus:outline-none rounded"
-            >
-              Play
-            </a>
-          </div>
-        </section>
+            <!-- 水平線 (所謂 hr) -->
+            <div class="border-t border-stone-200"></div>
 
-        <!-- article (right) -->
-        <section
-          class="
-            relative
-            my-auto
-            w-11/12
-            md:w-1/2
-            lg:w-1/3
-            rounded-md
-            drop-shadow-md
-            bg-stone-600
-            overflow-hidden
-          "
-        >
-          <!-- 1. swiper (main pic) -->
-          <section
-            :class="genresDict[post.genre].color"
-            class="
-              swiper
-              md:pl-8
-              w-full
-              aspect-video
-              object-cover object-center
-              overflow-hidden
-            "
-            v-swiper:swiperTop="swiperOptionTop"
-          >
-            <div class="swiper-wrapper">
-              <div
-                v-for="(pic, idx) in post.pics"
-                :key="pic"
-                class="swiper-slide"
-              >
-                <img
-                  class="w-full aspect-video bg-white object-cover"
-                  :src="pic"
-                  :title="slug"
-                  :alt="slug"
-                />
-                <div
-                  class="
-                    absolute
-                    flex
-                    mx-auto
-                    inset-x-0
-                    bottom-2
-                    h-5
-                    w-10
-                    bg-black bg-opacity-40
-                    rounded
-                    text-stone-100 text-sm
-                  "
+            <!-- author -->
+            <div class="flex min-h-10 items-center">
+              <span class="text-gray-500">作者</span>
+              <span class="ml-auto -my-4 text-gray-800 flex flex-wrap">
+                <span
+                  v-for="athr in post.authors"
+                  :key="athr"
+                  class="mr-2 flex flex-wrap items-center"
                 >
-                  <p class="m-auto">
-                    {{ `${(idx % picsDefaultLen) + 1} / ${picsDefaultLen}` }}
+                  <img
+                    :src="authorsDict[athr].icon"
+                    class="h-8 w-8 rounded-full"
+                  />
+                  <p class="mx-1">
+                    {{ authorsDict[athr].name }}
                   </p>
-                </div>
-              </div>
+                </span>
+              </span>
+            </div>
+
+            <!-- 水平線 (所謂 hr) -->
+            <div class="border-t border-stone-200"></div>
+
+            <!-- updatedTime -->
+            <div class="flex min-h-8 items-center">
+              <span class="text-gray-500">更新日時</span>
+              <span class="ml-auto text-gray-800">{{ post.updatedTime }}</span>
+            </div>
+
+            <!-- 水平線 (所謂 hr) -->
+            <div class="border-t border-stone-200"></div>
+
+            <!-- supportedEnvs -->
+            <div class="flex min-h-8 items-center">
+              <span class="mr-auto text-gray-500">対応環境</span>
+              <span class="flex flex-wrap">
+                <span
+                  v-for="env in post.supportedEnvs"
+                  :key="env"
+                  :class="[
+                    colorsDict[envsDict[env].color].textClass,
+                    colorsDict[envsDict[env].color].bgClass,
+                  ]"
+                  class="
+                    inline-block
+                    ml-2
+                    px-2
+                    py-1
+                    text-xs
+                    rounded-full
+                    font-semibold
+                    tracking-wide
+                  "
+                  >{{ envsDict[env].aka }}</span
+                >
+              </span>
+            </div>
+
+            <!-- 水平線 (所謂 hr) -->
+            <div class="border-t border-stone-200"></div>
+
+            <!-- downloadUrl, playUrl -->
+            <div class="ml-auto pt-3 w-full flex justify-end space-x-4">
+              <a
+                v-if="post.downloadUrl"
+                rel="noopener"
+                :href="post.downloadUrl"
+                target="_blank"
+                :class="colorsDict[genresDict[post.genre].color].buttonClass"
+                class="py-2 px-6 text-white focus:outline-none rounded"
+              >
+                Download
+              </a>
+              <a
+                v-if="post.playUrl"
+                rel="noopener"
+                :href="post.playUrl"
+                target="_blank"
+                :class="colorsDict[genresDict[post.genre].color].buttonClass"
+                class="py-2 px-6 text-white focus:outline-none rounded"
+              >
+                Play
+              </a>
             </div>
           </section>
 
-          <!-- 2. swiper (sub pics) -->
-          <div class="p-1">
+          <!-- article (right) -->
+          <section
+            class="
+              relative
+              my-auto
+              w-full
+              md:w-1/2
+              lg:w-1/3
+              rounded-md
+              drop-shadow-md
+              bg-stone-600
+              overflow-hidden
+            "
+          >
+            <!-- 1. swiper (main pic) -->
             <section
-              class="swiper object-cover object-center"
-              v-swiper:swiperThumbs="swiperOptionThumbs"
+              :class="genresDict[post.genre].color"
+              class="
+                swiper
+                md:pl-8
+                w-full
+                aspect-video
+                object-cover object-center
+                overflow-hidden
+              "
+              v-swiper:swiperTop="swiperOptionTop"
             >
               <div class="swiper-wrapper">
                 <div
-                  v-for="pic in post.pics"
+                  v-for="(pic, idx) in post.pics"
                   :key="pic"
-                  class="swiper-slide bg-gray-900 relative"
+                  class="swiper-slide"
                 >
-                  <div
-                    id="darken"
-                    class="
-                      absolute
-                      h-full
-                      w-full
-                      bg-black bg-opacity-50
-                      transition-colors
-                      ease-in-out
-                      duration-300
-                    "
-                  ></div>
                   <img
-                    class="
-                      w-full
-                      aspect-video
-                      bg-white
-                      rounded
-                      overflow-hidden
-                      object-cover
-                    "
+                    class="w-full aspect-video bg-white object-cover"
                     :src="pic"
                     :title="slug"
                     :alt="slug"
                   />
+                  <div
+                    class="
+                      absolute
+                      flex
+                      mx-auto
+                      inset-x-0
+                      bottom-2
+                      h-5
+                      w-10
+                      bg-black bg-opacity-40
+                      rounded
+                      text-stone-100 text-sm
+                    "
+                  >
+                    <p class="m-auto">
+                      {{ `${(idx % picsDefaultLen) + 1} / ${picsDefaultLen}` }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
-          </div>
-        </section>
+
+            <!-- 2. swiper (sub pics) -->
+            <div class="p-1">
+              <section
+                class="swiper object-cover object-center"
+                v-swiper:swiperThumbs="swiperOptionThumbs"
+              >
+                <div class="swiper-wrapper">
+                  <div
+                    v-for="pic in post.pics"
+                    :key="pic"
+                    class="swiper-slide bg-gray-900 relative"
+                  >
+                    <div
+                      id="darken"
+                      class="
+                        absolute
+                        h-full
+                        w-full
+                        bg-black bg-opacity-50
+                        transition-colors
+                        ease-in-out
+                        duration-300
+                      "
+                    ></div>
+                    <img
+                      class="
+                        w-full
+                        aspect-video
+                        bg-white
+                        rounded
+                        overflow-hidden
+                        object-cover
+                      "
+                      :src="pic"
+                      :title="slug"
+                      :alt="slug"
+                    />
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+        </div>
       </article>
     </main>
     <TheSlides />
@@ -314,7 +320,9 @@ export default {
           pics: [],
         };
       }
-      let post = deepCopy(this.$store.getters["posts/getPostByTitle"](this.slug));
+      let post = deepCopy(
+        this.$store.getters["posts/getPostByTitle"](this.slug)
+      );
       if (!post) {
         this.$nuxt.context.error({
           statusCode: 404,

@@ -9,7 +9,8 @@
       class="
         swiper
         directive
-        aspect-[8/9]
+        aspect-[32/27]
+        md:aspect-[8/9]
         bg-stone-100
         border-2
         rounded-xl
@@ -34,7 +35,7 @@
                   class="
                     pr-1
                     inline-block
-                    font-semibold
+                    text-2xl md:text-xl font-medium
                     text-lg text-stone-800
                     hover:underline hover:decoration-stone-800
                   "

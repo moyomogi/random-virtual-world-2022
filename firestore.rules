@@ -6,7 +6,8 @@ service cloud.firestore {
       allow read, delete;
       allow create, update: if
       request.resource.data.pics[0].matches("https?://.*")
-      && request.resource.data.url.matches("https?://.*");
+      && (request.resource.data.downloadUrl.matches("https?://.*")
+      || request.resource.data.playUrl.matches("https?://.*"));
     }
     match /redirects/{slug} {
       allow read, delete;

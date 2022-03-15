@@ -606,7 +606,7 @@ export default {
       },
       // for internal system
       picDetails: [],
-      maxBytes: 5 * 1024 * 1024, // 5 MB 以下
+      maxBytes: 512 * 1024, // 512 KB 以下
       updateMsg: null,
       deleteMsg: null,
       // define

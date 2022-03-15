@@ -25,7 +25,7 @@
           aria-label="Open menu"
           @click="drawerOpen = true"
         >
-          <img class="w-12 h-12" src="~assets/navbar/icon_burger.png" />
+          <img class="w-12 h-12" src="~assets/navbar/icon_burger.webp" />
         </button>
         <button
           class="mx-2 hidden sm:flex focus:outline-none"
@@ -34,9 +34,9 @@
           <img
             v-if="muted"
             class="w-12 h-12"
-            src="~assets/navbar/icon_vol_muted.png"
+            src="~assets/navbar/icon_vol_muted.webp"
           />
-          <img v-else class="w-12 h-12" src="~assets/navbar/icon_vol.png" />
+          <img v-else class="w-12 h-12" src="~assets/navbar/icon_vol.webp" />
         </button>
       </div>
 
@@ -50,7 +50,7 @@
       <div class="flex my-auto items-center">
         <!-- info -->
         <button class="mx-2 focus:outline-none" @click="infoOpen = true">
-          <img class="w-12 h-12" src="~assets/navbar/icon_info.png" />
+          <img class="w-12 h-12" src="~assets/navbar/icon_info.webp" />
         </button>
         <ModalApp :open="infoOpen" @close="close" />
 
@@ -75,7 +75,7 @@
             md:flex
           "
         >
-          <img class="mr-3 h-6 w-6" src="~assets/navbar/icon_hp.png" />
+          <img class="mr-3 h-6 w-6" src="~assets/navbar/icon_hp.webp" />
           <p class="font-bold">Home Page</p></a
         >
       </div>
@@ -131,7 +131,7 @@
             aria-label="Open menu"
             @click="drawerOpen = false"
           >
-            <img class="w-12 h-12" src="~assets/navbar/icon_burger.png" />
+            <img class="w-12 h-12" src="~assets/navbar/icon_burger.webp" />
           </button>
         </div>
 
@@ -184,7 +184,7 @@
             href="https://ch-random.net"
             target="_blank"
           >
-            <img class="h-8 w-auto mr-2" src="~assets/navbar/icon_hp.png" />
+            <img class="h-8 w-auto mr-2" src="~assets/navbar/icon_hp.webp" />
             <div>
               <span class="font-bold">Home Page</span>
               <br />
@@ -207,8 +207,6 @@ export default {
     return {
       genresDict,
       colorsDict,
-      // cyanClass: ["focus:bg-sky-500", "bg-sky-600", "hover:bg-sky-700"],
-      // magentaClass: ["focus:bg-pink-600", "bg-pink-700", "hover:bg-pink-800"],
       drawerOpen: false,
       infoOpen: false,
       audio: process.client ? new Audio("/bgm.mp3") : null,
@@ -253,6 +251,6 @@ export default {
 /* https://reactgo.com/nuxt-set-background-image/
 assets 内の画像は style に置く必要がある */
 .self-logo {
-  background-image: url("~assets/navbar/logo.png");
+  background-image: url("~assets/navbar/logo.webp");
 }
 </style>
