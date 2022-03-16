@@ -39,12 +39,12 @@ for (i, footer) in enumerate(footers[:3]):
     h4s = footer.select("h4")
     imgs = footer.select("img.my-portrait")
     for j in range(len(h4s)):
+        # https://stackoverflow.com/questions/55385113/how-do-i-scrape-image-src-in-beautifulsoup
         src = str(imgs[j].get("src"))
         author = src.split("/")[2]
         print(f"  {author}: {{")
         print(f'    year: {i + 1},')
         print(f'    name: "{h4s[j].text}",')
-        # https://stackoverflow.com/questions/55385113/how-do-i-scrape-image-src-in-beautifulsoup
         print(f'    icon: "https://ch-random.net{src}",')
         print("  },")
 

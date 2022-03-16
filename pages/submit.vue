@@ -431,7 +431,7 @@
             rounded
           "
         >
-          https://vuetest-103b3.firebaseapp.com/posts/{{ post.title }}</NuxtLink
+          https://rvw2022.herokuapp.com/posts/{{ post.title }}</NuxtLink
         >
         にて公開されます。
         <br />

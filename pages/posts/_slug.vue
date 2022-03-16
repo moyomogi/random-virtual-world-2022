@@ -390,7 +390,7 @@ export default {
   asyncData({ params }) {
     // https://nuxtjs.org/ja/docs/directory-structure/pages/
     // "/abc" パスにアクセスすると、slug は "abc" になります。
-    // cf: このプロジェクトにおいては slug == title です
+    // cf このプロジェクトにおいては slug == title です
     const { slug } = params;
     return { slug };
   },
