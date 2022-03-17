@@ -2,7 +2,7 @@
 [![last-commit](https://img.shields.io/github/last-commit/moyomogi/rvw2022)](https://github.com/moyomogi/rvw2022/commits/master)
 [![license](https://img.shields.io/badge/license-CC0-blue)](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)
 
-# 🌸 Random Virtual World 2022
+# Random Virtual World 2022 🌸
 <img src="https://i.imgur.com/R9YV2YX.png" width="180" style="border-radius: 0.375rem;">  
 
 ## インストール

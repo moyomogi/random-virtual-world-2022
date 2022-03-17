@@ -2,6 +2,11 @@
 // https://devsakaso.com/vue-js-img-in-assets/
 // v-bind したい画像は assets でなく static に置く
 const genresDict = {
+  action: {
+    aka: "アクション",
+    color: "magenta",
+    genreUrl: "/slides/genre_action.webp",
+  },
   puzzle: {
     aka: "パズル",
     color: "cyan",
@@ -12,30 +17,20 @@ const genresDict = {
     color: "yellow",
     genreUrl: "/slides/genre_role_playing.webp",
   },
-  action: {
-    aka: "アクション",
-    color: "magenta",
-    genreUrl: "/slides/genre_action.webp",
-  },
   shooting: {
     aka: "シューティング",
-    color: "cyan",
+    color: "magenta",
     genreUrl: "/slides/genre_shooting.webp",
   },
   desttop_music: {
     aka: "DTM",
-    color: "yellow",
+    color: "cyan",
     genreUrl: "/slides/genre_desktop_music.webp",
   },
   etcetera: {
     aka: "その他",
-    color: "magenta",
+    color: "yellow",
     genreUrl: "/slides/genre_etcetera.webp",
-  },
-  illustration: {
-    aka: "イラスト",
-    color: "cyan",
-    genreUrl: "/slides/genre_illustration.webp",
   },
 };
 export { genresDict };

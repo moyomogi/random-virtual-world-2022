@@ -25,7 +25,6 @@
           <img
             class="w-full aspect-video bg-white object-cover drop-shadow"
             :src="post.pics[0]"
-            :title="post.title"
             :alt="post.title"
           />
           <div class="px-6 pt-4 mb-auto">
@@ -35,7 +34,9 @@
                   class="
                     pr-1
                     inline-block
-                    text-2xl md:text-xl font-medium
+                    text-2xl
+                    md:text-xl
+                    font-medium
                     text-lg text-stone-800
                     hover:underline hover:decoration-stone-800
                   "

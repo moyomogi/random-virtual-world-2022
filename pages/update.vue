@@ -534,14 +534,6 @@
           "
           >{{ JSON.stringify(getCurPost()) }}</span
         >
-        <!-- ・Submit 済み投稿一覧:
-        <br />
-        <span
-          v-for="(curPost, curPostId) in postIdsDict"
-          :key="curPostId"
-          class="inline-block w-full text-sky-600 bg-sky-100 rounded"
-          >{{ curPost.title }} ({{ curPostId }})
-        </span> -->
       </p>
     </form>
   </div>
@@ -929,14 +921,14 @@ export default {
       // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing
       // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
       // 2. playUrl に関してはそのままです
-      const introns = ["/view?usp=sharing", /.*[\/=]/u];
+      const introns = [/\/view.*/u, /.*[\/=]/u];
       if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
         let googleDriveFileId = curPost.downloadUrl;
         introns.forEach((s) => {
           googleDriveFileId = googleDriveFileId.replace(s, "");
         });
         if (googleDriveFileId) {
-          curPost.downloadUrl = `https://drive.google.com/uc?export=download&id=${googleDriveFileId}`;
+          curPost.downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
           this.googleDriveFileId = googleDriveFileId;
         }
       }
@@ -988,7 +980,7 @@ export default {
       {
         // firestore は 1 GB で、クエリ処理が速い
         // firestore/redirects/<title>/ に json を送信
-        this.updateMsg = `POST: firestore/redirects/${this.post.title}`;
+        this.updateMsg = `PUT: firestore/redirects/${this.post.title}`;
         const docRef = doc(db, "redirects", this.post.title);
         try {
           const redirect = { redirect: this.postId };
@@ -1011,7 +1003,7 @@ export default {
           continue;
         }
         const picName = getRandom() + ext;
-        this.submitMsg = `POST: storage/posts/${post.postId}/${picName}`;
+        this.submitMsg = `PUT: storage/posts/${post.postId}/${picName}`;
         const storageRef = ref(storage, `${post.postId}/${picName}`);
         await uploadBytes(storageRef, bytes).then(async (snapshot) => {
           post.pics[i] = await getDownloadURL(snapshot.ref);
@@ -1019,7 +1011,7 @@ export default {
       }
       this.post.pics = post.pics;
       // firestore/posts/<postId>/ に json を送信
-      this.updateMsg = `POST: firestore/posts/${this.postId}`;
+      this.updateMsg = `PUT: firestore/posts/${this.postId}`;
       const docRef = doc(db, "posts", this.postId);
       try {
         await setDoc(docRef, post);

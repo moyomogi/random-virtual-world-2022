@@ -435,8 +435,8 @@
         >
         にて公開されます。
         <br />
-        ・なお、動作軽量化と実装難易度の観点から DTM のプラウザ上再生および
-        WebGL は実装しない予定です。DTM は zip で配布してください。
+        ・なお、動作軽量化と実装難易度の観点から
+        WebGL は実装しない予定です。
       </p>
 
       <!-- 水平線 -->
@@ -458,14 +458,6 @@
           "
           >{{ JSON.stringify(getCurPost()) }}</span
         >
-        <!-- ・Submit 済み投稿一覧:
-        <br />
-        <span
-          v-for="(curPost, curId) in postIdsDict"
-          :key="curId"
-          class="inline-block w-full text-sky-600 bg-sky-100 rounded"
-          >{{ curPost.title }} ({{ curId }})
-        </span> -->
       </p>
     </form>
   </div>
@@ -797,14 +789,14 @@ export default {
       // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing
       // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
       // 2. playUrl に関してはそのままです
-      const introns = ["/view?usp=sharing", /.*[\/=]/u];
+      const introns = [/\/view.*/u, /.*[\/=]/u];
       if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
         let googleDriveFileId = curPost.downloadUrl;
         introns.forEach((s) => {
           googleDriveFileId = googleDriveFileId.replace(s, "");
         });
         if (googleDriveFileId) {
-          curPost.downloadUrl = `https://drive.google.com/uc?export=download&id=${googleDriveFileId}`;
+          curPost.downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
           this.googleDriveFileId = googleDriveFileId;
         }
       }

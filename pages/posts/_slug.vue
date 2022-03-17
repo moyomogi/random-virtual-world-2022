@@ -184,7 +184,6 @@
                   <img
                     class="w-full aspect-video bg-white object-cover"
                     :src="pic"
-                    :title="slug"
                     :alt="slug"
                   />
                   <div
