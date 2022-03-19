@@ -465,7 +465,7 @@
 
 <script>
 // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
-import { db, storage } from "~/plugins/firebase.js";
+import { db, storage, debug_str } from "~/plugins/firebase.js";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 

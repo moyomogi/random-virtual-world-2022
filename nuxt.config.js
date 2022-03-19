@@ -19,14 +19,15 @@ async function getUrls() {
 export default {
   // https://zenn.dev/kouchanne/articles/83466e36e1c30f174ae8
   // https://stackoverflow.com/questions/59413786/can-not-access-process-env-variables-in-component-nuxt
-  privateRuntimeConfig: {
-    API_KEY: process.env.API_KEY,
-    AUTH_DOMAIN: process.env.AUTH_DOMAIN,
-    PROJECT_ID: process.env.PROJECT_ID,
-    STORAGE_BUCKET: process.env.STORAGE_BUCKET,
-    MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
-    APP_ID: process.env.APP_ID,
-  },
+  // https://cly7796.net/blog/javascript/try-using-runtimeconfig-in-nuxt-js/
+  // publicRuntimeConfig: {
+  //   API_KEY: process.env.API_KEY,
+  //   AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+  //   PROJECT_ID: process.env.PROJECT_ID,
+  //   STORAGE_BUCKET: process.env.STORAGE_BUCKET,
+  //   MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
+  //   APP_ID: process.env.APP_ID,
+  // },
 
   // SPA, SSR, SSG https://shimablogs.com/spa-ssr-ssg-difference
   ssr: true, // true: SSR, SSG, false: SPA(=CSR)

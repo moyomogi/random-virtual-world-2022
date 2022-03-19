@@ -6,6 +6,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
+// https://develop365.gitlab.io/nuxtjs-2.8.X-doc/ja/api/context/
 const firebaseConfig = {
   apiKey: "AIzaSyBtJ2EN7_JznLs03fYngKzl0nN6F9-5G9I",
   authDomain: "vuetest-103b3.firebaseapp.com",
