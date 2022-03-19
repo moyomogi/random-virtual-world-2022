@@ -1,0 +1,11 @@
+/.github
+/docs
+/pages/submit.vue
+/pages/update.vue
+
+*.rules
+
+.firebaserc
+firebase.json
+README.md
+scraping.py

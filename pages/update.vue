@@ -462,9 +462,9 @@
       <!-- info -->
       <p v-if="post.title" class="py-2">
         ・この投稿は
-        <NuxtLink
+        <a
           rel="noopener"
-          :to="`/posts/${post.title}`"
+          :href="`https://rvw2022.herokuapp.com/posts/${post.title}`"
           target="_blank"
           class="
             mx-1
@@ -476,7 +476,7 @@
             rounded
           "
         >
-          https://rvw2022.herokuapp.com/posts/{{ post.title }}</NuxtLink
+          https://rvw2022.herokuapp.com/posts/{{ post.title }}</a
         >
         にて公開中です。
       </p>

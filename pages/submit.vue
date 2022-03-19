@@ -416,10 +416,10 @@
       <!-- info -->
       <p class="py-2">
         ・この投稿は
-        <NuxtLink
+        <a
           v-if="post.title"
           rel="noopener"
-          :to="`/posts/${post.title}`"
+          :href="`https://rvw2022.herokuapp.com/posts/${post.title}`"
           target="_blank"
           class="
             mx-1
@@ -431,7 +431,7 @@
             rounded
           "
         >
-          https://rvw2022.herokuapp.com/posts/{{ post.title }}</NuxtLink
+          https://rvw2022.herokuapp.com/posts/{{ post.title }}</a
         >
         にて公開されます。
         <br />
@@ -507,7 +507,7 @@ export default {
         body: "",
         downloadUrl: "",
         playUrl: "",
-        genre: "puzzle",
+        genre: "action",
         supportedEnvs: [],
         authors: [],
         pics: null,
