@@ -7,12 +7,12 @@ import { getStorage } from "firebase/storage";
 
 // https://firebase.google.com/docs/web/setup#available-libraries
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
+  apiKey: "AIzaSyBtJ2EN7_JznLs03fYngKzl0nN6F9-5G9I",
+  authDomain: "vuetest-103b3.firebaseapp.com",
+  projectId: "vuetest-103b3",
+  storageBucket: "gs://vuetest-103b3.appspot.com",
+  messagingSenderId: "640887077281",
+  appId: "1:640887077281:web:a87322542e2246c1f2f3e0",
 };
 const apps = getApps(); // 構築済み apps があれば格納
 const firebaseApp = apps.length ? apps[0] : initializeApp(firebaseConfig);
