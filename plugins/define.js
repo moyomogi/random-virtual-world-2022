@@ -156,6 +156,11 @@ const authorsDict = {
     name: "V0!d",
     icon: "https://ch-random.net/authors/v01d/avatar_hu7a1c2541a1e9cb9798aa537672282d0e_142235_250x250_fill_q90_lanczos_center.jpg",
   },
+  y_y_: {
+    year: 2,
+    name: "山中",
+    icon: "https://ch-random.net/authors/y_y_/avatar_hub3e0b43c4b3f17b50e92ac9473e8630e_1050_250x250_fill_lanczos_center_2.png",
+  },
   haniwa0404: {
     year: 3,
     name: "Haniwa",

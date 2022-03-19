@@ -1,7 +1,7 @@
 /.github
 /docs
-/pages/submit.vue
-/pages/update.vue
+# /pages/submit.vue
+# /pages/update.vue
 
 *.rules
 
