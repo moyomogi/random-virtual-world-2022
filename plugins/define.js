@@ -266,6 +266,10 @@ const colorsDict = {
     borderClass: "border-stone-400",
     buttonClass: ["focus:bg-stone-500", "bg-stone-600", "hover:bg-stone-700"],
   },
+  signIn: {
+    borderClass: ["border", "border-stone-200"],
+    buttonClass: ["bg-white shadow"],
+  },
   random: {
     textClass: "text-rose-800",
     bgClass: "bg-rose-200",

@@ -32,12 +32,12 @@
     >
       <!--header-->
       <h3 class="flex text-white items-start p-5 text-3xl font-semibold">
-        Random Virtual World 2022 について
+        RVW 2022 Spring について
       </h3>
       <!--body-->
       <div class="mx-8 my-2 flex text-stone-100">
-        Random Virtual World 2022
-        は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった
+        Random Virtual World 2022 Spring
+        は大阪府立大学の部活、コンピューターハウスランダムの作品展示企画です。中止になった
         2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽)
         を展示します。無料でダウンロード・ウェブ上でプレイできます。
       </div>

@@ -28,6 +28,22 @@
         </p>
       </h1>
 
+      <!-- SignInBtnApp -->
+      <section class="md:flex">
+        <label
+          class="pr-4 md:w-1/6 block text-gray-600 font-bold md:text-left"
+          for="title"
+          >サインイン</label
+        >
+        <div class="md:w-5/6">
+          <SignInBtnApp :userName="userName" :userUid="userUid" />
+          <p :class="msgColorsDict[errSignIn().state]" class="py-2 text-sm">
+            {{ errSignIn().msg }}
+          </p>
+        </div>
+      </section>
+
+      <!-- postId -->
       <section class="md:flex">
         <div class="pr-4 md:w-1/6 block text-gray-600 font-bold md:text-left">
           更新したい記事 (一択)
@@ -462,9 +478,9 @@
       <!-- info -->
       <p v-if="post.title" class="py-2">
         ・この投稿は
-        <a
+        <NuxtLink
           rel="noopener"
-          :href="`https://rvw2022.herokuapp.com/posts/${post.title}`"
+          :to="`posts/${post.title}`"
           target="_blank"
           class="
             mx-1
@@ -476,7 +492,7 @@
             rounded
           "
         >
-          https://rvw2022.herokuapp.com/posts/{{ post.title }}</a
+          https://rvw2022.herokuapp.com/posts/{{ post.title }}</NuxtLink
         >
         にて公開中です。
       </p>
@@ -581,6 +597,9 @@ const urlPattern = /^https?:\/\/.*$/u;
 export default {
   data() {
     return {
+      // SignInBtnApp 用
+      userUid: "",
+      userName: "",
       // watch 用
       postId: null,
       // Submit 用
@@ -666,6 +685,32 @@ export default {
       }
       b = Math.floor(b);
       return `${b} ${units[i]}`;
+    },
+    getUserUid() {
+      return this.$store.getters["auth/getUserUid"];
+    },
+    getUserName() {
+      return this.$store.getters["auth/getUserName"];
+    },
+    errSignIn() {
+      const userUid = this.getUserUid();
+      const userName = this.getUserName();
+      if (userUid) {
+        if (this.post.userUid && userUid !== this.post.userUid) {
+          return {
+            state: "ng",
+            msg: "NG: 投稿時の Google アカウントと一致していません。",
+          };
+        }
+        return {
+          state: "ok",
+          msg: `OK: ${userName}`,
+        };
+      }
+      return {
+        state: "ng",
+        msg: "NG: ログインしていません。",
+      };
     },
     errTitle() {
       if (this.post.title.length) {
@@ -836,6 +881,7 @@ export default {
         };
       }
       const funcs = [
+        this.errSignIn,
         this.errTitle,
         this.errBody,
         this.errUrls,
@@ -844,11 +890,11 @@ export default {
         this.errPics,
       ];
       for (let i = 0; i < funcs.length; i++) {
-        const msg = funcs[i]();
-        if (msg.state === "ng") {
+        const err = funcs[i]();
+        if (err.state === "ng") {
           return {
-            state: msg.state,
-            msg: msg.msg,
+            state: err.state,
+            msg: err.msg,
           };
         }
       }
@@ -858,6 +904,10 @@ export default {
       };
     },
     deleteErrIfAny() {
+      let err = this.errSignIn();
+      if (err.state !== "ok") {
+        return err;
+      }
       if (!this.post) {
         return {
           state: "ng",
@@ -908,6 +958,10 @@ export default {
     },
     getCurPost() {
       let curPost = deepCopy(this.post);
+
+      // userUid
+      const userUid = this.getUserUid();
+      curPost.userUid = userUid;
 
       // 1. downloadUrl に関しては
       // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing

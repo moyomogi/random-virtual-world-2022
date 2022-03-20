@@ -14,7 +14,7 @@ export const state = () => ({
 //   return JSON.parse(JSON.stringify(obj));
 // }
 
-// this.$store.getters["FILE_NAME/FUNC"];
+// this.$store.getters["posts/FUNC"];
 export const getters = {
   getPostById(state) {
     return (id) => state.postIdsDict[id];
@@ -34,7 +34,7 @@ export const getters = {
   },
 };
 
-// this.$store.commit("FILE_NAME/FUNC");
+// this.$store.commit("posts/FUNC");
 export const mutations = {
   init(state, { postIdsDict, postTitlesDict, postGenresDict }) {
     state.postIdsDict = postIdsDict;
@@ -43,7 +43,7 @@ export const mutations = {
   },
 };
 
-// this.$store.dispatch("FILE_NAME/FUNC");
+// this.$store.dispatch("posts/FUNC");
 // The Firebase SDK is initialized and available here!
 // firebase.auth().onAuthStateChanged(user => { });
 // firebase.database().ref("/path/to/ref").on("value", snapshot => { });
@@ -60,10 +60,10 @@ export const actions = {
   // https://qiita.com/sotszk/items/f23199e864cba47455ce
   // `Promise.resolve(/* value */)` は以下と等価
   // `new Promise(resolve => resolve(/* value */))`
-  async load(vuexContext) {
+  async load({ getters, commit }) {
     // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
     // firebase公式 https://firebase.google.com/docs/firestore/query-data/queries
-    const curPostIdsDict = vuexContext.getters["getPostIdsDict"];
+    const curPostIdsDict = getters["getPostIdsDict"];
     // 既に取得済みなら return
     if (Object.keys(curPostIdsDict).length > 0) {
       return;
@@ -106,6 +106,6 @@ export const actions = {
       console.warn(e);
     }
     // 引数を複数取りたい時、c++ では可変引数だが、js では Object にまとめる。
-    vuexContext.commit("init", { postIdsDict, postTitlesDict, postGenresDict });
+    commit("init", { postIdsDict, postTitlesDict, postGenresDict });
   },
 };
