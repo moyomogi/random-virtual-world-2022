@@ -386,7 +386,9 @@ export default {
       ],
     };
   },
-  asyncData({ params }) {
+  async asyncData({ params, store }) {
+    await store.dispatch("posts/load");
+
     // https://nuxtjs.org/ja/docs/directory-structure/pages/
     // "/abc" パスにアクセスすると、slug は "abc" になります。
     // cf このプロジェクトにおいては slug == title です

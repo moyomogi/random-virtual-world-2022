@@ -15,5 +15,8 @@ export default {
       titleTemplate: "",
     };
   },
+  async asyncData({ store }) {
+    await store.dispatch("posts/load");
+  },
 };
 </script>

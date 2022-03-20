@@ -63,6 +63,11 @@ export const actions = {
   async load(vuexContext) {
     // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
     // firebase公式 https://firebase.google.com/docs/firestore/query-data/queries
+    const curPostIdsDict = vuexContext.getters["getPostIdsDict"];
+    // 既に取得済みなら return
+    if (Object.keys(curPostIdsDict).length > 0) {
+      return;
+    }
     let postIdsDict = {};
     let postTitlesDict = {};
     let postGenresDict = {};

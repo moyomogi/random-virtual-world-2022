@@ -644,14 +644,6 @@ export default {
       ],
     };
   },
-  computed: {
-    postGenresDict() {
-      return this.$store.getters["posts/getPostGenresDict"];
-    },
-    postIdsDict() {
-      return this.$store.getters["posts/getPostIdsDict"];
-    },
-  },
   mounted() {
     // for (let key in dict) {}
     for (let genre in this.genresDict) {
@@ -1082,6 +1074,17 @@ export default {
         });
       },
     },
+  },
+  computed: {
+    postGenresDict() {
+      return this.$store.getters["posts/getPostGenresDict"];
+    },
+    postIdsDict() {
+      return this.$store.getters["posts/getPostIdsDict"];
+    },
+  },
+  async asyncData({ store }) {
+    await store.dispatch("posts/load");
   },
   // async asyncData({ error }) {
   //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成

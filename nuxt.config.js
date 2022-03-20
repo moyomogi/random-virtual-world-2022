@@ -5,7 +5,7 @@ const SITE_NAME = "Random Virtual World 2022";
 const DESC =
   "Random Virtual World 2022 は大阪府立大学の部活、コンピューターハウスランダムの作品展示リレー企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
 const HOST_NAME = "https://rvw2022.herokuapp.com";
-async function getUrls() {
+async function getRoutes() {
   const postsRef = collection(db, "posts");
   const documents = await getDocs(postsRef);
   if (!documents) return [];
@@ -121,10 +121,10 @@ export default {
     exclude: ["/submit", "/update"],
     // https://zenn.dev/ysmtegsr/articles/f1cd20fb877dd8c8c154
     async routes() {
-      return getUrls().then((urls) =>
-        urls.map((url) => {
+      return getRoutes().then((routes) =>
+        routes.map((route) => {
           return {
-            url: url,
+            url: route,
             changefreq: "weekly",
             lastmod: new Date(),
             priority: 1,
@@ -137,7 +137,7 @@ export default {
   // 使ってません
   generate: {
     routes() {
-      return getUrls();
+      return getRoutes();
     },
   },
 
