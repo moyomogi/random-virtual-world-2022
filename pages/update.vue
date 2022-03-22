@@ -968,6 +968,7 @@ export default {
       // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
       // 2. playUrl に関してはそのままです
       const introns = [/\/view.*/u, /.*[\/=]/u];
+      this.googleDriveFileId = "";
       if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
         let googleDriveFileId = curPost.downloadUrl;
         introns.forEach((s) => {
