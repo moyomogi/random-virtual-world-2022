@@ -9,9 +9,10 @@ function isImageBelowMaxSize(maxSizeMB) {
 service firebase.storage {
   match /b/{bucket}/o {
     match /{postId}/{picName} {
-      allow read, delete;
+      allow read;
       // 5 MB 以下かつ画像のとき、書き込み許可
       allow write: if isImageBelowMaxSize(5);
+      allow delete: if request.auth != null;
     }
   }
 }

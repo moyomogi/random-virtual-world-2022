@@ -11,7 +11,7 @@
 export default {
   head() {
     return {
-      title: "Random Virtual World",
+      title: "RVW 2022 Spring",
       titleTemplate: "",
     };
   },

@@ -365,7 +365,7 @@
                 "
               >
                 <img
-                  class="mx-2 h-30 aspect-video bg-white object-cover"
+                  class="mx-2 h-30 aspect-video bg-white object-cover rounded"
                   :src="detail.base64"
                 />
                 <span
@@ -720,7 +720,7 @@ export default {
         });
         return {
           state: "ok",
-          msg: supEnvs.map((env) => this.envsDict[env].aka).join(", "),
+          msg: `OK: [${supEnvs.map((env) => this.envsDict[env].aka).join(", ")}]`,
         };
       }
       return {
@@ -732,7 +732,7 @@ export default {
       if (this.post.authors.length) {
         return {
           state: "ok",
-          msg: `OK: ${this.post.authors.map((athr) => authorsDict[athr].name)}`,
+          msg: `OK: [${this.post.authors.map((athr) => authorsDict[athr].name)}]`,
         };
       }
       return {
