@@ -4,7 +4,7 @@ import { getDocs, collection } from "firebase/firestore";
 const SITE_NAME = "RVW 2022 Spring";
 const DESC =
   "Random Virtual World 2022 Spring は大阪府立大学の部活、コンピューターハウスランダムの作品展示企画です。中止になった 2021 年度白鷺祭で展示予定だった作品 (ゲーム・音楽) を展示します。無料でダウンロード・ウェブ上でプレイできます。";
-const HOST_NAME = "https://rvw2022.herokuapp.com";
+const HOST_NAME = "https://rvw2022s.herokuapp.com";
 async function getRoutes() {
   const postsRef = collection(db, "posts");
   const documents = await getDocs(postsRef);

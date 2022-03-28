@@ -492,7 +492,7 @@
             rounded
           "
         >
-          https://rvw2022.herokuapp.com/posts/{{ post.title }}</NuxtLink
+          https://rvw2022s.herokuapp.com/posts/{{ post.title }}</NuxtLink
         >
         にて公開中です。
       </p>

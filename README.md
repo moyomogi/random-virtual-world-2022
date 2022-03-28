@@ -1,9 +1,9 @@
-[![hp](https://raw.githubusercontent.com/moyomogi/rvw2022/master/docs/hp.svg)](https://rvw2022.herokuapp.com)
-[![last-commit](https://img.shields.io/github/last-commit/moyomogi/rvw2022)](https://github.com/moyomogi/rvw2022/commits/master)
+[![hp](https://raw.githubusercontent.com/moyomogi/rvw2022s/master/docs/hp.svg)](https://rvw2022s.herokuapp.com)
+[![last-commit](https://img.shields.io/github/last-commit/moyomogi/rvw2022s)](https://github.com/moyomogi/rvw2022s/commits/master)
 [![license](https://img.shields.io/badge/license-CC0-blue)](https://creativecommons.org/publicdomain/zero/1.0/deed.ja)
 
 # Random Virtual World 2022 🌸
-<img src="https://i.imgur.com/R9YV2YX.png" width="180" style="border-radius: 0.375rem;">  
+<img src="https://i.imgur.com/R9YV2YX.png" width="180">  
 
 ## インストール
 WSL の上で作業してください。  
@@ -52,8 +52,8 @@ firebase login
 アカウントを作った後、公式解説 [Getting Started on Heroku with Node.js](https://devcenter.heroku.com/articles/getting-started-with-nodejs) に従い、以下を実行。
 ```sh
 heroku login
-# `rvw2022` は自分の Heroku プロジェクト名に変更してください
-heroku git:remote -a rvw2022
+# `rvw2022s` は自分の Heroku プロジェクト名に変更してください
+heroku git:remote -a rvw2022s
 ```
 
 ### 以降はこれを実行
