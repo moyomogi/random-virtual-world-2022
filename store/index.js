@@ -10,7 +10,7 @@ export const state = () => ({});
 // this.$store.dispatch("FILE_NAME/FUNC");
 export const actions = {
   // nuxtServerInit: SSR でのみ実行される
-  async nuxtServerInit({ dispatch }) {
-    await dispatch("posts/load");
-  },
+  // async nuxtServerInit({ dispatch }) {
+  //   await dispatch("posts/load");
+  // },
 };

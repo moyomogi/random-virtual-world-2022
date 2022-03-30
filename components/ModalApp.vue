@@ -50,13 +50,9 @@
             border border-solid border-stone-400
             hover:bg-stone-400 hover:text-white
             active:bg-stone-600
-            font-bold
-            uppercase
-            text-sm
-            px-3
+            px-4
             py-2
             rounded
-            outline-none
             focus:outline-none
             mr-1
             mb-1

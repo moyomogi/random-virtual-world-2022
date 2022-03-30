@@ -14,7 +14,6 @@ url = "https://ch-random.net/authors/"
 response = requests.get(url)
 soup = BeautifulSoup(response.text, "html.parser")
 
-
 # https://realpython.com/beautiful-soup-web-scraper-python/
 # 以下は等価
 # - soup.find("img", class_="my-portrait")

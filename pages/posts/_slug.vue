@@ -131,7 +131,7 @@
                 :href="post.downloadUrl"
                 target="_blank"
                 :class="colorsDict[genresDict[post.genre].color].buttonClass"
-                class="py-2 px-6 text-white focus:outline-none rounded"
+                class="px-6 py-2 text-white focus:outline-none rounded"
               >
                 Download
               </a>
@@ -141,7 +141,7 @@
                 :href="post.playUrl"
                 target="_blank"
                 :class="colorsDict[genresDict[post.genre].color].buttonClass"
-                class="py-2 px-6 text-white focus:outline-none rounded"
+                class="px-6 py-2 text-white focus:outline-none rounded"
               >
                 Play
               </a>

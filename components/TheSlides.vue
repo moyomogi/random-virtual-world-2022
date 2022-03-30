@@ -50,5 +50,9 @@ export default {
       colorsDict,
     };
   },
+  // 意図的に async を付けない
+  fetch({ store }) {
+    store.dispatch("posts/load");
+  },
 };
 </script>

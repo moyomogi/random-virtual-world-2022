@@ -10,7 +10,6 @@ import {
 } from "firebase/auth";
 
 export const state = () => ({
-  // inited: false,
   userUid: "",
   userIcon: "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
   userName: "",
@@ -19,9 +18,6 @@ export const state = () => ({
 // this.$store.getters["auth/FUNC"];
 // 欲しいもの: userUid, userIcon, name
 export const getters = {
-  // getInited(state) {
-  //   return state.inited;
-  // },
   getUserUid(state) {
     return state.userUid;
   },
@@ -40,9 +36,6 @@ export const mutations = {
     state.userIcon = userIcon;
     state.userName = userName;
   },
-  // setInited(state) {
-  //   state.inited = true;
-  // },
 };
 
 // this.$store.dispatch("auth/FUNC");
@@ -89,6 +82,5 @@ export const actions = {
     }
     // Listen to auth state changes.
     onAuthStateChanged(getAuth(), authStateObserver);
-    // commit("setInited");
   },
 };

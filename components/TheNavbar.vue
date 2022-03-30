@@ -49,17 +49,27 @@
       <!-- header (right) -->
       <div class="flex my-auto items-center">
         <!-- info -->
-        <button class="mx-2 focus:outline-none" @click="infoOpen = true">
+        <button class="mx-3 focus:outline-none" @click="infoOpen = true">
           <img class="w-12 h-12" src="~assets/navbar/icon_info.webp" />
         </button>
         <ModalApp :open="infoOpen" @close="close" />
+
+        <!-- form -->
+        <a
+          class="mx-3 sm:flex focus:outline-none"
+          rel="noopener"
+          target="_blank"
+          href="https://docs.google.com/forms/d/e/1FAIpQLScBPL4HLrjunGhR91rCrb0rjuZONT0AtpsQw6r5b8wZH7tN9w/viewform"
+        >
+          <img class="w-10 h-10" src="~assets/navbar/icon_form.webp" />
+        </a>
 
         <!-- Home Page -->
         <!-- "hidden md:flex": スマホの時は非表示 -->
         <a
           rel="noopener"
-          href="https://ch-random.net"
           target="_blank"
+          href="https://ch-random.net"
           title="Computer House Random"
           :class="colorsDict['random'].buttonClass"
           class="
@@ -157,10 +167,10 @@
           <!-- sidebar (Share) -->
           <a
             rel="noopener"
+            target="_blank"
             :class="colorsDict['cyan'].buttonClass"
             class="flex items-center p-4 h-16 w-full"
             href="https://twitter.com/intent/tweet?text=RVW%20%7C%20Computer%20House%20Random&url=https://vuetest-103b3.firebaseapp.com&via=c_h_random"
-            target="_blank"
           >
             <svg
               class="h-8 w-auto mr-2"
@@ -179,10 +189,10 @@
           <!-- sidebar (Home Page) -->
           <a
             rel="noopener"
+            target="_blank"
             :class="colorsDict['random'].buttonClass"
             class="flex items-center px-4 h-20 focus:outline-none"
             href="https://ch-random.net"
-            target="_blank"
           >
             <img class="h-8 w-auto mr-2" src="~assets/navbar/icon_hp.webp" />
             <div>
