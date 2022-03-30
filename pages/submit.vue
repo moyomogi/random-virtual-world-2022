@@ -32,7 +32,7 @@
       <section class="md:flex">
         <label
           class="pr-4 md:w-1/6 block text-gray-600 font-bold md:text-left"
-          for="title"
+          for="signin"
           >サインイン</label
         >
         <div class="md:w-5/6">
@@ -927,12 +927,9 @@ export default {
       return this.$store.getters["posts/getPostIdsDict"];
     },
   },
-  async fetch({ store }) {
+  async asyncData({ store }) {
     await store.dispatch("posts/load");
   },
-  // async asyncData({ store }) {
-  //   await store.dispatch("posts/load");
-  // },
   // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
   // async asyncData({ error }) {
   //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成

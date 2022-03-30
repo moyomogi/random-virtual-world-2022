@@ -32,7 +32,7 @@
       <section class="md:flex">
         <label
           class="pr-4 md:w-1/6 block text-gray-600 font-bold md:text-left"
-          for="title"
+          for="signin"
           >サインイン</label
         >
         <div class="md:w-5/6">
@@ -49,6 +49,7 @@
           更新したい記事 (一択)
         </div>
         <div class="md:w-5/6">
+          <!-- <client-side> -->
           <span v-for="(_, gnr) in genresDict" :key="gnr">
             <label
               v-for="curPostId in postGenresDict[gnr]"
@@ -84,6 +85,7 @@
               </div>
             </label>
           </span>
+          <!-- </client-side> -->
         </div>
       </section>
 
@@ -824,7 +826,9 @@ export default {
         });
         return {
           state: "ok",
-          msg: `OK: [${supEnvs.map((env) => this.envsDict[env].aka).join(", ")}]`,
+          msg: `OK: [${supEnvs
+            .map((env) => this.envsDict[env].aka)
+            .join(", ")}]`,
         };
       }
       return {
@@ -836,7 +840,9 @@ export default {
       if (this.post.authors.length) {
         return {
           state: "ok",
-          msg: `OK: [${this.post.authors.map((athr) => authorsDict[athr].name)}]`,
+          msg: `OK: [${this.post.authors.map(
+            (athr) => authorsDict[athr].name
+          )}]`,
         };
       }
       return {
@@ -1119,6 +1125,9 @@ export default {
         if (!postId) return;
         this.post = deepCopy(this.postIdsDict[postId]);
         this.picDetails = this.post.pics.map((pic) => {
+          if (!pic)
+            pic =
+              "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7";
           return {
             bytes:
               "data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7",
@@ -1138,12 +1147,9 @@ export default {
       return this.$store.getters["posts/getPostIdsDict"];
     },
   },
-  async fetch({ store }) {
+  async asyncData({ store }) {
     await store.dispatch("posts/load");
   },
-  // async asyncData({ store }) {
-  //   await store.dispatch("posts/load");
-  // },
   // async asyncData({ error }) {
   //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成
   //   let postIdsDict = {};

@@ -60,14 +60,6 @@ export const actions = {
   // https://qiita.com/sotszk/items/f23199e864cba47455ce
   // `Promise.resolve(/* value */)` は以下と等価
   // `new Promise(resolve => resolve(/* value */))`
-  async init({ commit }) {
-    const genres = Object.keys(genresDict);
-    let postIdsDict = {};
-    let postTitlesDict = {};
-    let postGenresDict = {};
-    genres.forEach((genre) => (postGenresDict[genre] = []));
-    commit("init", { postIdsDict, postTitlesDict, postGenresDict });
-  },
   async load({ getters, commit }) {
     // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
     // firebase公式 https://firebase.google.com/docs/firestore/query-data/queries
