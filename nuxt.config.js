@@ -81,7 +81,7 @@ export default {
         content: HOST_NAME,
       },
       { hid: "og:type", property: "og:type", content: "website" },
-      { hid: "og:image", property: "og:image", content: "/ogp.jpg" },
+      { hid: "og:image", property: "og:image", content: "/ogp.webp" },
       {
         hid: "og:description",
         property: "og:description",

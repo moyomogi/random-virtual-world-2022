@@ -13,6 +13,9 @@ export default {
     return {
       title: "RVW 2022 Spring",
       titleTemplate: "",
+      meta: [
+        { hid: "og:image", property: "og:image", content: "/ogp.webp" },
+      ],
     };
   },
   async asyncData({ store }) {

@@ -170,7 +170,7 @@
             target="_blank"
             :class="colorsDict['cyan'].buttonClass"
             class="flex items-center p-4 h-16 w-full"
-            href="https://twitter.com/intent/tweet?text=RVW%20%7C%20Computer%20House%20Random&url=https://vuetest-103b3.firebaseapp.com&via=c_h_random"
+            href="https://twitter.com/intent/tweet?text=RVW%202022%20Spring&url=https://rvw2022s.herokuapp.com&via=c_h_random"
           >
             <svg
               class="h-8 w-auto mr-2"
