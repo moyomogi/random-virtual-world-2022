@@ -927,9 +927,12 @@ export default {
       return this.$store.getters["posts/getPostIdsDict"];
     },
   },
-  async asyncData({ store }) {
+  async fetch({ store }) {
     await store.dispatch("posts/load");
   },
+  // async asyncData({ store }) {
+  //   await store.dispatch("posts/load");
+  // },
   // https://lupas.medium.com/firebase-9-beta-nuxt-js-981cf3dac910
   // async asyncData({ error }) {
   //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成

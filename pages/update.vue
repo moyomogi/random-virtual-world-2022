@@ -1138,9 +1138,12 @@ export default {
       return this.$store.getters["posts/getPostIdsDict"];
     },
   },
-  async asyncData({ store }) {
+  async fetch({ store }) {
     await store.dispatch("posts/load");
   },
+  // async asyncData({ store }) {
+  //   await store.dispatch("posts/load");
+  // },
   // async asyncData({ error }) {
   //   // firestore/posts/<postId>/ を見て this.postIdsDict を生成
   //   let postIdsDict = {};
