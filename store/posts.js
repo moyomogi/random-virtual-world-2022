@@ -10,14 +10,14 @@ export const state = () => ({
   postGenresDict: {},
 });
 
-// function deepCopy(obj) {
-//   return JSON.parse(JSON.stringify(obj));
-// }
+function deepCopy(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 // this.$store.getters["posts/FUNC"];
 export const getters = {
   getPostById(state) {
-    return (id) => state.postIdsDict[id];
+    return (id) => deepCopy(state.postIdsDict[id]);
   },
   getPostByTitle(state) {
     return (title) => {
@@ -99,8 +99,8 @@ export const actions = {
         postGenresDict[post.genre].push(document.id);
       });
 
-      // sort
-      genres.forEach((genre) => postGenresDict[genre].sort());
+      // sort() は破壊的関数なので deepCopy() を使う
+      genres.forEach((genre) => deepCopy(postGenresDict[genre]).sort());
     } catch (e) {
       console.warn("(posts, fetch) Error");
       console.warn(e);
