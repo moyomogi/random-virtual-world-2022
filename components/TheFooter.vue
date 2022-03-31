@@ -26,26 +26,46 @@
       >
         <img class="w-40 md:w-52" src="~assets/navbar/logo.webp" />
       </NuxtLink>
-      <span
-        class="
-          md:ml-3
-          text-xs
-          md:text-base
-          lg:text-lg
-          text-stone-300
-          transision-color
-          ease-in-out
-          duration-500
-        "
-      >
-        <a
-          class="hover:text-stone-100"
-          rel="noopener"
-          href="https://ch-random.net"
-          target="_blank"
-          >&copy; 2022 Computer House Random</a
+      <div class="flex flex-col items-end">
+        <span
+          class="
+            md:ml-3
+            text-xs
+            md:text-base
+            lg:text-lg
+            text-stone-300
+            transision-color
+            ease-in-out
+            duration-500
+          "
         >
-      </span>
+          <a
+            class="hover:text-stone-100"
+            rel="noopener"
+            href="https://ch-random.net"
+            target="_blank"
+            >&copy; 2022 Computer House Random</a
+          >
+        </span>
+        <span
+          class="
+            md:ml-3
+            text-sm
+            text-stone-300
+            transision-color
+            ease-in-out
+            duration-500
+          "
+        >
+          <a
+            class="hover:text-stone-100"
+            rel="noopener"
+            href="https://github.com/moyomogi/rvw2022s"
+            target="_blank"
+            >Source Code</a
+          >
+        </span>
+      </div>
     </span>
     <span class="inline-flex justify-end">
       <a

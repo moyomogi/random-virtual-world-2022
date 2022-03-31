@@ -75,7 +75,7 @@ git push heroku master  # Heroku にデプロイ
   Firestore, Firebase Storage を DB として使っています。
 - [Heroku](https://jp.heroku.com/)
   Node.js hosting である Heroku でホスティングしています。
-- [vue-awesome-swiper](https://github.surmon.me/vue-awesome-swiper/)
+- [vue-awesome-swiper](https://web.archive.org/web/20211127071455/https://github.surmon.me/vue-awesome-swiper/)
   スライドショー機能
 
 ## 参考文献

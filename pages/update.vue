@@ -978,18 +978,18 @@ export default {
       // 2. playUrl に関してはそのままです
       // 本来は render に用いる関数では this 変数を変更すべきでないが、
       // 今回は、input を編集したときのみ this 変数が変更されないから ok
-      const introns = [/\/view.*/u, /.*[\/=]/u];
-      this.googleDriveFileId = "";
-      if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
-        let googleDriveFileId = curPost.downloadUrl;
-        introns.forEach((s) => {
-          googleDriveFileId = googleDriveFileId.replace(s, "");
-        });
-        if (googleDriveFileId) {
-          curPost.downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
-          this.googleDriveFileId = googleDriveFileId;
-        }
-      }
+      // const introns = [/\/view.*/u, /.*[\/=]/u];
+      // this.googleDriveFileId = "";
+      // if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
+      //   let googleDriveFileId = curPost.downloadUrl;
+      //   introns.forEach((s) => {
+      //     googleDriveFileId = googleDriveFileId.replace(s, "");
+      //   });
+      //   if (googleDriveFileId) {
+      //     curPost.downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
+      //     this.googleDriveFileId = googleDriveFileId;
+      //   }
+      // }
 
       // pics
       curPost.pics = this.picDetails.map((detail) => {
