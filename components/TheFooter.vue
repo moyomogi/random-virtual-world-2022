@@ -49,14 +49,20 @@
         </span>
         <span
           class="
+            flex flex-row
+            items-center
+            space-x-1
             md:ml-3
-            text-sm
-            text-stone-300
+            text-sm text-stone-300
             transision-color
             ease-in-out
             duration-500
           "
         >
+          <img
+            class="w-4 h-4 rounded-md"
+            src="~assets/footer/favicon_github.webp"
+          />
           <a
             class="hover:text-stone-100"
             rel="noopener"
@@ -77,11 +83,11 @@
       >
         <img
           class="w-12 h-12 rounded-md"
-          src="~assets/footer/icon_youtube.webp"
+          src="~assets/footer/random_youtube.webp"
         />
         <img
           class="absolute w-5 h-5 -right-2 -bottom-2 rounded-full"
-          src="~assets/footer/youtube.svg"
+          src="~assets/footer/favicon_youtube.svg"
         />
       </a>
       <a
@@ -93,11 +99,11 @@
       >
         <img
           class="w-12 h-12 rounded-md"
-          src="~assets/footer/icon_twitter.webp"
+          src="~assets/footer/random_twitter.webp"
         />
         <img
           class="absolute w-5 h-5 -right-2 -bottom-2 rounded-full"
-          src="~assets/footer/twitter.svg"
+          src="~assets/footer/favicon_twitter.svg"
         />
       </a>
     </span>
