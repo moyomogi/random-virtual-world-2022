@@ -49,9 +49,6 @@
         </span>
         <span
           class="
-            flex flex-row
-            items-center
-            space-x-1
             md:ml-3
             text-sm text-stone-300
             transision-color
@@ -59,17 +56,23 @@
             duration-500
           "
         >
-          <img
-            class="w-4 h-4 rounded-md"
-            src="~assets/footer/favicon_github.webp"
-          />
+          <!--
+            @mouseover https://newsite-make.com/vue-img-change/
+          -->
           <a
-            class="hover:text-stone-100"
+            class="flex flex-row items-center space-x-1 hover:text-stone-100"
+            @mouseover="onOverGitHubFavicon()"
+            @mouseout="onOutGitHubFavicon()"
             rel="noopener"
             href="https://github.com/moyomogi/rvw2022s"
             target="_blank"
-            >Source Code</a
           >
+            <img
+              class="w-4 h-4"
+              :src="favicon_github_srcs[favicon_github_index]"
+            />
+            <span>Source Code</span>
+          </a>
         </span>
       </div>
     </span>
@@ -109,3 +112,25 @@
     </span>
   </footer>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      favicon_github_index: 0,
+      favicon_github_srcs: [
+        "/footer/favicon_github.webp",
+        "/footer/favicon_github_hover.webp",
+      ],
+    };
+  },
+  methods: {
+    onOverGitHubFavicon() {
+      this.favicon_github_index = 1;
+    },
+    onOutGitHubFavicon() {
+      this.favicon_github_index = 0;
+    },
+  },
+};
+</script>
