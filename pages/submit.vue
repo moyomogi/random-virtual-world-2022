@@ -133,6 +133,7 @@
             type="text"
             id="download-url"
             v-model="post.downloadUrl"
+            :input="onEditDownloadUrl"
             class="
               py-1
               px-3
@@ -824,18 +825,16 @@ export default {
       // splice https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array
       this.picDetails.splice(idx, 1);
     },
-    getCurPost() {
-      let curPost = deepCopy(this.post);
-
-      // userUid
-      const userUid = this.getUserUid();
-      curPost.userUid = userUid;
-
+    onEditDownloadUrl() {
       // 1. downloadUrl に関しては
       // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing
       // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
       // 2. playUrl に関してはそのままです
       const introns = [/\/view.*/u, /.*[\/=]/u];
+      // render 中に this 変数を変更すると、
+      // infinite update loop に陥る。
+      // 従って、render 時に呼ばれる関数内では
+      // this 変数を変更してはならない
       this.googleDriveFileId = "";
       if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
         let googleDriveFileId = curPost.downloadUrl;
@@ -847,6 +846,13 @@ export default {
           this.googleDriveFileId = googleDriveFileId;
         }
       }
+    },
+    getCurPost() {
+      let curPost = deepCopy(this.post);
+
+      // userUid
+      const userUid = this.getUserUid();
+      curPost.userUid = userUid;
 
       // pics
       if (!curPost.pics) {

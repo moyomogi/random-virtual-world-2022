@@ -346,6 +346,22 @@ export default {
       }
       this.swiperOptionTop.loopedSlides = post.pics.length;
       this.swiperOptionThumbs.loopedSlides = post.pics.length;
+
+      // downloadUrl
+      const introns = [/\/view.*/u, /.*[\/=]/u];
+      // render 中に this 変数を変更すると、
+      // infinite update loop に陥る。
+      // 従って、render 時に呼ばれる関数内では
+      // this 変数を変更してはならない
+      if (post.downloadUrl.startsWith("https://drive.google.com")) {
+        let googleDriveFileId = post.downloadUrl;
+        introns.forEach((s) => {
+          googleDriveFileId = googleDriveFileId.replace(s, "");
+        });
+        if (googleDriveFileId) {
+          post.downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
+        }
+      }
       return post;
     },
   },
