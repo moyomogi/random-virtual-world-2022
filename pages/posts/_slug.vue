@@ -348,13 +348,11 @@ export default {
       this.swiperOptionThumbs.loopedSlides = post.pics.length;
 
       // downloadUrl
-      const introns = [/\/view.*/u, /.*[\/=]/u];
-      // render 中に this 変数を変更すると、
-      // infinite update loop に陥る。
-      // 従って、render 時に呼ばれる関数内では
-      // this 変数を変更してはならない
-      if (post.downloadUrl.startsWith("https://drive.google.com")) {
-        let googleDriveFileId = post.downloadUrl;
+      const introns = [/\/view.*/u, /\?usp=sharing.*/u, /.*[\/=]/u];
+      let googleDriveFileId = "";
+      if (post.downloadUrl.startsWith("https://drive.google.com/file/d/") ||
+        post.downloadUrl.startsWith("https://drive.google.com/uc")) {
+        googleDriveFileId = post.downloadUrl;
         introns.forEach((s) => {
           googleDriveFileId = googleDriveFileId.replace(s, "");
         });
