@@ -834,10 +834,13 @@ export default {
       // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing
       // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
       // 2. playUrl に関してはそのままです
-      const introns = [/\/view.*/u, /.*[\/=]/u];
+      // 注: ごくまれに、zip にせず、フォルダのまま投稿しようとする人間がいる
+      // https://drive.google.com/drive/folders/1c9klmUygpsaj2cbrFDiH_cwG3SeuSPwh?usp=sharing
+      const introns = [/\/view.*/u, /\?usp=sharing.*/u, /.*[\/=]/u];
       let googleDriveFileId = "";
       let downloadUrl = this.post.downloadUrl;
-      if (downloadUrl.startsWith("https://drive.google.com")) {
+      if (downloadUrl.startsWith("https://drive.google.com/file/d/") ||
+        downloadUrl.startsWith("https://drive.google.com/uc")) {
         googleDriveFileId = downloadUrl;
         introns.forEach((s) => {
           googleDriveFileId = googleDriveFileId.replace(s, "");
