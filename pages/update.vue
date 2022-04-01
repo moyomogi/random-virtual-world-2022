@@ -605,7 +605,6 @@ export default {
       // watch 用
       postId: null,
       // Submit 用
-      googleDriveFileId: "",
       post: {
         title: "",
         postId: "",
@@ -761,7 +760,9 @@ export default {
         if (str === "downloadUrl") {
           return {
             state: "ok",
-            msg: `OK: re.match("https?://.*", self.${str}) != None, self.googleDriveFileId == "${this.googleDriveFileId}"`,
+            msg: `OK: re.match("https?://.*", self.${str}) != None, self.googleDriveFileId == "${
+              this.getGoogleDriveFileId_DownloadUrl().googleDriveFileId
+            }"`,
           };
         }
         return {
@@ -962,34 +963,39 @@ export default {
       // splice https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array
       this.picDetails.splice(idx, 1);
     },
-    getCurPost() {
-      let curPost = deepCopy(this.post);
-
-      // userUid
-      const userUid = this.getUserUid();
-      curPost.userUid = userUid;
-
-      // postId
-      curPost.postId = this.postId;
-
+    getGoogleDriveFileId_DownloadUrl() {
       // 1. downloadUrl に関しては
       // from: https://drive.google.com/file/d/1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk/view?usp=sharing
       // to: https://drive.google.com/uc?export=download&id=1T_vXIz1xjKJSPLlnc7tZYTtd7F7a0isk
       // 2. playUrl に関してはそのままです
-      // 本来は render に用いる関数では this 変数を変更すべきでないが、
-      // 今回は、input を編集したときのみ this 変数が変更されないから ok
-      // const introns = [/\/view.*/u, /.*[\/=]/u];
-      // this.googleDriveFileId = "";
-      // if (curPost.downloadUrl.startsWith("https://drive.google.com")) {
-      //   let googleDriveFileId = curPost.downloadUrl;
-      //   introns.forEach((s) => {
-      //     googleDriveFileId = googleDriveFileId.replace(s, "");
-      //   });
-      //   if (googleDriveFileId) {
-      //     curPost.downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
-      //     this.googleDriveFileId = googleDriveFileId;
-      //   }
-      // }
+      const introns = [/\/view.*/u, /.*[\/=]/u];
+      let googleDriveFileId = "";
+      let downloadUrl = this.post.downloadUrl;
+      if (downloadUrl.startsWith("https://drive.google.com")) {
+        googleDriveFileId = downloadUrl;
+        introns.forEach((s) => {
+          googleDriveFileId = googleDriveFileId.replace(s, "");
+        });
+        if (googleDriveFileId) {
+          downloadUrl = `https://drive.google.com/uc?id=${googleDriveFileId}`;
+        }
+      }
+      return {
+        googleDriveFileId,
+        downloadUrl,
+      };
+    },
+    getCurPost() {
+      let curPost = deepCopy(this.post);
+
+      // userUid
+      curPost.userUid = this.getUserUid();
+
+      // downloadUrl
+      curPost.downloadUrl = this.getGoogleDriveFileId_DownloadUrl().downloadUrl;
+
+      // postId
+      curPost.postId = this.postId;
 
       // pics
       curPost.pics = this.picDetails.map((detail) => {
@@ -1126,8 +1132,7 @@ export default {
       handler(postId) {
         if (!postId) return;
         let curPost = this.postIdsDict[postId];
-        if (!curPost)
-        {
+        if (!curPost) {
           console.error(`(update, handler) postId: ${postId}`);
           return;
         }

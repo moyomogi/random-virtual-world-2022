@@ -50,7 +50,7 @@
         <span
           class="
             md:ml-3
-            text-sm text-stone-300
+            text-sm
             transision-color
             ease-in-out
             duration-500
@@ -60,7 +60,8 @@
             @mouseover https://newsite-make.com/vue-img-change/
           -->
           <a
-            class="flex flex-row items-center space-x-1 hover:text-stone-100"
+            :class="favicon_github_text_cols[favicon_github_index]"
+            class="flex flex-row items-center space-x-1"
             @mouseover="onOverGitHubFavicon()"
             @mouseout="onOutGitHubFavicon()"
             rel="noopener"
@@ -122,6 +123,7 @@ export default {
         "/footer/favicon_github.webp",
         "/footer/favicon_github_hover.webp",
       ],
+      favicon_github_text_cols: ["text-stone-300", "text-stone-100"],
     };
   },
   methods: {
