@@ -49,14 +49,17 @@
       <!-- header (right) -->
       <div class="flex my-auto items-center">
         <!-- info -->
-        <button class="mx-3 focus:outline-none" @click="infoOpen = true">
+        <button
+          class="mx-3 hidden sm:flex focus:outline-none"
+          @click="infoOpen = true"
+        >
           <img class="w-12 h-12" src="~assets/navbar/icon_info.webp" />
         </button>
         <ModalApp :open="infoOpen" @close="close" />
 
         <!-- form -->
         <a
-          class="mx-3 hidden sm:flex focus:outline-none"
+          class="mx-3 focus:outline-none"
           rel="noopener"
           target="_blank"
           href="https://docs.google.com/forms/d/e/1FAIpQLScBPL4HLrjunGhR91rCrb0rjuZONT0AtpsQw6r5b8wZH7tN9w/viewform"

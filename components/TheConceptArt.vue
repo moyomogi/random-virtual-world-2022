@@ -1,10 +1,9 @@
 <template>
-  <div class="w-full bg-slate-500">
+  <div class="bg-slate-500">
     <article
       class="
         swiper
         directive
-        mx-auto
         sm:w-1/2
         md:w-1/3
         lg:w-1/4
@@ -19,7 +18,7 @@
       <div class="swiper-wrapper">
         <div v-for="(img, idx) in imgs" :key="idx" class="swiper-slide">
           <img
-            class="bg-white object-cover drop-shadow"
+            class="w-full bg-white object-cover drop-shadow"
             :src="img"
           />
         </div>
