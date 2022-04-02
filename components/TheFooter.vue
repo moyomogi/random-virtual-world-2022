@@ -7,7 +7,8 @@
       lg:px-12
       py-6
       w-full
-      flex flex-row
+      flex flex-col
+      sm:flex-row
       justify-evenly
       md:justify-between
       border-t border-stone-400
@@ -17,20 +18,26 @@
       to-pink-800
     "
   >
+    <!-- top sm:left -->
     <span
       class="md:ml-3 flex flex-col md:flex-row items-center justify-between"
     >
+      <!-- logo -->
       <NuxtLink
         to="/"
         class="md:mr-3 flex items-center justify-start text-white"
       >
         <img class="w-40 md:w-52" src="~assets/navbar/logo.webp" />
       </NuxtLink>
+
+      <!-- copyright, source code -->
       <div class="flex flex-col items-end">
+        <!-- copyright -->
         <span
           class="
             md:ml-3
             text-xs
+            sm:text-sm
             md:text-base
             lg:text-lg
             text-stone-300
@@ -47,10 +54,13 @@
             >&copy; 2022 Computer House Random</a
           >
         </span>
+
+        <!-- source code -->
         <span
           class="
             md:ml-3
-            text-sm
+            text-xs
+            sm:text-sm
             transision-color
             ease-in-out
             duration-500
@@ -77,7 +87,9 @@
         </span>
       </div>
     </span>
-    <span class="inline-flex justify-end">
+
+    <!-- bottom sm:right -->
+    <span class="inline-flex justify-center sm:justify-end">
       <a
         rel="noopener"
         href="https://www.youtube.com/channel/UCRJlEajdk4Yl9d7jWHw_lmw"

@@ -9,8 +9,7 @@
       class="
         swiper
         directive
-        aspect-[32/27]
-        md:aspect-[8/9]
+        aspect-[8/9]
         bg-stone-100
         border-2
         rounded-xl

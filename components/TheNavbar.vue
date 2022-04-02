@@ -56,7 +56,7 @@
 
         <!-- form -->
         <a
-          class="mx-3 sm:flex focus:outline-none"
+          class="mx-3 hidden sm:flex focus:outline-none"
           rel="noopener"
           target="_blank"
           href="https://docs.google.com/forms/d/e/1FAIpQLScBPL4HLrjunGhR91rCrb0rjuZONT0AtpsQw6r5b8wZH7tN9w/viewform"
@@ -220,7 +220,11 @@ export default {
       drawerOpen: false,
       infoOpen: false,
       // bgm は GitHub に置いてる
-      audio: process.client ? new Audio("https://github.com/moyomogi/rvw2022s/blob/master/docs/bgm.mp3?raw=true") : null,
+      audio: process.client
+        ? new Audio(
+            "https://github.com/moyomogi/rvw2022s/blob/master/docs/bgm.mp3?raw=true"
+          )
+        : null,
       muted: true,
     };
   },
