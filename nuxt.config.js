@@ -59,10 +59,15 @@ export default {
     meta: [
       { charset: "utf-8" },
       {
+        hid: "google-site-verification",
         name: "google-site-verification",
         content: "Gx18T3hkrzY9YZy_MAKgNWckKkWFZkFqK_-n6h5TBvQ",
       },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        hid: "viewport",
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
       // サイト名は SITE_NAME で固定
       {
         hid: "og:site_name",
@@ -81,7 +86,6 @@ export default {
         content: HOST_NAME,
       },
       { hid: "og:type", property: "og:type", content: "website" },
-      { hid: "og:image", property: "og:image", content: "/ogp.webp" },
       {
         hid: "og:description",
         property: "og:description",
@@ -92,8 +96,12 @@ export default {
         name: "description",
         content: DESC,
       },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@c_h_random" },
+      {
+        hid: "twitter:card",
+        name: "twitter:card",
+        content: "summary_large_image",
+      },
+      { hid: "twitter:site", name: "twitter:site", content: "@c_h_random" },
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
   },

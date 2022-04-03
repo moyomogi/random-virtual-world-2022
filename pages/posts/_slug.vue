@@ -350,8 +350,10 @@ export default {
       // downloadUrl
       const introns = [/\/view.*/u, /\?usp=sharing.*/u, /.*[\/=]/u];
       let googleDriveFileId = "";
-      if (post.downloadUrl.startsWith("https://drive.google.com/file/d/") ||
-        post.downloadUrl.startsWith("https://drive.google.com/uc")) {
+      if (
+        post.downloadUrl.startsWith("https://drive.google.com/file/d/") ||
+        post.downloadUrl.startsWith("https://drive.google.com/uc")
+      ) {
         googleDriveFileId = post.downloadUrl;
         introns.forEach((s) => {
           googleDriveFileId = googleDriveFileId.replace(s, "");
@@ -396,6 +398,11 @@ export default {
           hid: "description",
           name: "description",
           content: DESC,
+        },
+        {
+          hid: "twitter:image",
+          name: "twitter:image",
+          content: this.post.pics[0],
         },
       ],
     };

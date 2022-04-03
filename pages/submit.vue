@@ -560,8 +560,6 @@ export default {
           property: "og:title",
           content: TITLE,
         },
-        // og 画像はなし
-        { hid: "og:image" },
         {
           hid: "og:description",
           property: "og:description",

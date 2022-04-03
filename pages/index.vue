@@ -15,6 +15,11 @@ export default {
       titleTemplate: "",
       meta: [
         { hid: "og:image", property: "og:image", content: "/ogp.webp" },
+        {
+          hid: "twitter:image",
+          name: "twitter:image",
+          content: "/ogp.webp",
+        },
       ],
     };
   },
