@@ -32,8 +32,8 @@ footers = soup.select("div.projects-container")
 # };
 print("const authorsDict = {")
 
-for (i, footer) in enumerate(footers[:3]):
-    print(f"  // {i + 1} 回生", file=sys.stderr)
+for (i, footer) in enumerate(footers[1:4]):
+    print(f"  // {i + 2} 回生", file=sys.stderr)
     h4s = footer.select("h4")
     imgs = footer.select("img.my-portrait")
     for j in range(len(h4s)):
@@ -41,7 +41,7 @@ for (i, footer) in enumerate(footers[:3]):
         src = str(imgs[j].get("src"))
         author = src.split("/")[2]
         print(f"  {author}: {{")
-        print(f'    year: {i + 1},')
+        print(f'    year: {i + 2},')
         print(f'    name: "{h4s[j].text}",')
         print(f'    icon: "https://ch-random.net{src}",')
         print("  },")

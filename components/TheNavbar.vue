@@ -222,12 +222,8 @@ export default {
       colorsDict,
       drawerOpen: false,
       infoOpen: false,
-      // bgm は GitHub に置いてる
-      audio: process.client
-        ? new Audio(
-            "https://github.com/moyomogi/rvw2022s/blob/master/docs/bgm.mp3?raw=true"
-          )
-        : null,
+      // bgm は static に置いてる
+      audio: process.client ? new Audio("/bgm.mp3?raw=true") : null,
       muted: true,
     };
   },
